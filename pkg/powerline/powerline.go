@@ -13,7 +13,9 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 	"github.com/gentoomaniac/powerline-go/pkg/segments"
 	"github.com/gentoomaniac/powerline-go/pkg/shellinfo"
+
 	"github.com/mattn/go-runewidth"
+	"github.com/rs/zerolog/log"
 	"github.com/shirou/gopsutil/v3/process"
 	"golang.org/x/term"
 	"golang.org/x/text/width"
@@ -155,7 +157,7 @@ func initSegments(p *Powerline, mods []string) {
 						segs: s,
 					}
 				} else {
-					println("Module not found: " + module)
+					log.Error().Str("module", module).Msg("module not found")
 				}
 			}
 			wg.Done()
