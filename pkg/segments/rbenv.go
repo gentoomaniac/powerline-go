@@ -78,7 +78,7 @@ func checkForRbenvOutput() (string, error) {
 	return items[0], nil
 }
 
-func Rbenv(cfg config.Config) []Segment {
+func Rbenv(cfg config.Config, align config.Alignment) []Segment {
 	var (
 		segment string
 		err     error

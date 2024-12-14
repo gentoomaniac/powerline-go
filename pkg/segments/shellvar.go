@@ -9,7 +9,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func ShellVar(theme config.Theme) []Segment {
+func ShellVar(cfg config.Config, align config.Alignment) []Segment {
 	shellVarName := p.cfg.ShellVar
 	varContent, varExists := os.LookupEnv(shellVarName)
 
@@ -30,7 +30,7 @@ func ShellVar(theme config.Theme) []Segment {
 	return []Segment{{
 		Name:       "shell-var",
 		Content:    varContent,
-		Foreground: theme.ShellVarFg,
-		Background: theme.ShellVarBg,
+		Foreground: cfg.SelectedTheme().ShellVarFg,
+		Background: cfg.SelectedTheme().ShellVarBg,
 	}}
 }

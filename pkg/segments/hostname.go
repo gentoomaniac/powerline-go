@@ -21,7 +21,7 @@ func getMd5(text string) []byte {
 	return hasher.Sum(nil)
 }
 
-func Host(cfg config.Config) []Segment {
+func Host(cfg config.Config, align config.Alignment) []Segment {
 	var hostPrompt string
 	var foreground, background uint8
 

@@ -6,7 +6,7 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func VirtualGo(theme config.Theme) []Segment {
+func VirtualGo(cfg config.Config, align config.Alignment) []Segment {
 	env, _ := os.LookupEnv("VIRTUALGO")
 	if env == "" {
 		return []Segment{}
@@ -15,7 +15,7 @@ func VirtualGo(theme config.Theme) []Segment {
 	return []Segment{{
 		Name:       "vgo",
 		Content:    env,
-		Foreground: theme.VirtualGoFg,
-		Background: theme.VirtualGoBg,
+		Foreground: cfg.SelectedTheme().VirtualGoFg,
+		Background: cfg.SelectedTheme().VirtualGoBg,
 	}}
 }

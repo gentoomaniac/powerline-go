@@ -7,7 +7,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func ViMode(theme config.Theme) []Segment {
+func ViMode(cfg config.Config, align config.Alignment) []Segment {
 	mode := p.cfg.ViMode
 	if mode == "" {
 		log.Warn().Msg("'--vi-mode' is not set.")
@@ -19,15 +19,15 @@ func ViMode(theme config.Theme) []Segment {
 		return []Segment{{
 			Name:       "vi-mode",
 			Content:    "C",
-			Foreground: theme.ViModeCommandFg,
-			Background: theme.ViModeCommandBg,
+			Foreground: cfg.SelectedTheme().ViModeCommandFg,
+			Background: cfg.SelectedTheme().ViModeCommandBg,
 		}}
 	default: // usually "viins" or "main"
 		return []Segment{{
 			Name:       "vi-mode",
 			Content:    "I",
-			Foreground: theme.ViModeInsertFg,
-			Background: theme.ViModeInsertBg,
+			Foreground: cfg.SelectedTheme().ViModeInsertFg,
+			Background: cfg.SelectedTheme().ViModeInsertBg,
 		}}
 	}
 }

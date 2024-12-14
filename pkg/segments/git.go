@@ -186,7 +186,7 @@ func indexSize(root string) (int64, error) {
 	return fileInfo.Size(), nil
 }
 
-func Git(cfg config.Config) []Segment {
+func Git(cfg config.Config, align config.Alignment) []Segment {
 	cwd, err := os.Getwd()
 	if err != nil {
 		log.Error().Err(err).Msg("could not determine current working directory")

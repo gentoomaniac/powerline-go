@@ -7,7 +7,7 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func Perlbrew(cfg config.Config) []Segment {
+func Perlbrew(cfg config.Config, align config.Alignment) []Segment {
 	env, _ := os.LookupEnv("PERLBREW_PERL")
 	if env == "" {
 		return []Segment{}

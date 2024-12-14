@@ -6,9 +6,9 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func User(conf config.Config) []Segment {
+func User(cfg config.Config, align config.Alignment) []Segment {
 	var userPrompt string
-	switch conf.Shell {
+	switch cfg.Shell {
 	case "bash":
 		userPrompt = "\\u"
 	case "zsh":
@@ -19,15 +19,15 @@ func User(conf config.Config) []Segment {
 
 	var background uint8
 	if userIsAdmin() {
-		background = conf.SelectedTheme().UsernameRootBg
+		background = cfg.SelectedTheme().UsernameRootBg
 	} else {
-		background = conf.SelectedTheme().UsernameBg
+		background = cfg.SelectedTheme().UsernameBg
 	}
 
 	return []Segment{{
 		Name:       "user",
 		Content:    userPrompt,
-		Foreground: conf.SelectedTheme().UsernameFg,
+		Foreground: cfg.SelectedTheme().UsernameFg,
 		Background: background,
 	}}
 }

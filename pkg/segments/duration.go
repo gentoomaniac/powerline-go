@@ -26,7 +26,7 @@ const (
 	hours        int64 = minutes * 60
 )
 
-func Duration(cfg config.Config) []Segment {
+func Duration(cfg config.Config, align config.Alignment) []Segment {
 	if cfg.Duration == "" {
 		return []Segment{{
 			Name:       "duration",

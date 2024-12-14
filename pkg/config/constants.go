@@ -10,3 +10,10 @@ const (
 	// MinInteger minimum integer
 	// MinInteger = ^MaxInteger
 )
+
+type Alignment int
+
+const (
+	AlignLeft Alignment = iota
+	AlignRight
+)

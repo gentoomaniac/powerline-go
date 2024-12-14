@@ -4,7 +4,6 @@ import (
 	"bytes"
 	"fmt"
 	"os"
-	"os/user"
 	"strconv"
 	"strings"
 	"sync"
@@ -20,25 +19,15 @@ import (
 	"golang.org/x/text/width"
 )
 
-type alignment int
-
-const (
-	AlignLeft alignment = iota
-	AlignRight
-)
-
 type Powerline struct {
 	cfg            config.Config
-	userInfo       user.User
-	hostname       string
-	username       string
 	theme          config.Theme
 	shell          shellinfo.ShellInfo
 	reset          string
 	priorities     map[string]int
 	Segments       [][]segments.Segment
 	curSegment     int
-	align          alignment
+	align          config.Alignment
 	rightPowerline *Powerline
 }
 
@@ -47,26 +36,15 @@ type prioritizedSegments struct {
 	segs []segments.Segment
 }
 
-func NewPowerline(cfg config.Config, align alignment) *Powerline {
+func NewPowerline(cfg config.Config, align config.Alignment) *Powerline {
 	p := new(Powerline)
 	p.cfg = cfg
-	userInfo, err := user.Current()
-	if userInfo != nil && err == nil {
-		p.userInfo = *userInfo
-	}
-	p.hostname, _ = os.Hostname()
 
-	hostnamePrefix := fmt.Sprintf("%s%c", p.hostname, os.PathSeparator)
-	if strings.HasPrefix(p.userInfo.Username, hostnamePrefix) {
-		p.username = p.userInfo.Username[len(hostnamePrefix):]
-	} else {
-		p.username = p.userInfo.Username
-	}
 	if cfg.TrimADDomain {
-		usernameWithAd := strings.SplitN(p.username, `\`, 2)
+		usernameWithAd := strings.SplitN(cfg.Userinfo.Username, `\`, 2)
 		if len(usernameWithAd) > 1 {
 			// remove the Domain name from username
-			p.username = usernameWithAd[1]
+			cfg.Userinfo.Username = usernameWithAd[1]
 		}
 	}
 
@@ -91,11 +69,11 @@ func NewPowerline(cfg config.Config, align alignment) *Powerline {
 	p.align = align
 	p.Segments = make([][]segments.Segment, 1)
 	var mods []string
-	if p.align == AlignLeft {
+	if p.align == config.AlignLeft {
 		mods = cfg.Modules
 		if len(cfg.ModulesRight) > 0 {
 			if p.SupportsRightModules() {
-				p.rightPowerline = NewPowerline(cfg, AlignRight)
+				p.rightPowerline = NewPowerline(cfg, config.AlignRight)
 			} else {
 				mods = append(mods, cfg.ModulesRight...)
 			}
@@ -119,10 +97,10 @@ func initSegments(p *Powerline, mods []string) {
 			if ok {
 				c <- prioritizedSegments{
 					i:    i,
-					segs: elem(p.cfg.Themes[p.cfg.Theme]),
+					segs: elem(p.cfg, p.align),
 				}
 			} else {
-				s, ok := segments.Plugin(p.cfg.Themes[p.cfg.Theme], module)
+				s, ok := segments.Plugin(p.cfg, module)
 				if ok {
 					c <- prioritizedSegments{
 						i:    i,
@@ -368,10 +346,10 @@ func (p *Powerline) Render() string {
 	var buffer bytes.Buffer
 
 	if p.cfg.Eval {
-		if p.align == AlignLeft {
-			buffer.WriteString(p.shell.EvalPromptPrefix)
+		if p.align == config.AlignLeft {
+			buffer.WriteString(p.cfg.CurrentShell().EvalPromptPrefix)
 		} else if p.SupportsRightModules() {
-			buffer.WriteString(p.shell.EvalPromptRightPrefix)
+			buffer.WriteString(p.cfg.CurrentShell().EvalPromptRightPrefix)
 		}
 	}
 
@@ -407,7 +385,7 @@ func (p *Powerline) Render() string {
 
 	if p.cfg.Eval {
 		switch p.align {
-		case AlignLeft:
+		case config.AlignLeft:
 			buffer.WriteString(p.shell.EvalPromptSuffix)
 			if p.SupportsRightModules() {
 				buffer.WriteRune('\n')
@@ -415,7 +393,7 @@ func (p *Powerline) Render() string {
 					buffer.WriteString(p.shell.EvalPromptRightPrefix + p.shell.EvalPromptRightSuffix)
 				}
 			}
-		case AlignRight:
+		case config.AlignRight:
 			if p.SupportsRightModules() {
 				buffer.Truncate(buffer.Len() - 1)
 				buffer.WriteString(p.shell.EvalPromptRightSuffix)
@@ -438,5 +416,5 @@ func (p *Powerline) SupportsRightModules() bool {
 }
 
 func (p *Powerline) isRightPrompt() bool {
-	return p.align == AlignRight && p.SupportsRightModules()
+	return p.align == config.AlignRight && p.SupportsRightModules()
 }

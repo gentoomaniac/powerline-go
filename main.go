@@ -13,7 +13,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-var cfg config.Config
+var cfg = config.New()
 
 func main() {
 	ctx := kong.Parse(&cfg, kong.UsageOnError(), kong.Configuration(kong.JSON, config.ConfigPath()))
@@ -54,7 +54,7 @@ func main() {
 		}
 	}
 
-	p := pwl.NewPowerline(cfg, pwl.AlignLeft)
+	p := pwl.NewPowerline(cfg, config.AlignLeft)
 	if p.SupportsRightModules() && p.HasRightModules() && !cfg.Eval {
 		log.Fatal().Msg("'--modules-right' requires '--eval' mode")
 	}
