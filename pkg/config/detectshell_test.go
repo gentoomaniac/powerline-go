@@ -1,4 +1,4 @@
-package powerline
+package config
 
 import "testing"
 

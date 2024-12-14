@@ -29,7 +29,7 @@ type SymbolTemplate struct {
 
 func (mode *SymbolTemplate) UnmarshalJSON(data []byte) error {
 	type Alias SymbolTemplate
-	tmp := Defaults.Modes[Defaults.Mode]
+	tmp := defaults.Modes[defaults.Mode]
 	err := json.Unmarshal(data, (*Alias)(&tmp))
 	if err == nil {
 		*mode = tmp
@@ -179,7 +179,7 @@ type Theme struct {
 
 func (theme *Theme) UnmarshalJSON(data []byte) error {
 	type Alias Theme
-	tmp := Defaults.Themes[Defaults.Theme]
+	tmp := defaults.Themes[defaults.Theme]
 	err := json.Unmarshal(data, (*Alias)(&tmp))
 	if err == nil {
 		*theme = tmp

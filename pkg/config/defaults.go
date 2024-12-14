@@ -1,7 +1,7 @@
 //nolint:deadcode,varcheck
 package config
 
-var Defaults = Config{
+var defaults = Config{
 	CwdMode:                "fancy",
 	CwdMaxDepth:            5,
 	CwdMaxDirSize:          -1,

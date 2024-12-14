@@ -1,5 +1,3 @@
-//go:build broken
-
 package segments
 
 import (
@@ -10,7 +8,7 @@ import (
 )
 
 func ShellVar(cfg config.Config, align config.Alignment) []Segment {
-	shellVarName := p.cfg.ShellVar
+	shellVarName := cfg.ShellVar
 	varContent, varExists := os.LookupEnv(shellVarName)
 
 	if !varExists {
@@ -21,7 +19,7 @@ func ShellVar(cfg config.Config, align config.Alignment) []Segment {
 	}
 
 	if varContent == "" {
-		if !p.cfg.ShellVarNoWarnEmpty {
+		if !cfg.ShellVarNoWarnEmpty {
 			log.Warn().Msgf("Shell variable %s is empty.", shellVarName)
 		}
 		return []Segment{}

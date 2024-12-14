@@ -1,5 +1,3 @@
-//go:build broken
-
 package segments
 
 import (
@@ -8,7 +6,7 @@ import (
 )
 
 func ViMode(cfg config.Config, align config.Alignment) []Segment {
-	mode := p.cfg.ViMode
+	mode := cfg.ViMode
 	if mode == "" {
 		log.Warn().Msg("'--vi-mode' is not set.")
 		return []Segment{}

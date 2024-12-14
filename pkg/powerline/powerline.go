@@ -10,11 +10,9 @@ import (
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 	"github.com/gentoomaniac/powerline-go/pkg/segments"
-	"github.com/gentoomaniac/powerline-go/pkg/shellinfo"
 
 	"github.com/mattn/go-runewidth"
 	"github.com/rs/zerolog/log"
-	"github.com/shirou/gopsutil/v3/process"
 	"golang.org/x/term"
 	"golang.org/x/text/width"
 )
@@ -22,7 +20,6 @@ import (
 type Powerline struct {
 	cfg            config.Config
 	theme          config.Theme
-	shell          shellinfo.ShellInfo
 	reset          string
 	priorities     map[string]int
 	Segments       [][]segments.Segment
@@ -48,20 +45,7 @@ func NewPowerline(cfg config.Config, align config.Alignment) *Powerline {
 		}
 	}
 
-	p.theme = cfg.Themes[cfg.Theme]
-	if cfg.Shell == "autodetect" {
-		var shellExe string
-		proc, err := process.NewProcess(int32(os.Getppid()))
-		if err == nil {
-			shellExe, _ = proc.Exe()
-		}
-		if shellExe == "" {
-			shellExe = os.Getenv("SHELL")
-		}
-		cfg.Shell = detectShell(shellExe)
-	}
-	p.shell = cfg.Shells[cfg.Shell]
-	p.reset = fmt.Sprintf(p.shell.ColorTemplate, "[0m")
+	p.reset = fmt.Sprintf(cfg.CurrentShell().ColorTemplate, "[0m")
 	p.priorities = make(map[string]int)
 	for idx, priority := range cfg.Priority {
 		p.priorities[priority] = len(cfg.Priority) - idx
@@ -129,7 +113,7 @@ func (p *Powerline) color(prefix string, code uint8) string {
 	if code == p.theme.Reset {
 		return p.reset
 	}
-	return fmt.Sprintf(p.shell.ColorTemplate, fmt.Sprintf("[%s;5;%dm", prefix, code))
+	return fmt.Sprintf(p.cfg.CurrentShell().ColorTemplate, fmt.Sprintf("[%s;5;%dm", prefix, code))
 }
 
 func (p *Powerline) fgColor(code uint8) string {
@@ -375,7 +359,7 @@ func (p *Powerline) Render() string {
 
 		buffer.WriteString(p.fgColor(foreground))
 		buffer.WriteString(p.bgColor(background))
-		buffer.WriteString(p.shell.RootIndicator)
+		buffer.WriteString(p.cfg.CurrentShell().RootIndicator)
 		buffer.WriteString(p.reset)
 		buffer.WriteString(p.fgColor(background))
 		buffer.WriteString(p.cfg.Symbols().Separator)
@@ -386,17 +370,17 @@ func (p *Powerline) Render() string {
 	if p.cfg.Eval {
 		switch p.align {
 		case config.AlignLeft:
-			buffer.WriteString(p.shell.EvalPromptSuffix)
+			buffer.WriteString(p.cfg.CurrentShell().EvalPromptSuffix)
 			if p.SupportsRightModules() {
 				buffer.WriteRune('\n')
 				if !p.HasRightModules() {
-					buffer.WriteString(p.shell.EvalPromptRightPrefix + p.shell.EvalPromptRightSuffix)
+					buffer.WriteString(p.cfg.CurrentShell().EvalPromptRightPrefix + p.cfg.CurrentShell().EvalPromptRightSuffix)
 				}
 			}
 		case config.AlignRight:
 			if p.SupportsRightModules() {
 				buffer.Truncate(buffer.Len() - 1)
-				buffer.WriteString(p.shell.EvalPromptRightSuffix)
+				buffer.WriteString(p.cfg.CurrentShell().EvalPromptRightSuffix)
 			}
 		}
 		if p.HasRightModules() {
@@ -412,7 +396,7 @@ func (p *Powerline) HasRightModules() bool {
 }
 
 func (p *Powerline) SupportsRightModules() bool {
-	return p.shell.EvalPromptRightPrefix != "" || p.shell.EvalPromptRightSuffix != ""
+	return p.cfg.CurrentShell().EvalPromptRightPrefix != "" || p.cfg.CurrentShell().EvalPromptRightSuffix != ""
 }
 
 func (p *Powerline) isRightPrompt() bool {

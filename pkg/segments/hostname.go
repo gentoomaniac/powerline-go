@@ -1,5 +1,3 @@
-//go:build broken
-
 package segments
 
 import (
@@ -21,19 +19,19 @@ func getMd5(text string) []byte {
 	return hasher.Sum(nil)
 }
 
-func Host(cfg config.Config, align config.Alignment) []Segment {
+func Hostname(cfg config.Config, align config.Alignment) []Segment {
 	var hostPrompt string
 	var foreground, background uint8
 
-	if p.cfg.HostnameOnlyIfSSH {
+	if cfg.HostnameOnlyIfSSH {
 		if os.Getenv("SSH_CLIENT") == "" {
 			// It's not an ssh connection do nothing
 			return []Segment{}
 		}
 	}
 
-	if p.cfg.ColorizeHostname {
-		hostName := getHostName(p.hostname)
+	if cfg.ColorizeHostname {
+		hostName := getHostName(cfg.Hostname)
 		hostPrompt = hostName
 
 		foregroundEnv, foregroundEnvErr := strconv.ParseUint(os.Getenv("PLGO_HOSTNAMEFG"), 0, 8)
@@ -47,12 +45,12 @@ func Host(cfg config.Config, align config.Alignment) []Segment {
 			foreground = cfg.SelectedTheme().HostnameColorizedFgMap[background]
 		}
 	} else {
-		if p.cfg.Shell == "bash" {
+		if cfg.Shell == "bash" {
 			hostPrompt = "\\h"
-		} else if p.cfg.Shell == "zsh" {
+		} else if cfg.Shell == "zsh" {
 			hostPrompt = "%m"
 		} else {
-			hostPrompt = getHostName(p.hostname)
+			hostPrompt = getHostName(cfg.Hostname)
 		}
 
 		foreground = cfg.SelectedTheme().HostnameFg
