@@ -57,13 +57,12 @@ var Defaults = Config{
 	ShellVar:             "",
 	ShellVarNoWarnEmpty:  false,
 	TrimADDomain:         false,
-	PathAliases:          AliasMap{},
+	PathAliases:          make(map[string]string),
 	Duration:             "",
 	DurationMin:          "0",
 	DurationLowPrecision: false,
 	Eval:                 false,
 	Condensed:            false,
-	IgnoreWarnings:       false,
 	Modes: SymbolMap{
 		"compatible": {
 			Lock:                 "RO",
@@ -238,16 +237,16 @@ var Defaults = Config{
 			GoenvBg: 38,  // approx. Gopher Blue
 			GoenvFg: 220, // approx. Secondary Yellow
 
-			VirtualEnvFg: 00,
+			VirtualEnvFg: 0o0,
 			VirtualEnvBg: 35, // a mid-tone green
 
 			VirtualGoFg: 220, // approx. Secondary Yellow
 			VirtualGoBg: 38,  // approx. Gopher Blue
 
-			PerlbrewFg: 00,
+			PerlbrewFg: 0o0,
 			PerlbrewBg: 20, // a mid-tone blue
 
-			PlEnvFg: 00,
+			PlEnvFg: 0o0,
 			PlEnvBg: 32,
 
 			TFWsFg: 15, // white

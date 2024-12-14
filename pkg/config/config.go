@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/gentoomaniac/powerline-go/pkg/logging"
 	"github.com/gentoomaniac/powerline-go/pkg/shellinfo"
 )
 
@@ -13,53 +14,55 @@ type (
 	SymbolMap map[string]SymbolTemplate
 	ShellMap  map[string]shellinfo.ShellInfo
 	ThemeMap  map[string]Theme
-	AliasMap  map[string]string
 )
 
 type Config struct {
-	CwdMode                string    `json:"cwd-mode"`
-	CwdMaxDepth            int       `json:"cwd-max-depth"`
-	CwdMaxDirSize          int       `json:"cwd-max-dir-size"`
-	ColorizeHostname       bool      `json:"colorize-hostname"`
-	HostnameOnlyIfSSH      bool      `json:"hostname-only-if-ssh"`
-	SshAlternateIcon       bool      `json:"alternate-ssh-icon"`
-	EastAsianWidth         bool      `json:"east-asian-width"`
-	PromptOnNewLine        bool      `json:"newline"`
-	StaticPromptIndicator  bool      `json:"static-prompt-indicator"`
-	VenvNameSizeLimit      int       `json:"venv-name-size-limit"`
-	Jobs                   int       `json:"-"`
-	GitAssumeUnchangedSize int64     `json:"git-assume-unchanged-size"`
-	GitDisableStats        []string  `json:"git-disable-stats"`
-	GitMode                string    `json:"git-mode"`
-	Mode                   string    `json:"mode"`
-	Theme                  string    `json:"theme"`
-	Shell                  string    `json:"shell"`
-	Modules                []string  `json:"modules"`
-	ModulesRight           []string  `json:"modules-right"`
-	Priority               []string  `json:"priority"`
-	MaxWidthPercentage     int       `json:"max-width-percentage"`
-	TruncateSegmentWidth   int       `json:"truncate-segment-width"`
-	PrevError              int       `json:"-"`
-	NumericExitCodes       bool      `json:"numeric-exit-codes"`
-	IgnoreRepos            []string  `json:"ignore-repos"`
-	ShortenGKENames        bool      `json:"shorten-gke-names"`
-	ShortenEKSNames        bool      `json:"shorten-eks-names"`
-	ShortenOpenshiftNames  bool      `json:"shorten-openshift-names"`
-	ShellVar               string    `json:"shell-var"`
-	ShellVarNoWarnEmpty    bool      `json:"shell-var-no-warn-empty"`
-	TrimADDomain           bool      `json:"trim-ad-domain"`
-	PathAliases            AliasMap  `json:"path-aliases"`
-	Duration               string    `json:"-"`
-	DurationMin            string    `json:"duration-min"`
-	DurationLowPrecision   bool      `json:"duration-low-precision"`
-	Eval                   bool      `json:"eval"`
-	Condensed              bool      `json:"condensed"`
-	IgnoreWarnings         bool      `json:"ignore-warnings"`
-	Modes                  SymbolMap `json:"modes"`
-	Shells                 ShellMap  `json:"shells"`
-	Themes                 ThemeMap  `json:"themes"`
-	Time                   string    `json:"-"`
-	ViMode                 string    `json:"vi-mode"`
+	logging.LoggingConfig
+
+	CwdMode                string   `help:"How to display the current directory"`
+	CwdMaxDepth            int      `help:"Maximum number of directories to show in path"`
+	CwdMaxDirSize          int      `help:"Maximum number of letters displayed for each directory in the path"`
+	ColorizeHostname       bool     `help:"Colorize the hostname based on a hash of itself, or use the PLGO_HOSTNAMEFG and PLGO_HOSTNAMEBG env vars (both need to be set)."`
+	HostnameOnlyIfSSH      bool     `help:"Show hostname only for SSH connections"`
+	SshAlternateIcon       bool     `help:"Show the older, original icon for SSH connections"`
+	EastAsianWidth         bool     `help:"Use East Asian Ambiguous Widths"`
+	PromptOnNewLine        bool     `help:"Show the prompt on a new line"`
+	StaticPromptIndicator  bool     `help:"Always show the prompt indicator with the default color, never with the error color"`
+	VenvNameSizeLimit      int      `help:"Show indicator instead of virtualenv name if name is longer than this limit (defaults to 0, which is unlimited)"`
+	Jobs                   int      `help:"Number of jobs currently running"`
+	GitAssumeUnchangedSize int64    `help:"Disable checking for changed/edited files in git repositories where the index is larger than this size (in KB), improves performance"`
+	GitDisableStats        []string `help:"Comma-separated list to disable individual git statuses, (valid choices: ahead, behind, staged, notStaged, untracked, conflicted, stashed)"`
+	GitMode                string   `help:"How to display git status, (valid choices: fancy, compact, simple)"`
+	Mode                   string   `help:"The characters used to make separators between segments, (valid choices: patched, compatible, flat)"`
+	Theme                  string   `help:"Set this to the theme you want to use, (valid choices: default, low-contrast, gruvbox, solarized-dark16, solarized-light16)"`
+	Shell                  string   `help:"Set this to your shell type, (valid choices: autodetect, bare, bash, zsh)"`
+	Modules                []string `help:"The list of modules to load, separated by ','. Unrecognized modules will be invoked as 'powerline-go-MODULE' executable plugins and should output a (possibly empty) list of JSON objects that unmarshal to powerline-go's Segment structs." enum:"aws,bzr,cwd,direnv,docker,docker-context,dotenv,duration,exit,fossil,gcp,git,gitlite,goenv,hg,host,jobs,kube,load,newline,nix-shell,node,perlbrew,perms,plenv,rbenv,root,rvm,shell-var,shenv,ssh,svn,termtitle,terraform-workspace,time,user,venv,vgo,vi-mode,wsl"`
+	ModulesRight           []string `help:"The list of modules to load anchored to the right, separated by ','. Unrecognized modules will be invoked as 'powerline-go-MODULE' executable plugins and should output a (possibly empty) list of JSON objects that unmarshal to powerline-go's Segment structs." enum:"aws,bzr,cwd,direnv,docker,docker-context,dotenv,duration,exit,fossil,gcp,git,gitlite,goenv,hg,host,jobs,kube,load,newline,nix-shell,node,perlbrew,perms,plenv,rbenv,root,rvm,shell-var,shenv,ssh,svn,termtitle,terraform-workspace,time,user,venv,vgo,vi-mode,wsl"`
+	Priority               []string `help:"Segments sorted by priority, if not enough space exists, the least priorized segments are removed first. Separate with ','" enum:"aws,bzr,cwd,direnv,docker,docker-context,dotenv,duration,exit,fossil,gcp,git,gitlite,goenv,hg,host,jobs,kube,load,newline,nix-shell,node,perlbrew,perms,plenv,rbenv,root,rvm,shell-var,shenv,ssh,svn,termtitle,terraform-workspace,time,user,venv,vgo,vi-mode,wsl"`
+	MaxWidthPercentage     int      `help:"Maximum width of the shell that the prompt may use, in percent. Setting this to 0 disables the shrinking subsystem."`
+	TruncateSegmentWidth   int      `help:"Maximum width of a segment, segments longer than this will be shortened if space is limited. Setting this to 0 disables it."`
+	PrevError              int      `help:"Exit code of previously executed command"`
+	NumericExitCodes       bool     `help:"Shows numeric exit codes for errors."`
+	IgnoreRepos            []string `help:"A list of git repos to ignore. Separate with ','. Repos are identified by their root directory."`
+	ShortenGKENames        bool     `help:"Shortens names for GKE Kube clusters."`
+	ShortenEKSNames        bool     `help:"Shortens names for EKS Kube clusters."`
+	ShortenOpenshiftNames  bool     `help:"Shortens names for Openshift Kube clusters."`
+	ShellVar               string   `help:"A shell variable to add to the segments."`
+	ShellVarNoWarnEmpty    bool     `help:"Disables warning for empty shell variable."`
+	TrimADDomain           bool     `helP:"Trim the Domainname from the AD username."`
+	Duration               string   `help:"The elapsed clock-time of the previous command"`
+	DurationMin            string   `help:"The minimal time a command has to take before the duration segment is shown"`
+	DurationLowPrecision   bool     `help:"Use low precision timing for duration with milliseconds as maximum resolution"`
+	Eval                   bool     `help:"Output prompt in 'eval' format."`
+	Condensed              bool     `help:"Remove spacing between segments"`
+	Time                   string   `help:"The layout string how a reference time should be represented. The reference time is predefined and not user choosen. Consult the golang documentation for details: https://pkg.go.dev/time#example-Time.Format"`
+	ViMode                 string   `help:"The current vi-mode (eg. KEYMAP for zsh) for vi-module module"`
+
+	PathAliases map[string]string `help:"One or more aliases from a path to a short name. Separate with ','. An alias maps a path like foo/bar/baz to a short name like FBB. Specify these as key/value pairs like foo/bar/baz=FBB. Use '~' for your home dir. You may need to escape this character to avoid shell substitution." mapsep:","`
+
+	Modes  SymbolMap `hidden:""`
+	Shells ShellMap  `hidden:""`
+	Themes ThemeMap  `hidden:""`
 }
 
 func (mode *SymbolTemplate) UnmarshalJSON(data []byte) error {
@@ -82,22 +85,13 @@ func (theme *Theme) UnmarshalJSON(data []byte) error {
 	return err
 }
 
-func configPath() string {
+func ConfigPath() string {
 	home, _ := os.UserHomeDir()
 	return filepath.Join(home, ".config", "powerline-go", "config.json")
 }
 
-func (cfg *Config) Load() error {
-	path := configPath()
-	file, err := ioutil.ReadFile(path)
-	if err != nil {
-		return nil // fail silently
-	}
-	return json.Unmarshal(file, cfg)
-}
-
 func (cfg *Config) Save() error {
-	path := configPath()
+	path := ConfigPath()
 	tmp := cfg
 	tmp.Themes = map[string]Theme{}
 	tmp.Modes = map[string]SymbolTemplate{}
@@ -106,5 +100,5 @@ func (cfg *Config) Save() error {
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(path, data, 0644)
+	return ioutil.WriteFile(path, data, 0o644)
 }
