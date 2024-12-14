@@ -1,5 +1,3 @@
-//go:build broken
-
 package segments
 
 import (
@@ -9,15 +7,17 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func GitLite(theme config.Theme) []Segment {
-	if len(p.ignoreRepos) > 0 {
+func GitLite(cfg config.Config) []Segment {
+	if len(cfg.IgnoreRepos) > 0 {
 		out, err := runGitCommand("git", "--no-optional-locks", "rev-parse", "--show-toplevel")
 		if err != nil {
 			return []Segment{}
 		}
 		out = strings.TrimSpace(out)
-		if p.ignoreRepos[out] {
-			return []Segment{}
+		for _, repo := range cfg.IgnoreRepos {
+			if out == repo {
+				return []Segment{}
+			}
 		}
 	}
 
@@ -30,19 +30,19 @@ func GitLite(theme config.Theme) []Segment {
 	var branch string
 
 	if status == "HEAD" {
-		branch = getGitDetachedBranch(p)
+		branch = getGitDetachedBranch(cfg)
 	} else {
 		branch = status
 	}
 
-	if p.cfg.GitMode != "compact" && len(p.symbols.RepoBranch) > 0 {
-		branch = fmt.Sprintf("%s %s", p.symbols.RepoBranch, branch)
+	if cfg.GitMode != "compact" && len(cfg.Symbols().RepoBranch) > 0 {
+		branch = fmt.Sprintf("%s %s", cfg.Symbols().RepoBranch, branch)
 	}
 
 	return []Segment{{
 		Name:       "git-branch",
 		Content:    branch,
-		Foreground: theme.RepoCleanFg,
-		Background: theme.RepoCleanBg,
+		Foreground: cfg.SelectedTheme().RepoCleanFg,
+		Background: cfg.SelectedTheme().RepoCleanBg,
 	}}
 }

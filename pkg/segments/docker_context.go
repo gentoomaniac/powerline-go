@@ -2,7 +2,6 @@ package segments
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -13,7 +12,7 @@ type DockerContextConfig struct {
 	CurrentContext string `json:"currentContext"`
 }
 
-func DockerContext(theme config.Theme) []Segment {
+func DockerContext(cfg config.Config) []Segment {
 	context := "default"
 	home, _ := os.LookupEnv("HOME")
 	contextFolder := filepath.Join(home, ".docker", "contexts")
@@ -25,7 +24,7 @@ func DockerContext(theme config.Theme) []Segment {
 	} else {
 		stat, err := os.Stat(contextFolder)
 		if err == nil && stat.IsDir() {
-			dockerConfigFile, err := ioutil.ReadFile(configFile)
+			dockerConfigFile, err := os.ReadFile(configFile)
 			if err == nil {
 				var dockerConfig DockerContextConfig
 				err = json.Unmarshal(dockerConfigFile, &dockerConfig)
@@ -44,7 +43,7 @@ func DockerContext(theme config.Theme) []Segment {
 	return []Segment{{
 		Name:       "docker-context",
 		Content:    "🐳" + context,
-		Foreground: theme.PlEnvFg,
-		Background: theme.PlEnvBg,
+		Foreground: cfg.SelectedTheme().PlEnvFg,
+		Background: cfg.SelectedTheme().PlEnvBg,
 	}}
 }

@@ -21,7 +21,7 @@ func getMd5(text string) []byte {
 	return hasher.Sum(nil)
 }
 
-func Host(theme config.Theme) []Segment {
+func Host(cfg config.Config) []Segment {
 	var hostPrompt string
 	var foreground, background uint8
 
@@ -44,7 +44,7 @@ func Host(theme config.Theme) []Segment {
 		} else {
 			hash := getMd5(hostName)
 			background = hash[0] % 128
-			foreground = theme.HostnameColorizedFgMap[background]
+			foreground = cfg.SelectedTheme().HostnameColorizedFgMap[background]
 		}
 	} else {
 		if p.cfg.Shell == "bash" {
@@ -55,8 +55,8 @@ func Host(theme config.Theme) []Segment {
 			hostPrompt = getHostName(p.hostname)
 		}
 
-		foreground = theme.HostnameFg
-		background = theme.HostnameBg
+		foreground = cfg.SelectedTheme().HostnameFg
+		background = cfg.SelectedTheme().HostnameBg
 	}
 
 	return []Segment{{

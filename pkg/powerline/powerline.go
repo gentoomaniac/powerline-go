@@ -29,17 +29,13 @@ const (
 
 type Powerline struct {
 	cfg            config.Config
-	cwd            string
 	userInfo       user.User
-	userIsAdmin    bool
 	hostname       string
 	username       string
 	theme          config.Theme
 	shell          shellinfo.ShellInfo
 	reset          string
-	symbols        config.SymbolTemplate
 	priorities     map[string]int
-	ignoreRepos    map[string]bool
 	Segments       [][]segments.Segment
 	curSegment     int
 	align          alignment
@@ -51,10 +47,9 @@ type prioritizedSegments struct {
 	segs []segments.Segment
 }
 
-func NewPowerline(cfg config.Config, cwd string, align alignment) *Powerline {
+func NewPowerline(cfg config.Config, align alignment) *Powerline {
 	p := new(Powerline)
 	p.cfg = cfg
-	p.cwd = cwd
 	userInfo, err := user.Current()
 	if userInfo != nil && err == nil {
 		p.userInfo = *userInfo
@@ -74,7 +69,6 @@ func NewPowerline(cfg config.Config, cwd string, align alignment) *Powerline {
 			p.username = usernameWithAd[1]
 		}
 	}
-	p.userIsAdmin = userIsAdmin()
 
 	p.theme = cfg.Themes[cfg.Theme]
 	if cfg.Shell == "autodetect" {
@@ -90,26 +84,18 @@ func NewPowerline(cfg config.Config, cwd string, align alignment) *Powerline {
 	}
 	p.shell = cfg.Shells[cfg.Shell]
 	p.reset = fmt.Sprintf(p.shell.ColorTemplate, "[0m")
-	p.symbols = cfg.Modes[cfg.Mode]
 	p.priorities = make(map[string]int)
 	for idx, priority := range cfg.Priority {
 		p.priorities[priority] = len(cfg.Priority) - idx
 	}
 	p.align = align
-	p.ignoreRepos = make(map[string]bool)
-	for _, r := range cfg.IgnoreRepos {
-		if r == "" {
-			continue
-		}
-		p.ignoreRepos[r] = true
-	}
 	p.Segments = make([][]segments.Segment, 1)
 	var mods []string
 	if p.align == AlignLeft {
 		mods = cfg.Modules
 		if len(cfg.ModulesRight) > 0 {
 			if p.SupportsRightModules() {
-				p.rightPowerline = NewPowerline(cfg, cwd, AlignRight)
+				p.rightPowerline = NewPowerline(cfg, AlignRight)
 			} else {
 				mods = append(mods, cfg.ModulesRight...)
 			}
@@ -187,9 +173,9 @@ func (p *Powerline) appendSegment(origin string, segment segments.Segment) {
 	}
 	if segment.Separator == "" {
 		if p.isRightPrompt() {
-			segment.Separator = p.symbols.SeparatorReverse
+			segment.Separator = p.cfg.Symbols().SeparatorReverse
 		} else {
-			segment.Separator = p.symbols.Separator
+			segment.Separator = p.cfg.Symbols().Separator
 		}
 	}
 	if segment.SeparatorForeground == 0 {
@@ -377,7 +363,8 @@ func (p *Powerline) drawRow(rowNum int, buffer *bytes.Buffer) {
 	}
 }
 
-func (p *Powerline) Draw() string {
+func (p *Powerline) Render() string {
+	log.Debug().Msgf("Draw(): %v", p.cfg.Modules)
 	var buffer bytes.Buffer
 
 	if p.cfg.Eval {
@@ -413,7 +400,7 @@ func (p *Powerline) Draw() string {
 		buffer.WriteString(p.shell.RootIndicator)
 		buffer.WriteString(p.reset)
 		buffer.WriteString(p.fgColor(background))
-		buffer.WriteString(p.symbols.Separator)
+		buffer.WriteString(p.cfg.Symbols().Separator)
 		buffer.WriteString(p.reset)
 		buffer.WriteRune(' ')
 	}
@@ -435,7 +422,7 @@ func (p *Powerline) Draw() string {
 			}
 		}
 		if p.HasRightModules() {
-			buffer.WriteString(p.rightPowerline.Draw())
+			buffer.WriteString(p.rightPowerline.Render())
 		}
 	}
 

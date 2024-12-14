@@ -2,7 +2,6 @@ package config
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"os"
 	"path/filepath"
 
@@ -10,14 +9,17 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/shellinfo"
 )
 
+var defaultConfigPath = []string{".config", "powerline-go", "config.json"}
+
 type (
-	SymbolMap map[string]SymbolTemplate
-	ShellMap  map[string]shellinfo.ShellInfo
-	ThemeMap  map[string]Theme
+	ShellMap map[string]shellinfo.ShellInfo
+	ThemeMap map[string]Theme
 )
 
 type Config struct {
 	logging.LoggingConfig
+
+	SaveDefaultConfig bool `help:"Save default config and exit"`
 
 	CwdMode                string   `help:"How to display the current directory"`
 	CwdMaxDepth            int      `help:"Maximum number of directories to show in path"`
@@ -60,37 +62,24 @@ type Config struct {
 
 	PathAliases map[string]string `help:"One or more aliases from a path to a short name. Separate with ','. An alias maps a path like foo/bar/baz to a short name like FBB. Specify these as key/value pairs like foo/bar/baz=FBB. Use '~' for your home dir. You may need to escape this character to avoid shell substitution." mapsep:","`
 
-	Modes  SymbolMap `hidden:""`
-	Shells ShellMap  `hidden:""`
-	Themes ThemeMap  `hidden:""`
+	Modes  map[string]SymbolTemplate `hidden:""`
+	Shells ShellMap                  `hidden:""`
+	Themes ThemeMap                  `hidden:""`
 }
 
-func (mode *SymbolTemplate) UnmarshalJSON(data []byte) error {
-	type Alias SymbolTemplate
-	tmp := Defaults.Modes[Defaults.Mode]
-	err := json.Unmarshal(data, (*Alias)(&tmp))
-	if err == nil {
-		*mode = tmp
-	}
-	return err
+func (cfg *Config) SelectedTheme() Theme {
+	return cfg.Themes[cfg.Theme]
 }
 
-func (theme *Theme) UnmarshalJSON(data []byte) error {
-	type Alias Theme
-	tmp := Defaults.Themes[Defaults.Theme]
-	err := json.Unmarshal(data, (*Alias)(&tmp))
-	if err == nil {
-		*theme = tmp
-	}
-	return err
+func (cfg *Config) Symbols() SymbolTemplate {
+	return cfg.Modes[cfg.Mode]
 }
 
-func ConfigPath() string {
-	home, _ := os.UserHomeDir()
-	return filepath.Join(home, ".config", "powerline-go", "config.json")
+func (cfg *Config) CurrentShell() shellinfo.ShellInfo {
+	return cfg.Shells[cfg.Shell]
 }
 
-func (cfg *Config) Save() error {
+func (cfg *Config) save() error {
 	path := ConfigPath()
 	tmp := cfg
 	tmp.Themes = map[string]Theme{}
@@ -100,5 +89,27 @@ func (cfg *Config) Save() error {
 	if err != nil {
 		return err
 	}
-	return ioutil.WriteFile(path, data, 0o644)
+	return os.WriteFile(path, data, 0o644)
+}
+
+func (cfg *Config) EnsureExists() error {
+	home, _ := os.UserHomeDir()
+	p := []string{home}
+	path := filepath.Join(append(p, defaultConfigPath[:len(defaultConfigPath)-1]...)...)
+
+	if _, err := os.Stat(path); os.IsNotExist(err) {
+		err := os.MkdirAll(path, os.ModePerm)
+		if err != nil {
+			return err
+		}
+	}
+
+	return cfg.save()
+}
+
+func ConfigPath() string {
+	home, _ := os.UserHomeDir()
+	path := []string{home}
+	path = append(path, defaultConfigPath...)
+	return filepath.Join(path...)
 }

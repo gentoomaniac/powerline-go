@@ -6,7 +6,7 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func DotEnv(theme config.Theme) []Segment {
+func DotEnv(cfg config.Config) []Segment {
 	files := []string{".env", ".envrc"}
 	dotEnv := false
 	for _, file := range files {
@@ -22,7 +22,7 @@ func DotEnv(theme config.Theme) []Segment {
 	return []Segment{{
 		Name:       "dotenv",
 		Content:    "\u2235",
-		Foreground: theme.DotEnvFg,
-		Background: theme.DotEnvBg,
+		Foreground: cfg.SelectedTheme().DotEnvFg,
+		Background: cfg.SelectedTheme().DotEnvBg,
 	}}
 }

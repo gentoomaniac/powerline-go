@@ -1,5 +1,3 @@
-//go:build broken
-
 package segments
 
 import (
@@ -51,21 +49,21 @@ func getMeaningFromExitCode(exitCode int) string {
 	return fmt.Sprintf("%d", exitCode)
 }
 
-func ExitCode(theme config.Theme) []Segment {
+func ExitCode(cfg config.Config) []Segment {
 	var meaning string
-	if p.cfg.PrevError == 0 {
+	if cfg.PrevError == 0 {
 		return []Segment{}
 	}
-	if p.cfg.NumericExitCodes {
-		meaning = strconv.Itoa(p.cfg.PrevError)
+	if cfg.NumericExitCodes {
+		meaning = strconv.Itoa(cfg.PrevError)
 	} else {
-		meaning = getMeaningFromExitCode(p.cfg.PrevError)
+		meaning = getMeaningFromExitCode(cfg.PrevError)
 	}
 
 	return []Segment{{
 		Name:       "exit",
 		Content:    meaning,
-		Foreground: theme.CmdFailedFg,
-		Background: theme.CmdFailedBg,
+		Foreground: cfg.SelectedTheme().CmdFailedFg,
+		Background: cfg.SelectedTheme().CmdFailedBg,
 	}}
 }

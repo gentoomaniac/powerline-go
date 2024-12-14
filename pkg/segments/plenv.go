@@ -6,7 +6,7 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func PlEnv(theme config.Theme) []Segment {
+func PlEnv(cfg config.Config) []Segment {
 	env, _ := os.LookupEnv("PLENV_VERSION")
 	if env == "" {
 		return []Segment{}
@@ -14,7 +14,7 @@ func PlEnv(theme config.Theme) []Segment {
 	return []Segment{{
 		Name:       "plenv",
 		Content:    env,
-		Foreground: theme.PlEnvFg,
-		Background: theme.PlEnvBg,
+		Foreground: cfg.SelectedTheme().PlEnvFg,
+		Background: cfg.SelectedTheme().PlEnvBg,
 	}}
 }

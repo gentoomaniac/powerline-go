@@ -1,5 +1,3 @@
-//go:build broken
-
 package segments
 
 import (
@@ -8,11 +6,21 @@ import (
 	"os/exec"
 	"path"
 	"regexp"
+	"runtime"
 	"strconv"
 	"strings"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
+	"github.com/rs/zerolog/log"
 )
+
+func homeEnvName() string {
+	env := "HOME"
+	if runtime.GOOS == "windows" {
+		env = "USERPROFILE"
+	}
+	return env
+}
 
 type repoStats struct {
 	ahead      int
@@ -44,14 +52,14 @@ func addRepoStatsSegment(nChanges int, symbol string, foreground uint8, backgrou
 	return []Segment{}
 }
 
-func (r repoStats) GitSegments(theme config.Theme) (segments segment) {
-	segments = append(segments, addRepoStatsSegment(r.ahead, p.symbols.RepoAhead, theme.GitAheadFg, theme.GitAheadBg)...)
-	segments = append(segments, addRepoStatsSegment(r.behind, p.symbols.RepoBehind, theme.GitBehindFg, theme.GitBehindBg)...)
-	segments = append(segments, addRepoStatsSegment(r.staged, p.symbols.RepoStaged, theme.GitStagedFg, theme.GitStagedBg)...)
-	segments = append(segments, addRepoStatsSegment(r.notStaged, p.symbols.RepoNotStaged, theme.GitNotStagedFg, theme.GitNotStagedBg)...)
-	segments = append(segments, addRepoStatsSegment(r.untracked, p.symbols.RepoUntracked, theme.GitUntrackedFg, theme.GitUntrackedBg)...)
-	segments = append(segments, addRepoStatsSegment(r.conflicted, p.symbols.RepoConflicted, theme.GitConflictedFg, theme.GitConflictedBg)...)
-	segments = append(segments, addRepoStatsSegment(r.stashed, p.symbols.RepoStashed, theme.GitStashedFg, theme.GitStashedBg)...)
+func (r repoStats) GitSegments(cfg config.Config) (segments []Segment) {
+	segments = append(segments, addRepoStatsSegment(r.ahead, cfg.Symbols().RepoAhead, cfg.SelectedTheme().GitAheadFg, cfg.SelectedTheme().GitAheadBg)...)
+	segments = append(segments, addRepoStatsSegment(r.behind, cfg.Symbols().RepoBehind, cfg.SelectedTheme().GitBehindFg, cfg.SelectedTheme().GitBehindBg)...)
+	segments = append(segments, addRepoStatsSegment(r.staged, cfg.Symbols().RepoStaged, cfg.SelectedTheme().GitStagedFg, cfg.SelectedTheme().GitStagedBg)...)
+	segments = append(segments, addRepoStatsSegment(r.notStaged, cfg.Symbols().RepoNotStaged, cfg.SelectedTheme().GitNotStagedFg, cfg.SelectedTheme().GitNotStagedBg)...)
+	segments = append(segments, addRepoStatsSegment(r.untracked, cfg.Symbols().RepoUntracked, cfg.SelectedTheme().GitUntrackedFg, cfg.SelectedTheme().GitUntrackedBg)...)
+	segments = append(segments, addRepoStatsSegment(r.conflicted, cfg.Symbols().RepoConflicted, cfg.SelectedTheme().GitConflictedFg, cfg.SelectedTheme().GitConflictedBg)...)
+	segments = append(segments, addRepoStatsSegment(r.stashed, cfg.Symbols().RepoStashed, cfg.SelectedTheme().GitStashedFg, cfg.SelectedTheme().GitStashedBg)...)
 	return
 }
 
@@ -68,15 +76,15 @@ func addRepoStatsSymbol(nChanges int, symbol string, GitMode string) string {
 	return ""
 }
 
-func (r repoStats) GitSymbols(theme config.Theme) string {
+func (r repoStats) GitSymbols(cfg config.Config) string {
 	var info string
-	info += addRepoStatsSymbol(r.ahead, p.symbols.RepoAhead, p.cfg.GitMode)
-	info += addRepoStatsSymbol(r.behind, p.symbols.RepoBehind, p.cfg.GitMode)
-	info += addRepoStatsSymbol(r.staged, p.symbols.RepoStaged, p.cfg.GitMode)
-	info += addRepoStatsSymbol(r.notStaged, p.symbols.RepoNotStaged, p.cfg.GitMode)
-	info += addRepoStatsSymbol(r.untracked, p.symbols.RepoUntracked, p.cfg.GitMode)
-	info += addRepoStatsSymbol(r.conflicted, p.symbols.RepoConflicted, p.cfg.GitMode)
-	info += addRepoStatsSymbol(r.stashed, p.symbols.RepoStashed, p.cfg.GitMode)
+	info += addRepoStatsSymbol(r.ahead, cfg.Symbols().RepoAhead, cfg.GitMode)
+	info += addRepoStatsSymbol(r.behind, cfg.Symbols().RepoBehind, cfg.GitMode)
+	info += addRepoStatsSymbol(r.staged, cfg.Symbols().RepoStaged, cfg.GitMode)
+	info += addRepoStatsSymbol(r.notStaged, cfg.Symbols().RepoNotStaged, cfg.GitMode)
+	info += addRepoStatsSymbol(r.untracked, cfg.Symbols().RepoUntracked, cfg.GitMode)
+	info += addRepoStatsSymbol(r.conflicted, cfg.Symbols().RepoConflicted, cfg.GitMode)
+	info += addRepoStatsSymbol(r.stashed, cfg.Symbols().RepoStashed, cfg.GitMode)
 	return info
 }
 
@@ -122,7 +130,7 @@ func parseGitBranchInfo(status []string) map[string]string {
 	return groupDict(branchRegex, status[0])
 }
 
-func getGitDetachedBranch(theme config.Theme) string {
+func getGitDetachedBranch(cfg config.Config) string {
 	out, err := runGitCommand("git", "--no-optional-locks", "rev-parse", "--short", "HEAD")
 	if err != nil {
 		out, err := runGitCommand("git", "--no-optional-locks", "symbolic-ref", "--short", "HEAD")
@@ -132,7 +140,7 @@ func getGitDetachedBranch(theme config.Theme) string {
 		return strings.SplitN(out, "\n", 2)[0]
 	}
 	detachedRef := strings.SplitN(out, "\n", 2)
-	return fmt.Sprintf("%s %s", p.symbols.RepoDetached, detachedRef[0])
+	return fmt.Sprintf("%s %s", cfg.Symbols().RepoDetached, detachedRef[0])
 }
 
 func parseGitStats(status []string) repoStats {
@@ -178,23 +186,29 @@ func indexSize(root string) (int64, error) {
 	return fileInfo.Size(), nil
 }
 
-func Git(theme config.Theme) []Segment {
-	repoRoot, err := repoRoot(p.cwd)
+func Git(cfg config.Config) []Segment {
+	cwd, err := os.Getwd()
+	if err != nil {
+		log.Error().Err(err).Msg("could not determine current working directory")
+	}
+	repoRoot, err := repoRoot(cwd)
 	if err != nil {
 		return []Segment{}
 	}
 
-	if len(p.ignoreRepos) > 0 && p.ignoreRepos[repoRoot] {
-		return []Segment{}
+	for _, repo := range cfg.IgnoreRepos {
+		if repoRoot == repo {
+			return []Segment{}
+		}
 	}
 
 	args := []string{
 		"--no-optional-locks", "status", "--porcelain", "-b", "--ignore-submodules",
 	}
 
-	if p.cfg.GitAssumeUnchangedSize > 0 {
-		indexSize, _ := indexSize(p.cwd)
-		if indexSize > (p.cfg.GitAssumeUnchangedSize * 1024) {
+	if cfg.GitAssumeUnchangedSize > 0 {
+		indexSize, _ := indexSize(cwd)
+		if indexSize > (cfg.GitAssumeUnchangedSize * 1024) {
 			args = append(args, "-uno")
 		}
 	}
@@ -218,23 +232,23 @@ func Git(theme config.Theme) []Segment {
 
 		branch = branchInfo["local"]
 	} else {
-		branch = getGitDetachedBranch(p)
+		branch = getGitDetachedBranch(cfg)
 	}
 
-	if len(p.symbols.RepoBranch) > 0 {
-		branch = fmt.Sprintf("%s %s", p.symbols.RepoBranch, branch)
+	if len(cfg.Symbols().RepoBranch) > 0 {
+		branch = fmt.Sprintf("%s %s", cfg.Symbols().RepoBranch, branch)
 	}
 
 	var foreground, background uint8
 	if stats.dirty() {
-		foreground = theme.RepoDirtyFg
-		background = theme.RepoDirtyBg
+		foreground = cfg.SelectedTheme().RepoDirtyFg
+		background = cfg.SelectedTheme().RepoDirtyBg
 	} else {
-		foreground = theme.RepoCleanFg
-		background = theme.RepoCleanBg
+		foreground = cfg.SelectedTheme().RepoCleanFg
+		background = cfg.SelectedTheme().RepoCleanBg
 	}
 
-	segments := segment{{
+	segments := []Segment{{
 		Name:       "git-branch",
 		Content:    branch,
 		Foreground: foreground,
@@ -242,7 +256,7 @@ func Git(theme config.Theme) []Segment {
 	}}
 
 	stashEnabled := true
-	for _, stat := range p.cfg.GitDisableStats {
+	for _, stat := range cfg.GitDisableStats {
 		// "ahead, behind, staged, notStaged, untracked, conflicted, stashed"
 		switch stat {
 		case "ahead":
@@ -270,16 +284,16 @@ func Git(theme config.Theme) []Segment {
 		}
 	}
 
-	if p.cfg.GitMode == "simple" {
+	if cfg.GitMode == "simple" {
 		if stats.any() {
-			segments[0].Content += " " + stats.GitSymbols(p)
+			segments[0].Content += " " + stats.GitSymbols(cfg)
 		}
-	} else if p.cfg.GitMode == "compact" {
+	} else if cfg.GitMode == "compact" {
 		if stats.any() {
-			segments[0].Content += stats.GitSymbols(p)
+			segments[0].Content += stats.GitSymbols(cfg)
 		}
 	} else { // fancy
-		segments = append(segments, stats.GitSegments(p)...)
+		segments = append(segments, stats.GitSegments(cfg)...)
 	}
 
 	return segments

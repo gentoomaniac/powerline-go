@@ -29,7 +29,7 @@ func checkEnvForGoenvVersion() (string, error) {
 	if len(goenvVersion) > 0 {
 		return goenvVersion, nil
 	} else {
-		return "", fmt.Errorf("Not found in %s", goenvVersionEnvVar)
+		return "", fmt.Errorf("not found in %s", goenvVersionEnvVar)
 	}
 }
 
@@ -52,17 +52,17 @@ func checkForGoVersionFileInTree() (string, error) {
 		}
 	}
 
-	return "", fmt.Errorf("No %s file found in tree", goenvVersionFileSuffix)
+	return "", fmt.Errorf("no %s file found in tree", goenvVersionFileSuffix)
 }
 
 // check for global version
 func checkForGoenvGlobalVersion() (string, error) {
 	homeDir, _ := os.UserHomeDir()
-	globalGoVersion, err := ioutil.ReadFile(homeDir + goenvGlobalVersionFileSuffix)
+	globalGoVersion, err := os.ReadFile(homeDir + goenvGlobalVersionFileSuffix)
 	if err == nil {
 		return strings.TrimSpace(string(globalGoVersion)), nil
 	} else {
-		return "", fmt.Errorf("No global go version file found in %s", homeDir+goenvGlobalVersionFileSuffix)
+		return "", fmt.Errorf("no global go version file found in %s", homeDir+goenvGlobalVersionFileSuffix)
 	}
 }
 
@@ -77,10 +77,10 @@ func checkForGoenvOutput() (string, error) {
 		}
 	}
 
-	return "", fmt.Errorf("Not found in goenv object")
+	return "", fmt.Errorf("not found in goenv object")
 }
 
-func Goenv(theme config.Theme) []Segment {
+func Goenv(cfg config.Config) []Segment {
 	global, _ := checkForGoenvGlobalVersion()
 
 	segment, err := checkEnvForGoenvVersion()
@@ -96,8 +96,8 @@ func Goenv(theme config.Theme) []Segment {
 		return []Segment{{
 			Name:       "goenv",
 			Content:    segment,
-			Foreground: theme.GoenvFg,
-			Background: theme.GoenvBg,
+			Foreground: cfg.SelectedTheme().GoenvFg,
+			Background: cfg.SelectedTheme().GoenvBg,
 		}}
 	}
 }

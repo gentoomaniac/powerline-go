@@ -78,7 +78,7 @@ func checkForRbenvOutput() (string, error) {
 	return items[0], nil
 }
 
-func Rbenv(theme config.Theme) []Segment {
+func Rbenv(cfg config.Config) []Segment {
 	var (
 		segment string
 		err     error
@@ -100,7 +100,7 @@ func Rbenv(theme config.Theme) []Segment {
 	return []Segment{{
 		Name:       "rbenv",
 		Content:    segment,
-		Foreground: theme.TimeFg,
-		Background: theme.TimeBg,
+		Foreground: cfg.SelectedTheme().TimeFg,
+		Background: cfg.SelectedTheme().TimeBg,
 	}}
 }

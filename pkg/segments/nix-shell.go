@@ -6,7 +6,7 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func NixShell(theme config.Theme) []Segment {
+func NixShell(cfg config.Config) []Segment {
 	var nixShell string
 	nixShell, _ = os.LookupEnv("IN_NIX_SHELL")
 	if nixShell == "" {
@@ -15,7 +15,7 @@ func NixShell(theme config.Theme) []Segment {
 	return []Segment{{
 		Name:       "nix-shell",
 		Content:    "\uf313",
-		Foreground: theme.NixShellFg,
-		Background: theme.NixShellBg,
+		Foreground: cfg.SelectedTheme().NixShellFg,
+		Background: cfg.SelectedTheme().NixShellBg,
 	}}
 }
