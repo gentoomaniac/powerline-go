@@ -5,7 +5,6 @@ import (
 	"fmt"
 	"os"
 	"os/user"
-	"path"
 	"strconv"
 	"strings"
 	"sync"
@@ -24,8 +23,8 @@ import (
 type alignment int
 
 const (
-	alignLeft alignment = iota
-	alignRight
+	AlignLeft alignment = iota
+	AlignRight
 )
 
 type Powerline struct {
@@ -106,11 +105,11 @@ func NewPowerline(cfg config.Config, cwd string, align alignment) *Powerline {
 	}
 	p.Segments = make([][]segments.Segment, 1)
 	var mods []string
-	if p.align == alignLeft {
+	if p.align == AlignLeft {
 		mods = cfg.Modules
 		if len(cfg.ModulesRight) > 0 {
 			if p.SupportsRightModules() {
-				p.rightPowerline = NewPowerline(cfg, cwd, alignRight)
+				p.rightPowerline = NewPowerline(cfg, cwd, AlignRight)
 			} else {
 				mods = append(mods, cfg.ModulesRight...)
 			}
@@ -121,19 +120,6 @@ func NewPowerline(cfg config.Config, cwd string, align alignment) *Powerline {
 	initSegments(p, mods)
 
 	return p
-}
-
-func detectShell(shellExe string) string {
-	var shell string
-	shellExe = path.Base(shellExe)
-	if strings.Contains(shellExe, "bash") {
-		shell = "bash"
-	} else if strings.Contains(shellExe, "zsh") {
-		shell = "zsh"
-	} else {
-		shell = "bare"
-	}
-	return shell
 }
 
 func initSegments(p *Powerline, mods []string) {
@@ -395,7 +381,7 @@ func (p *Powerline) Draw() string {
 	var buffer bytes.Buffer
 
 	if p.cfg.Eval {
-		if p.align == alignLeft {
+		if p.align == AlignLeft {
 			buffer.WriteString(p.shell.EvalPromptPrefix)
 		} else if p.SupportsRightModules() {
 			buffer.WriteString(p.shell.EvalPromptRightPrefix)
@@ -434,7 +420,7 @@ func (p *Powerline) Draw() string {
 
 	if p.cfg.Eval {
 		switch p.align {
-		case alignLeft:
+		case AlignLeft:
 			buffer.WriteString(p.shell.EvalPromptSuffix)
 			if p.SupportsRightModules() {
 				buffer.WriteRune('\n')
@@ -442,7 +428,7 @@ func (p *Powerline) Draw() string {
 					buffer.WriteString(p.shell.EvalPromptRightPrefix + p.shell.EvalPromptRightSuffix)
 				}
 			}
-		case alignRight:
+		case AlignRight:
 			if p.SupportsRightModules() {
 				buffer.Truncate(buffer.Len() - 1)
 				buffer.WriteString(p.shell.EvalPromptRightSuffix)
@@ -465,5 +451,5 @@ func (p *Powerline) SupportsRightModules() bool {
 }
 
 func (p *Powerline) isRightPrompt() bool {
-	return p.align == alignRight && p.SupportsRightModules()
+	return p.align == AlignRight && p.SupportsRightModules()
 }

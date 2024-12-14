@@ -1,3 +1,5 @@
+//go:build exitcodes
+
 package exitcode
 
 var Signals = map[int]string{
@@ -34,4 +36,3 @@ var Signals = map[int]string{
 	0x1f: "SIGUSR2",
 	0x20: "SIGTHR",
 }
-
