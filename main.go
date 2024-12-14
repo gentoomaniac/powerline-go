@@ -8,26 +8,8 @@ import (
 	"os"
 	"strings"
 
-	pwl "github.com/justjanne/powerline-go/powerline"
-)
-
-type alignment int
-
-const (
-	alignLeft alignment = iota
-	alignRight
-)
-
-const (
-	// MinUnsignedInteger minimum unsigned integer
-	MinUnsignedInteger uint = 0
-	// MaxUnsignedInteger maximum unsigned integer
-	MaxUnsignedInteger = ^MinUnsignedInteger
-	// MaxInteger maximum integer
-	MaxInteger = int(MaxUnsignedInteger >> 1)
-	/* MinInteger minimum integer
-	MinInteger = ^MaxInteger
-	*/
+	"github.com/gentoomaniac/powerline-go/pkg/config"
+	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
 func warn(msg string) {
@@ -70,49 +52,6 @@ func getValidCwd() string {
 	return cwd
 }
 
-var modules = map[string]func(*powerline) []pwl.Segment{
-	"aws":                 segmentAWS,
-	"bzr":                 segmentBzr,
-	"cwd":                 segmentCwd,
-	"direnv":              segmentDirenv,
-	"docker":              segmentDocker,
-	"docker-context":      segmentDockerContext,
-	"dotenv":              segmentDotEnv,
-	"duration":            segmentDuration,
-	"exit":                segmentExitCode,
-	"fossil":              segmentFossil,
-	"gcp":                 segmentGCP,
-	"git":                 segmentGit,
-	"gitlite":             segmentGitLite,
-	"goenv":               segmentGoenv,
-	"hg":                  segmentHg,
-	"svn":                 segmentSubversion,
-	"host":                segmentHost,
-	"jobs":                segmentJobs,
-	"kube":                segmentKube,
-	"load":                segmentLoad,
-	"newline":             segmentNewline,
-	"perlbrew":            segmentPerlbrew,
-	"plenv":               segmentPlEnv,
-	"perms":               segmentPerms,
-	"rbenv":               segmentRbenv,
-	"root":                segmentRoot,
-	"rvm":                 segmentRvm,
-	"shell-var":           segmentShellVar,
-	"shenv":               segmentShEnv,
-	"ssh":                 segmentSSH,
-	"termtitle":           segmentTermTitle,
-	"terraform-workspace": segmentTerraformWorkspace,
-	"time":                segmentTime,
-	"node":                segmentNode,
-	"user":                segmentUser,
-	"venv":                segmentVirtualEnv,
-	"vgo":                 segmentVirtualGo,
-	"vi-mode":             segmentViMode,
-	"wsl":                 segmentWSL,
-	"nix-shell":           segmentNixShell,
-}
-
 func comments(lines ...string) string {
 	return " " + strings.Join(lines, "\n"+" ")
 }
@@ -124,7 +63,7 @@ func commentsWithDefaults(lines ...string) string {
 func main() {
 	flag.Parse()
 
-	cfg := defaults
+	cfg := config.Defaults
 	err := cfg.Load()
 	if err != nil {
 		println("Error loading config")
@@ -222,7 +161,7 @@ func main() {
 	if strings.HasSuffix(cfg.Theme, ".json") {
 		file, err := ioutil.ReadFile(cfg.Theme)
 		if err == nil {
-			theme := cfg.Themes[defaults.Theme]
+			theme := cfg.Themes[config.Defaults.Theme]
 			err = json.Unmarshal(file, &theme)
 			if err == nil {
 				cfg.Themes[cfg.Theme] = theme
@@ -236,7 +175,7 @@ func main() {
 	if strings.HasSuffix(cfg.Mode, ".json") {
 		file, err := ioutil.ReadFile(cfg.Mode)
 		if err == nil {
-			symbols := cfg.Modes[defaults.Mode]
+			symbols := cfg.Modes[config.Defaults.Mode]
 			err = json.Unmarshal(file, &symbols)
 			if err == nil {
 				cfg.Modes[cfg.Mode] = symbols
@@ -247,10 +186,10 @@ func main() {
 		}
 	}
 
-	p := newPowerline(cfg, getValidCwd(), alignLeft)
-	if p.supportsRightModules() && p.hasRightModules() && !cfg.Eval {
+	p := pwl.NewPowerline(cfg, getValidCwd(), alignLeft)
+	if p.SupportsRightModules() && p.HasRightModules() && !cfg.Eval {
 		panic("Flag '-modules-right' requires '-eval' mode.")
 	}
 
-	fmt.Print(p.draw())
+	fmt.Print(p.Draw())
 }
