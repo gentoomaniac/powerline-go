@@ -4,16 +4,15 @@ import (
 	"os"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
-func VirtualGo(theme config.Theme) []segment {
+func VirtualGo(theme config.Theme) []Segment {
 	env, _ := os.LookupEnv("VIRTUALGO")
 	if env == "" {
-		return []segment{}
+		return []Segment{}
 	}
 
-	return []segment{{
+	return []Segment{{
 		Name:       "vgo",
 		Content:    env,
 		Foreground: theme.VirtualGoFg,

@@ -5,25 +5,23 @@ import (
 	"os"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
 const wsFile = "./.terraform/environment"
 
-func TerraformWorkspace(theme config.Theme) []segment {
+func TerraformWorkspace(theme config.Theme) []Segment {
 	stat, err := os.Stat(wsFile)
 	if err != nil {
-		return []segment{}
+		return []Segment{}
 	}
 	if stat.IsDir() {
-		return []segment{}
+		return []Segment{}
 	}
 	workspace, err := ioutil.ReadFile(wsFile)
 	if err != nil {
-		return []segment{}
+		return []Segment{}
 	}
-	return []segment{{
+	return []Segment{{
 		Name:       "terraform-workspace",
 		Content:    string(workspace),
 		Foreground: theme.TFWsFg,

@@ -4,10 +4,9 @@ import (
 	"os"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
-func DotEnv(theme config.Theme) []segment {
+func DotEnv(theme config.Theme) []Segment {
 	files := []string{".env", ".envrc"}
 	dotEnv := false
 	for _, file := range files {
@@ -18,9 +17,9 @@ func DotEnv(theme config.Theme) []segment {
 		}
 	}
 	if !dotEnv {
-		return []segment{}
+		return []Segment{}
 	}
-	return []segment{{
+	return []Segment{{
 		Name:       "dotenv",
 		Content:    "\u2235",
 		Foreground: theme.DotEnvFg,

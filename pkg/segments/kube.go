@@ -1,3 +1,5 @@
+//go:build broken
+
 package segments
 
 import (
@@ -10,7 +12,6 @@ import (
 	"strings"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 
 	"gopkg.in/yaml.v2"
 )
@@ -52,7 +53,7 @@ func readKubeConfig(config *KubeConfig, path string) (err error) {
 	return
 }
 
-func Kube(theme config.Theme) []segment {
+func Kube(theme config.Theme) []Segment {
 	paths := append(strings.Split(os.Getenv("KUBECONFIG"), ":"), path.Join(homePath(), ".kube", "config"))
 	config := &KubeConfig{}
 	for _, configPath := range paths {

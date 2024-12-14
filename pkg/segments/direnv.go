@@ -1,3 +1,5 @@
+//go:build broken
+
 package segments
 
 import (
@@ -6,13 +8,12 @@ import (
 	"strings"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
-func Direnv(theme config.Theme) []segment {
+func Direnv(theme config.Theme) []Segment {
 	content := os.Getenv("DIRENV_DIR")
 	if content == "" {
-		return []segment{}
+		return []Segment{}
 	}
 	if strings.TrimPrefix(content, "-") == p.userInfo.HomeDir {
 		content = "~"
@@ -20,7 +21,7 @@ func Direnv(theme config.Theme) []segment {
 		content = filepath.Base(content)
 	}
 
-	return []segment{{
+	return []Segment{{
 		Name:       "direnv",
 		Content:    content,
 		Foreground: theme.DotEnvFg,

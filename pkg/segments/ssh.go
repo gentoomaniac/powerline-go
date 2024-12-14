@@ -1,17 +1,17 @@
+//go:build broken
+
 package segments
 
 import (
 	"os"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
-func SSH(theme config.Theme) []segment {
+func SSH(theme config.Theme) []Segment {
 	sshClient, _ := os.LookupEnv("SSH_CLIENT")
 	if sshClient == "" {
-		return []segment{}
+		return []Segment{}
 	}
 	var networkIcon string
 	if p.cfg.SshAlternateIcon {
@@ -20,7 +20,7 @@ func SSH(theme config.Theme) []segment {
 		networkIcon = p.symbols.Network
 	}
 
-	return []segment{{
+	return []Segment{{
 		Name:       "ssh",
 		Content:    networkIcon,
 		Foreground: theme.SSHFg,

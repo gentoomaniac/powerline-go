@@ -6,8 +6,6 @@ import (
 	"strings"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
 func getHgStatus() (bool, bool, bool) {
@@ -33,11 +31,11 @@ func getHgStatus() (bool, bool, bool) {
 	return hasModifiedFiles, hasUntrackedFiles, hasMissingFiles
 }
 
-func Hg(theme config.Theme) []segment {
+func Hg(theme config.Theme) []Segment {
 	out, _ := exec.Command("hg", "branch").Output()
 	output := strings.SplitN(string(out), "\n", 2)
 	if !(len(output) > 0 && output[0] != "") {
-		return []segment{}
+		return []Segment{}
 	}
 	branch := output[0]
 	hasModifiedFiles, hasUntrackedFiles, hasMissingFiles := getHgStatus()
@@ -66,7 +64,7 @@ func Hg(theme config.Theme) []segment {
 		content = branch
 	}
 
-	return []segment{{
+	return []Segment{{
 		Name:       "hg",
 		Content:    content,
 		Foreground: foreground,

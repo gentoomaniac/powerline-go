@@ -1,3 +1,5 @@
+//go:build broken
+
 package segments
 
 import (
@@ -8,8 +10,6 @@ import (
 	"strings"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
 const pkgfile = "./package.json"
@@ -47,14 +47,14 @@ func getPackageVersion() string {
 	return strings.TrimSpace(pkg.Version)
 }
 
-func Node(theme config.Theme) []segment {
+func Node(theme config.Theme) []Segment {
 	nodeVersion := getNodeVersion()
 	packageVersion := getPackageVersion()
 
-	segments := segment{}
+	segments := []Segment{}
 
 	if nodeVersion != "" {
-		segments = append(segments, segment{
+		segments = append(segments, Segment{
 			Name:       "node",
 			Content:    p.symbols.NodeIndicator + " " + nodeVersion,
 			Foreground: theme.NodeVersionFg,
@@ -63,7 +63,7 @@ func Node(theme config.Theme) []segment {
 	}
 
 	if packageVersion != "" {
-		segments = append(segments, segment{
+		segments = append(segments, Segment{
 			Name:       "node-segment",
 			Content:    packageVersion + " " + p.symbols.NodeIndicator,
 			Foreground: theme.NodeFg,

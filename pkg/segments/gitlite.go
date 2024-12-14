@@ -1,3 +1,5 @@
+//go:build broken
+
 package segments
 
 import (
@@ -5,24 +7,23 @@ import (
 	"strings"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
-func GitLite(theme config.Theme) []segment {
+func GitLite(theme config.Theme) []Segment {
 	if len(p.ignoreRepos) > 0 {
 		out, err := runGitCommand("git", "--no-optional-locks", "rev-parse", "--show-toplevel")
 		if err != nil {
-			return []segment{}
+			return []Segment{}
 		}
 		out = strings.TrimSpace(out)
 		if p.ignoreRepos[out] {
-			return []segment{}
+			return []Segment{}
 		}
 	}
 
 	out, err := runGitCommand("git", "--no-optional-locks", "rev-parse", "--abbrev-ref", "HEAD")
 	if err != nil {
-		return []segment{}
+		return []Segment{}
 	}
 
 	status := strings.TrimSpace(out)
@@ -38,7 +39,7 @@ func GitLite(theme config.Theme) []segment {
 		branch = fmt.Sprintf("%s %s", p.symbols.RepoBranch, branch)
 	}
 
-	return []segment{{
+	return []Segment{{
 		Name:       "git-branch",
 		Content:    branch,
 		Foreground: theme.RepoCleanFg,

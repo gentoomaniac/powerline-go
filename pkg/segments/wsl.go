@@ -5,11 +5,9 @@ import (
 	"os"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
-func WSL(theme config.Theme) []segment {
+func WSL(theme config.Theme) []Segment {
 	var WSL string
 	WSLMachineName, _ := os.LookupEnv("WSL_DISTRO_NAME")
 	WSLHost, _ := os.LookupEnv("NAME")
@@ -24,12 +22,12 @@ func WSL(theme config.Theme) []segment {
 	}
 
 	if WSL != "" {
-		return []segment{{
+		return []Segment{{
 			Name:       "WSL",
 			Content:    WSL,
 			Foreground: theme.WSLMachineFg,
 			Background: theme.WSLMachineBg,
 		}}
 	}
-	return []segment{}
+	return []Segment{}
 }

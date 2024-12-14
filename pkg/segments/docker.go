@@ -7,7 +7,7 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func Docker(theme config.Theme) []segment {
+func Docker(theme config.Theme) []Segment {
 	var docker string
 	dockerMachineName, _ := os.LookupEnv("DOCKER_MACHINE_NAME")
 	dockerHost, _ := os.LookupEnv("DOCKER_HOST")
@@ -22,9 +22,9 @@ func Docker(theme config.Theme) []segment {
 	}
 
 	if docker == "" {
-		return []segment{}
+		return []Segment{}
 	}
-	return []segment{{
+	return []Segment{{
 		Name:       "docker",
 		Content:    docker,
 		Foreground: theme.DockerMachineFg,

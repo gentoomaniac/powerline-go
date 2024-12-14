@@ -1,3 +1,5 @@
+//go:build broken
+
 package segments
 
 import (
@@ -7,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
 func getHostName(fullyQualifiedDomainName string) string {
@@ -20,14 +21,14 @@ func getMd5(text string) []byte {
 	return hasher.Sum(nil)
 }
 
-func Host(theme config.Theme) []segment {
+func Host(theme config.Theme) []Segment {
 	var hostPrompt string
 	var foreground, background uint8
 
 	if p.cfg.HostnameOnlyIfSSH {
 		if os.Getenv("SSH_CLIENT") == "" {
 			// It's not an ssh connection do nothing
-			return []segment{}
+			return []Segment{}
 		}
 	}
 
@@ -58,7 +59,7 @@ func Host(theme config.Theme) []segment {
 		background = theme.HostnameBg
 	}
 
-	return []segment{{
+	return []Segment{{
 		Name:       "host",
 		Content:    hostPrompt,
 		Foreground: foreground,

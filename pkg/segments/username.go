@@ -1,11 +1,12 @@
+//go:build broken
+
 package segments
 
 import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
-func User(theme config.Theme) []segment {
+func User(theme config.Theme) []Segment {
 	var userPrompt string
 	switch p.cfg.Shell {
 	case "bash":
@@ -23,7 +24,7 @@ func User(theme config.Theme) []segment {
 		background = theme.UsernameBg
 	}
 
-	return []segment{{
+	return []Segment{{
 		Name:       "user",
 		Content:    userPrompt,
 		Foreground: theme.UsernameFg,

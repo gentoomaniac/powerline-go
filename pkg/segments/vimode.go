@@ -1,27 +1,29 @@
+//go:build broken
+
 package segments
 
 import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
+	"github.com/rs/zerolog/log"
 )
 
-func ViMode(theme config.Theme) []segment {
+func ViMode(theme config.Theme) []Segment {
 	mode := p.cfg.ViMode
 	if mode == "" {
-		warn("'--vi-mode' is not set.")
-		return []segment{}
+		log.Warn().Msg("'--vi-mode' is not set.")
+		return []Segment{}
 	}
 
 	switch mode {
 	case "vicmd":
-		return []segment{{
+		return []Segment{{
 			Name:       "vi-mode",
 			Content:    "C",
 			Foreground: theme.ViModeCommandFg,
 			Background: theme.ViModeCommandBg,
 		}}
 	default: // usually "viins" or "main"
-		return []segment{{
+		return []Segment{{
 			Name:       "vi-mode",
 			Content:    "I",
 			Foreground: theme.ViModeInsertFg,

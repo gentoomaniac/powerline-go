@@ -1,3 +1,5 @@
+//go:build broken
+
 package segments
 
 import (
@@ -8,11 +10,9 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 
 	"gopkg.in/ini.v1"
-
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
-func VirtualEnv(theme config.Theme) []segment {
+func VirtualEnv(theme config.Theme) []Segment {
 	env := os.Getenv("VIRTUAL_ENV_PROMPT")
 	if strings.HasPrefix(env, "(") && strings.HasSuffix(env, ") ") {
 		env = strings.TrimPrefix(env, "(")
@@ -47,14 +47,14 @@ func VirtualEnv(theme config.Theme) []segment {
 		env, _ = os.LookupEnv("PYENV_VERSION")
 	}
 	if env == "" {
-		return []segment{}
+		return []Segment{}
 	}
 	envName := path.Base(env)
 	if p.cfg.VenvNameSizeLimit > 0 && len(envName) > p.cfg.VenvNameSizeLimit {
 		envName = p.symbols.VenvIndicator
 	}
 
-	return []segment{{
+	return []Segment{{
 		Name:       "venv",
 		Content:    escapeVariables(p, envName),
 		Foreground: theme.VirtualEnvFg,

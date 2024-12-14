@@ -9,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
 const (
@@ -81,7 +80,7 @@ func checkForGoenvOutput() (string, error) {
 	return "", fmt.Errorf("Not found in goenv object")
 }
 
-func Goenv(theme config.Theme) []segment {
+func Goenv(theme config.Theme) []Segment {
 	global, _ := checkForGoenvGlobalVersion()
 
 	segment, err := checkEnvForGoenvVersion()
@@ -92,9 +91,9 @@ func Goenv(theme config.Theme) []segment {
 		segment, err = checkForGoenvOutput()
 	}
 	if err != nil || segment == global {
-		return []segment{}
+		return []Segment{}
 	} else {
-		return []segment{{
+		return []Segment{{
 			Name:       "goenv",
 			Content:    segment,
 			Foreground: theme.GoenvFg,

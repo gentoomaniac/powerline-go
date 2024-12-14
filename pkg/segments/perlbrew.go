@@ -5,17 +5,16 @@ import (
 	"path"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
-func Perlbrew(theme config.Theme) []segment {
+func Perlbrew(theme config.Theme) []Segment {
 	env, _ := os.LookupEnv("PERLBREW_PERL")
 	if env == "" {
-		return []segment{}
+		return []Segment{}
 	}
 
 	envName := path.Base(env)
-	return []segment{{
+	return []Segment{{
 		Name:       "perlbrew",
 		Content:    envName,
 		Foreground: theme.PerlbrewFg,

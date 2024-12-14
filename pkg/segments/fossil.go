@@ -6,7 +6,6 @@ import (
 	"strings"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
 func getFossilStatus() (bool, bool, bool) {
@@ -32,7 +31,7 @@ func getFossilStatus() (bool, bool, bool) {
 	return hasModifiedFiles, hasUntrackedFiles, hasMissingFiles
 }
 
-func Fossil(theme config.Theme) []segment {
+func Fossil(theme config.Theme) []Segment {
 	out, _ := exec.Command("fossil", "branch", "current").Output()
 	output := strings.SplitN(string(out), "\n", 2)
 	if len(output) > 0 && output[0] != "" {
@@ -67,12 +66,12 @@ func Fossil(theme config.Theme) []segment {
 			content = branch
 		}
 
-		return []segment{{
+		return []Segment{{
 			Name:       "fossil",
 			Content:    content,
 			Foreground: foreground,
 			Background: background,
 		}}
 	}
-	return []segment{}
+	return []Segment{}
 }

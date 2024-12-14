@@ -1,3 +1,5 @@
+//go:build broken
+
 package segments
 
 import (
@@ -10,7 +12,6 @@ import (
 	"strings"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
 type repoStats struct {
@@ -31,16 +32,16 @@ func (r repoStats) any() bool {
 	return r.ahead+r.behind+r.untracked+r.notStaged+r.staged+r.conflicted+r.stashed > 0
 }
 
-func addRepoStatsSegment(nChanges int, symbol string, foreground uint8, background uint8) []segment {
+func addRepoStatsSegment(nChanges int, symbol string, foreground uint8, background uint8) []Segment {
 	if nChanges > 0 {
-		return []segment{{
+		return []Segment{{
 			Name:       "git-status",
 			Content:    fmt.Sprintf("%d%s", nChanges, symbol),
 			Foreground: foreground,
 			Background: background,
 		}}
 	}
-	return []segment{}
+	return []Segment{}
 }
 
 func (r repoStats) GitSegments(theme config.Theme) (segments segment) {
@@ -177,14 +178,14 @@ func indexSize(root string) (int64, error) {
 	return fileInfo.Size(), nil
 }
 
-func Git(theme config.Theme) []segment {
+func Git(theme config.Theme) []Segment {
 	repoRoot, err := repoRoot(p.cwd)
 	if err != nil {
-		return []segment{}
+		return []Segment{}
 	}
 
 	if len(p.ignoreRepos) > 0 && p.ignoreRepos[repoRoot] {
-		return []segment{}
+		return []Segment{}
 	}
 
 	args := []string{
@@ -200,7 +201,7 @@ func Git(theme config.Theme) []segment {
 
 	out, err := runGitCommand("git", args...)
 	if err != nil {
-		return []segment{}
+		return []Segment{}
 	}
 
 	status := strings.Split(out, "\n")

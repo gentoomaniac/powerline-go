@@ -5,7 +5,7 @@ import (
 )
 
 // Segment describes an information to display on the command line prompt
-type segment struct {
+type Segment struct {
 	Name string
 	// Content is the text to be displayed on the command line prompt
 	Content string
@@ -26,7 +26,7 @@ type segment struct {
 	NewLine bool
 }
 
-func (s segment) ComputeWidth(condensed bool) int {
+func (s Segment) ComputeWidth(condensed bool) int {
 	if condensed {
 		return runewidth.StringWidth(s.Content) + runewidth.StringWidth(s.Separator)
 	}

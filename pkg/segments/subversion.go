@@ -1,3 +1,5 @@
+//go:build broken
+
 package segments
 
 import (
@@ -7,7 +9,6 @@ import (
 	"strings"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
 var otherModified int
@@ -117,15 +118,15 @@ func parseSvnStatus() repoStats {
 	return stats
 }
 
-func Subversion(theme config.Theme) []segment {
+func Subversion(theme config.Theme) []Segment {
 	svnInfo, err := parseSvnURL()
 	if err != nil {
-		return []segment{}
+		return []Segment{}
 	}
 
 	if len(p.ignoreRepos) > 0 {
 		if p.ignoreRepos[svnInfo["URL"]] || p.ignoreRepos[svnInfo["Relative URL"]] {
-			return []segment{}
+			return []Segment{}
 		}
 	}
 

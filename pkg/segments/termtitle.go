@@ -1,3 +1,5 @@
+//go:build broken
+
 package segments
 
 // Port of set_term_title segment from powerine-shell:
@@ -9,16 +11,14 @@ import (
 	"strings"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
-func TermTitle(theme config.Theme) []segment {
+func TermTitle(theme config.Theme) []Segment {
 	var title string
 
 	term := os.Getenv("TERM")
 	if !(strings.Contains(term, "xterm") || strings.Contains(term, "rxvt")) {
-		return []segment{}
+		return []Segment{}
 	}
 
 	if p.cfg.Shell == "bash" {
@@ -30,7 +30,7 @@ func TermTitle(theme config.Theme) []segment {
 		title = fmt.Sprintf("\033]0;%s@%s: %s\007", p.username, p.hostname, cwd)
 	}
 
-	return []segment{{
+	return []Segment{{
 		Name:           "termtitle",
 		Content:        title,
 		Priority:       config.MaxInteger, // do not truncate
