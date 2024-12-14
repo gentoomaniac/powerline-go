@@ -1,31 +1,33 @@
+//go:build broken
+
 package segments
 
 import (
 	"os"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
+	"github.com/rs/zerolog/log"
 )
 
-func ShellVar(theme config.Theme) []segment {
+func ShellVar(theme config.Theme) []Segment {
 	shellVarName := p.cfg.ShellVar
 	varContent, varExists := os.LookupEnv(shellVarName)
 
 	if !varExists {
 		if shellVarName != "" {
-			warn("Shell variable " + shellVarName + " does not exist.")
+			log.Warn().Msgf("Shell variable %s does not exist.", shellVarName)
 		}
-		return []segment{}
+		return []Segment{}
 	}
 
 	if varContent == "" {
 		if !p.cfg.ShellVarNoWarnEmpty {
-			warn("Shell variable " + shellVarName + " is empty.")
+			log.Warn().Msgf("Shell variable %s is empty.", shellVarName)
 		}
-		return []segment{}
+		return []Segment{}
 	}
 
-	return []segment{{
+	return []Segment{{
 		Name:       "shell-var",
 		Content:    varContent,
 		Foreground: theme.ShellVarFg,

@@ -1,3 +1,5 @@
+//go:build broken
+
 package segments
 
 import (
@@ -7,8 +9,6 @@ import (
 	"strings"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
 func runRvmCommand(cmd string, args ...string) (string, error) {
@@ -52,7 +52,7 @@ func checkForRvmOutput() (string, error) {
 	return items[0], nil
 }
 
-func Rvm(theme config.Theme) []segment {
+func Rvm(theme config.Theme) []Segment {
 	var (
 		segment string
 		err     error
@@ -66,7 +66,7 @@ func Rvm(theme config.Theme) []segment {
 		segment, err = checkForRvmOutput()
 	}
 	if err != nil {
-		return []segment{}
+		return []Segment{}
 	}
 
 	// Remove explicit "ruby-" prefix from segment because it's superfluous
@@ -84,7 +84,7 @@ func Rvm(theme config.Theme) []segment {
 		}
 	}
 
-	return []segment{{
+	return []Segment{{
 		Name:       "rvm",
 		Content:    p.symbols.RvmIndicator + " " + segment,
 		Foreground: theme.RvmFg,

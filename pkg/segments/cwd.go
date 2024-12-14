@@ -1,3 +1,5 @@
+//go:build broken
+
 package segments
 
 import (
@@ -6,7 +8,7 @@ import (
 	"strings"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
+	"github.com/rs/zerolog/log"
 )
 
 const ellipsis = "\u2026"
@@ -190,7 +192,7 @@ func Cwd(theme config.Theme) (segments segment) {
 		} else {
 			maxDepth := p.cfg.CwdMaxDepth
 			if maxDepth <= 0 {
-				warn("Ignoring -cwd-max-depth argument since it's smaller than or equal to 0")
+				log.Warn().Msg("Ignoring -cwd-max-depth argument since it's smaller than or equal to 0")
 			} else if len(pathSegments) > maxDepth {
 				var nBefore int
 				if maxDepth > 2 {
@@ -236,7 +238,7 @@ func Cwd(theme config.Theme) (segments segment) {
 			isLastDir := idx == len(pathSegments)-1
 			foreground, background, special := getColor(p, pathSegment, isLastDir)
 
-			segment := segment{
+			segment := Segment{
 				Content:    escapeVariables(p, maybeShortenName(p, pathSegment.path)),
 				Foreground: foreground,
 				Background: background,

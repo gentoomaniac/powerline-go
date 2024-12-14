@@ -9,16 +9,10 @@ import (
 	"strings"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
+	"github.com/gentoomaniac/powerline-go/pkg/logging"
 	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
+	"github.com/rs/zerolog/log"
 )
-
-func warn(msg string) {
-	if *args.IgnoreWarnings {
-		return
-	}
-
-	print("[powerline-go]", msg)
-}
 
 func pathExists(path string) bool {
 	if _, err := os.Stat(path); os.IsNotExist(err) {
@@ -33,7 +27,7 @@ func getValidCwd() string {
 		var exists bool
 		cwd, exists = os.LookupEnv("PWD")
 		if !exists {
-			warn("Your current directory is invalid.")
+			log.Warn().Msg("Your current directory is invalid.")
 			print("> ")
 			os.Exit(1)
 		}
@@ -47,7 +41,7 @@ func getValidCwd() string {
 		up = strings.Join(parts, string(os.PathSeparator))
 	}
 	if cwd != up {
-		warn("Your current directory is invalid. Lowest valid directory: " + up)
+		log.Warn().Msgf("Your current directory is invalid. Lowest valid directory: %s", up)
 	}
 	return cwd
 }
@@ -61,6 +55,7 @@ func commentsWithDefaults(lines ...string) string {
 }
 
 func main() {
+	logging.Setup(&logging.LoggingConfig{Verbosity: 4})
 	flag.Parse()
 
 	cfg := config.Defaults

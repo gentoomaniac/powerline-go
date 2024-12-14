@@ -1,17 +1,18 @@
+//go:build broken
+
 package segments
 
 import (
 	"strconv"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
-func Jobs(theme config.Theme) []segment {
+func Jobs(theme config.Theme) []Segment {
 	if p.cfg.Jobs <= 0 {
-		return []segment{}
+		return []Segment{}
 	}
-	return []segment{{
+	return []Segment{{
 		Name:       "jobs",
 		Content:    strconv.Itoa(p.cfg.Jobs),
 		Foreground: theme.JobsFg,

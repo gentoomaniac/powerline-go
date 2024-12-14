@@ -5,16 +5,15 @@ import (
 	"runtime"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 
 	"github.com/shirou/gopsutil/v3/load"
 )
 
-func Load(theme config.Theme) []segment {
+func Load(theme config.Theme) []Segment {
 	c := runtime.NumCPU()
 	a, err := load.Avg()
 	if err != nil {
-		return []segment{}
+		return []Segment{}
 	}
 	bg := theme.LoadBg
 
@@ -30,7 +29,7 @@ func Load(theme config.Theme) []segment {
 		bg = theme.LoadHighBg
 	}
 
-	return []segment{{
+	return []Segment{{
 		Name:       "load",
 		Content:    fmt.Sprintf("%.2f", a.Load5),
 		Foreground: theme.LoadFg,

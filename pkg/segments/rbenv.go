@@ -9,8 +9,6 @@ import (
 	"strings"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
 const (
@@ -80,7 +78,7 @@ func checkForRbenvOutput() (string, error) {
 	return items[0], nil
 }
 
-func Rbenv(theme config.Theme) []segment {
+func Rbenv(theme config.Theme) []Segment {
 	var (
 		segment string
 		err     error
@@ -97,9 +95,9 @@ func Rbenv(theme config.Theme) []segment {
 		segment, err = checkForRbenvOutput()
 	}
 	if err != nil {
-		return []segment{}
+		return []Segment{}
 	}
-	return []segment{{
+	return []Segment{{
 		Name:       "rbenv",
 		Content:    segment,
 		Foreground: theme.TimeFg,

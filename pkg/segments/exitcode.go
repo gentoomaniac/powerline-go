@@ -1,3 +1,5 @@
+//go:build broken
+
 package segments
 
 import (
@@ -5,7 +7,6 @@ import (
 	"strconv"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 	"github.com/justjanne/powerline-go/exitcode"
 )
 
@@ -50,10 +51,10 @@ func getMeaningFromExitCode(exitCode int) string {
 	return fmt.Sprintf("%d", exitCode)
 }
 
-func ExitCode(theme config.Theme) []segment {
+func ExitCode(theme config.Theme) []Segment {
 	var meaning string
 	if p.cfg.PrevError == 0 {
-		return []segment{}
+		return []Segment{}
 	}
 	if p.cfg.NumericExitCodes {
 		meaning = strconv.Itoa(p.cfg.PrevError)
@@ -61,7 +62,7 @@ func ExitCode(theme config.Theme) []segment {
 		meaning = getMeaningFromExitCode(p.cfg.PrevError)
 	}
 
-	return []segment{{
+	return []Segment{{
 		Name:       "exit",
 		Content:    meaning,
 		Foreground: theme.CmdFailedFg,

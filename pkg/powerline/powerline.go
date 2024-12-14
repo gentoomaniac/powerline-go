@@ -11,6 +11,7 @@ import (
 	"sync"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
+	"github.com/gentoomaniac/powerline-go/pkg/segments"
 	"github.com/gentoomaniac/powerline-go/pkg/shellinfo"
 	"github.com/mattn/go-runewidth"
 	"github.com/shirou/gopsutil/v3/process"
@@ -38,7 +39,7 @@ type Powerline struct {
 	symbols        config.SymbolTemplate
 	priorities     map[string]int
 	ignoreRepos    map[string]bool
-	Segments       [][]Segment
+	Segments       [][]segments.Segment
 	curSegment     int
 	align          alignment
 	rightPowerline *Powerline
@@ -46,7 +47,7 @@ type Powerline struct {
 
 type prioritizedSegments struct {
 	i    int
-	segs []Segment
+	segs []segments.Segment
 }
 
 func NewPowerline(cfg config.Config, cwd string, align alignment) *Powerline {
@@ -101,7 +102,7 @@ func NewPowerline(cfg config.Config, cwd string, align alignment) *Powerline {
 		}
 		p.ignoreRepos[r] = true
 	}
-	p.Segments = make([][]Segment, 1)
+	p.Segments = make([][]segments.Segment, 1)
 	var mods []string
 	if p.align == alignLeft {
 		mods = cfg.Modules
@@ -134,7 +135,7 @@ func detectShell(shellExe string) string {
 }
 
 func initSegments(p *Powerline, mods []string) {
-	orderedSegments := map[int][]Segment{}
+	orderedSegments := map[int][]segments.Segment{}
 	c := make(chan prioritizedSegments, len(mods))
 	wg := sync.WaitGroup{}
 	for i, module := range mods {
@@ -144,10 +145,10 @@ func initSegments(p *Powerline, mods []string) {
 			if ok {
 				c <- prioritizedSegments{
 					i:    i,
-					segs: elem(p),
+					segs: elem(p.cfg.Themes[p.cfg.Theme]),
 				}
 			} else {
-				s, ok := segmentPlugin(p, module)
+				s, ok := segments.Plugin(p.cfg.Themes[p.cfg.Theme], module)
 				if ok {
 					c <- prioritizedSegments{
 						i:    i,
@@ -191,7 +192,7 @@ func (p *Powerline) bgColor(code uint8) string {
 	return p.color("48", code)
 }
 
-func (p *Powerline) appendSegment(origin string, segment Segment) {
+func (p *Powerline) appendSegment(origin string, segment segments.Segment) {
 	if segment.Foreground == segment.Background && segment.Background == 0 {
 		segment.Background = p.theme.DefaultBg
 		segment.Foreground = p.theme.DefaultFg
@@ -217,7 +218,7 @@ func (p *Powerline) appendSegment(origin string, segment Segment) {
 
 func (p *Powerline) newRow() {
 	if len(p.Segments[p.curSegment]) > 0 {
-		p.Segments = append(p.Segments, make([]Segment, 0))
+		p.Segments = append(p.Segments, make([]segments.Segment, 0))
 		p.curSegment = p.curSegment + 1
 	}
 }
@@ -252,7 +253,7 @@ func (p *Powerline) truncateRow(rowNum int) {
 		}
 
 		if rowLength > shellMaxLength && p.cfg.TruncateSegmentWidth > 0 {
-			minPriorityNotTruncated := config.config.MaxInteger
+			minPriorityNotTruncated := config.MaxInteger
 			minPriorityNotTruncatedSegmentID := -1
 			for idx, segment := range row {
 				if segment.Width > p.cfg.TruncateSegmentWidth && segment.Priority < minPriorityNotTruncated {
@@ -271,7 +272,7 @@ func (p *Powerline) truncateRow(rowNum int) {
 				row = append(append(row[:minPriorityNotTruncatedSegmentID], segment), row[minPriorityNotTruncatedSegmentID+1:]...)
 				rowLength += segment.Width
 
-				minPriorityNotTruncated = config.config.MaxInteger
+				minPriorityNotTruncated = config.MaxInteger
 				minPriorityNotTruncatedSegmentID = -1
 				for idx, segment := range row {
 					if segment.Width > p.cfg.TruncateSegmentWidth && segment.Priority < minPriorityNotTruncated {
@@ -388,7 +389,7 @@ func (p *Powerline) drawRow(rowNum int, buffer *bytes.Buffer) {
 	}
 }
 
-func (p *Powerline) Ddraw() string {
+func (p *Powerline) Draw() string {
 	var buffer bytes.Buffer
 
 	if p.cfg.Eval {
@@ -446,7 +447,7 @@ func (p *Powerline) Ddraw() string {
 			}
 		}
 		if p.HasRightModules() {
-			buffer.WriteString(p.rightPowerline.draw())
+			buffer.WriteString(p.rightPowerline.Draw())
 		}
 	}
 

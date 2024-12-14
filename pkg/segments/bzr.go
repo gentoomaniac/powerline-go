@@ -31,7 +31,7 @@ func getBzrStatus() (bool, bool, bool) {
 	return hasModifiedFiles, hasUntrackedFiles, hasMissingFiles
 }
 
-func Bzr(theme config.Theme) []segment {
+func Bzr(theme config.Theme) []Segment {
 	out, _ := exec.Command("bzr", "nick").Output()
 	output := strings.SplitN(string(out), "\n", 2)
 	if len(output) > 0 && output[0] != "" {
@@ -66,12 +66,12 @@ func Bzr(theme config.Theme) []segment {
 			content = branch
 		}
 
-		return []segment{{
+		return []Segment{{
 			Name:       "bzr",
 			Content:    content,
 			Foreground: foreground,
 			Background: background,
 		}}
 	}
-	return []segment{}
+	return []Segment{}
 }

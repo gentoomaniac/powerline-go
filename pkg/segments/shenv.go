@@ -4,15 +4,14 @@ import (
 	"os"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
-func ShEnv(theme config.Theme) []segment {
+func ShEnv(theme config.Theme) []Segment {
 	env, _ := os.LookupEnv("SHENV_VERSION")
 	if env == "" {
-		return []segment{}
+		return []Segment{}
 	}
-	return []segment{{
+	return []Segment{{
 		Name:       "shenv",
 		Content:    env,
 		Foreground: theme.ShEnvFg,

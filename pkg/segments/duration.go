@@ -1,3 +1,5 @@
+//go:build broken
+
 package segments
 
 import (
@@ -7,7 +9,6 @@ import (
 	"time"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
 const (
@@ -27,9 +28,9 @@ const (
 	hours        int64 = minutes * 60
 )
 
-func Duration(theme config.Theme) []segment {
+func Duration(theme config.Theme) []Segment {
 	if p.cfg.Duration == "" {
-		return []segment{{
+		return []Segment{{
 			Name:       "duration",
 			Content:    "No duration",
 			Foreground: theme.DurationFg,
@@ -45,7 +46,7 @@ func Duration(theme config.Theme) []segment {
 	durationFloat, err := strconv.ParseFloat(durationValue, 64)
 	durationMinFloat, _ := strconv.ParseFloat(durationMinValue, 64)
 	if err != nil {
-		return []segment{{
+		return []Segment{{
 			Name:       "duration",
 			Content:    fmt.Sprintf("Failed to convert '%s' to a number", p.cfg.Duration),
 			Foreground: theme.DurationFg,
@@ -54,13 +55,13 @@ func Duration(theme config.Theme) []segment {
 	}
 
 	if durationFloat < durationMinFloat {
-		return []segment{}
+		return []Segment{}
 	}
 
 	duration := time.Duration(durationFloat * float64(time.Second.Nanoseconds()))
 
 	if duration <= 0 {
-		return []segment{}
+		return []Segment{}
 	}
 
 	var content string
@@ -96,7 +97,7 @@ func Duration(theme config.Theme) []segment {
 		content = fmt.Sprintf("%d%c%c", ns/microseconds, micro, second)
 	}
 
-	return []segment{{
+	return []Segment{{
 		Name:       "duration",
 		Content:    content,
 		Foreground: theme.DurationFg,

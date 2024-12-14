@@ -11,7 +11,6 @@ import (
 	"strings"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
 const gcloudCoreSectionHeader = "\n[core]\n"
@@ -117,16 +116,16 @@ func getGCPProject() (string, error) {
 	}
 }
 
-func GCP(theme config.Theme) []segment {
+func GCP(theme config.Theme) []Segment {
 	project, err := getGCPProject()
 	if err != nil {
 		log.Fatal(err)
 	}
 
 	if project == "" {
-		return []segment{}
+		return []Segment{}
 	}
-	return []segment{{
+	return []Segment{{
 		Name:       "gcp",
 		Content:    project,
 		Foreground: theme.GCPFg,

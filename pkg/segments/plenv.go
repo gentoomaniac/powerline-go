@@ -4,15 +4,14 @@ import (
 	"os"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
-func PlEnv(theme config.Theme) []segment {
+func PlEnv(theme config.Theme) []Segment {
 	env, _ := os.LookupEnv("PLENV_VERSION")
 	if env == "" {
-		return []segment{}
+		return []Segment{}
 	}
-	return []segment{{
+	return []Segment{{
 		Name:       "plenv",
 		Content:    env,
 		Foreground: theme.PlEnvFg,

@@ -7,14 +7,13 @@ import (
 	"path/filepath"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-	pwl "github.com/gentoomaniac/powerline-go/pkg/powerline"
 )
 
 type DockerContextConfig struct {
 	CurrentContext string `json:"currentContext"`
 }
 
-func DockerContext(theme config.Theme) []segment {
+func DockerContext(theme config.Theme) []Segment {
 	context := "default"
 	home, _ := os.LookupEnv("HOME")
 	contextFolder := filepath.Join(home, ".docker", "contexts")
@@ -39,10 +38,10 @@ func DockerContext(theme config.Theme) []segment {
 
 	// Don’t show the default context
 	if context == "default" {
-		return []segment{}
+		return []Segment{}
 	}
 
-	return []segment{{
+	return []Segment{{
 		Name:       "docker-context",
 		Content:    "🐳" + context,
 		Foreground: theme.PlEnvFg,
