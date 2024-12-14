@@ -3,7 +3,6 @@
 *.dll
 *.so
 *.dylib
-powerline-go
 /dist/
 
 # Test binary, build with `go test -c`
