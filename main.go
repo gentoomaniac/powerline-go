@@ -61,8 +61,7 @@ func main() {
 	cfg := config.Defaults
 	err := cfg.Load()
 	if err != nil {
-		println("Error loading config")
-		println(err.Error())
+		log.Error().Err(err).Msg("error loading config")
 	}
 
 	flag.Visit(func(f *flag.Flag) {
@@ -161,8 +160,7 @@ func main() {
 			if err == nil {
 				cfg.Themes[cfg.Theme] = theme
 			} else {
-				println("Error reading theme")
-				println(err.Error())
+				log.Error().Err(err).Msg("error reading theme")
 			}
 		}
 	}
@@ -175,8 +173,7 @@ func main() {
 			if err == nil {
 				cfg.Modes[cfg.Mode] = symbols
 			} else {
-				println("Error reading mode")
-				println(err.Error())
+				log.Error().Err(err).Msg("error reading mode")
 			}
 		}
 	}
