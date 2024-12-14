@@ -1,4 +1,4 @@
-package powerline
+package config
 
 import (
 	"path"
@@ -12,6 +12,8 @@ func detectShell(shellExe string) string {
 		shell = "bash"
 	} else if strings.Contains(shellExe, "zsh") {
 		shell = "zsh"
+	} else if strings.Contains(shellExe, "go") { // for testing with `go run`
+		shell = "bash"
 	} else {
 		shell = "bare"
 	}
