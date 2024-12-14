@@ -1,7 +1,7 @@
 //go:build !windows
 // +build !windows
 
-package powerline
+package segments
 
 import (
 	"os"

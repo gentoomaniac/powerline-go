@@ -3,7 +3,6 @@ package segments
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"log"
 	"os"
 	"os/exec"
@@ -37,7 +36,7 @@ func getActiveGCloudConfig(configDir string) (string, error) {
 		return "", err
 	}
 
-	contents, err := ioutil.ReadFile(activeConfigPath)
+	contents, err := os.ReadFile(activeConfigPath)
 	if err != nil {
 		return "", err
 	}
@@ -78,7 +77,7 @@ func getGCPProjectFromFile() (string, error) {
 		return "", fmt.Errorf("%s is a directory", configPath)
 	}
 
-	b, err := ioutil.ReadFile(configPath)
+	b, err := os.ReadFile(configPath)
 	if err != nil {
 		return "", err
 	}
@@ -116,7 +115,7 @@ func getGCPProject() (string, error) {
 	}
 }
 
-func GCP(theme config.Theme) []Segment {
+func GCP(cfg config.Config) []Segment {
 	project, err := getGCPProject()
 	if err != nil {
 		log.Fatal(err)
@@ -128,7 +127,7 @@ func GCP(theme config.Theme) []Segment {
 	return []Segment{{
 		Name:       "gcp",
 		Content:    project,
-		Foreground: theme.GCPFg,
-		Background: theme.GCPBg,
+		Foreground: cfg.SelectedTheme().GCPFg,
+		Background: cfg.SelectedTheme().GCPBg,
 	}}
 }

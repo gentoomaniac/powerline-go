@@ -1,5 +1,3 @@
-//go:build broken
-
 package segments
 
 import (
@@ -53,7 +51,7 @@ func readKubeConfig(config *KubeConfig, path string) (err error) {
 	return
 }
 
-func Kube(theme config.Theme) []Segment {
+func Kube(cfg config.Config) []Segment {
 	paths := append(strings.Split(os.Getenv("KUBECONFIG"), ":"), path.Join(homePath(), ".kube", "config"))
 	config := &KubeConfig{}
 	for _, configPath := range paths {
@@ -79,7 +77,7 @@ func Kube(theme config.Theme) []Segment {
 	// When you use gke your clusters may look something like gke_projectname_availability-zone_cluster-01
 	// instead I want it to read as `cluster-01`
 	// So we remove the first 3 segments of this string, if the flag is set, and there are enough segments
-	if strings.HasPrefix(cluster, "gke") && p.cfg.ShortenGKENames {
+	if strings.HasPrefix(cluster, "gke") && cfg.ShortenGKENames {
 		segments := strings.Split(cluster, "_")
 		if len(segments) > 3 {
 			cluster = strings.Join(segments[3:], "_")
@@ -90,7 +88,7 @@ func Kube(theme config.Theme) []Segment {
 	// instead I want it to read as `portal-url`.
 	// So we ensure there are three segments split by / and then choose the middle part,
 	// we also remove the port number from the result.
-	if p.cfg.ShortenOpenshiftNames {
+	if cfg.ShortenOpenshiftNames {
 		segments := strings.Split(cluster, "/")
 		if len(segments) == 3 {
 			cluster = segments[1]
@@ -106,19 +104,19 @@ func Kube(theme config.Theme) []Segment {
 	const arnRegexString string = "^arn:aws:eks:[[:alnum:]-]+:[[:digit:]]+:cluster/(.*)$"
 	arnRe := regexp.MustCompile(arnRegexString)
 
-	if arnMatches := arnRe.FindStringSubmatch(cluster); arnMatches != nil && p.cfg.ShortenEKSNames {
+	if arnMatches := arnRe.FindStringSubmatch(cluster); arnMatches != nil && cfg.ShortenEKSNames {
 		cluster = arnMatches[1]
 	}
-	segments := segment{}
+	segments := []Segment{}
 	// Only draw the icon once
 	kubeIconHasBeenDrawnYet := false
 	if cluster != "" {
 		kubeIconHasBeenDrawnYet = true
-		segments = append(segments, segment{
+		segments = append(segments, Segment{
 			Name:       "kube-cluster",
 			Content:    fmt.Sprintf("⎈ %s", cluster),
-			Foreground: theme.KubeClusterFg,
-			Background: theme.KubeClusterBg,
+			Foreground: cfg.SelectedTheme().KubeClusterFg,
+			Background: cfg.SelectedTheme().KubeClusterBg,
 		})
 	}
 
@@ -127,11 +125,11 @@ func Kube(theme config.Theme) []Segment {
 		if !kubeIconHasBeenDrawnYet {
 			content = fmt.Sprintf("⎈ %s", content)
 		}
-		segments = append(segments, segment{
+		segments = append(segments, Segment{
 			Name:       "kube-namespace",
 			Content:    content,
-			Foreground: theme.KubeNamespaceFg,
-			Background: theme.KubeNamespaceBg,
+			Foreground: cfg.SelectedTheme().KubeNamespaceFg,
+			Background: cfg.SelectedTheme().KubeNamespaceBg,
 		})
 	}
 	return segments

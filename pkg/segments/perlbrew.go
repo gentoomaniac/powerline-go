@@ -7,7 +7,7 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func Perlbrew(theme config.Theme) []Segment {
+func Perlbrew(cfg config.Config) []Segment {
 	env, _ := os.LookupEnv("PERLBREW_PERL")
 	if env == "" {
 		return []Segment{}
@@ -17,7 +17,7 @@ func Perlbrew(theme config.Theme) []Segment {
 	return []Segment{{
 		Name:       "perlbrew",
 		Content:    envName,
-		Foreground: theme.PerlbrewFg,
-		Background: theme.PerlbrewBg,
+		Foreground: cfg.SelectedTheme().PerlbrewFg,
+		Background: cfg.SelectedTheme().PerlbrewBg,
 	}}
 }

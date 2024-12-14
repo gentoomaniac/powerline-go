@@ -31,7 +31,7 @@ func getFossilStatus() (bool, bool, bool) {
 	return hasModifiedFiles, hasUntrackedFiles, hasMissingFiles
 }
 
-func Fossil(theme config.Theme) []Segment {
+func Fossil(cfg config.Config) []Segment {
 	out, _ := exec.Command("fossil", "branch", "current").Output()
 	output := strings.SplitN(string(out), "\n", 2)
 	if len(output) > 0 && output[0] != "" {
@@ -41,8 +41,8 @@ func Fossil(theme config.Theme) []Segment {
 		var foreground, background uint8
 		var content string
 		if hasModifiedFiles || hasUntrackedFiles || hasMissingFiles {
-			foreground = theme.RepoDirtyFg
-			background = theme.RepoDirtyBg
+			foreground = cfg.SelectedTheme().RepoDirtyFg
+			background = cfg.SelectedTheme().RepoDirtyBg
 
 			extra := ""
 
@@ -60,8 +60,8 @@ func Fossil(theme config.Theme) []Segment {
 
 			content = fmt.Sprintf("%s %s", branch, extra)
 		} else {
-			foreground = theme.RepoCleanFg
-			background = theme.RepoCleanBg
+			foreground = cfg.SelectedTheme().RepoCleanFg
+			background = cfg.SelectedTheme().RepoCleanBg
 
 			content = branch
 		}

@@ -5,7 +5,7 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/segments"
 )
 
-var modules = map[string]func(config.Theme) []segments.Segment{
+var modules = map[string]func(config.Config) []segments.Segment{
 	"aws": segments.AWS,
 	"bzr": segments.Bzr,
 	//"cwd":                 segments.Cwd,
@@ -40,7 +40,7 @@ var modules = map[string]func(config.Theme) []segments.Segment{
 	"terraform-workspace": segments.TerraformWorkspace,
 	//"time":                segments.Time,
 	//"node":                segments.Node,
-	//"user":                segments.User,
+	"user": segments.User,
 	//"venv":                segments.VirtualEnv,
 	"vgo": segments.VirtualGo,
 	//"vi-mode":             segments.ViMode,

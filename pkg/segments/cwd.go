@@ -35,7 +35,7 @@ func (s byRevLength) Less(i, j int) bool {
 	return len(s[i]) > len(s[j])
 }
 
-func maybeAliasPathSegments(theme config.Theme, pathSegments []pathSegment) []pathSegment {
+func maybeAliasPathSegments(cfg config.Theme, pathSegments []pathSegment) []pathSegment {
 	pathSeparator := string(os.PathSeparator)
 
 	if p.cfg.PathAliases == nil || len(p.cfg.PathAliases) == 0 {
@@ -169,7 +169,7 @@ func getColor(theme config.Theme, pathSegment pathSegment, isLastDir bool) (uint
 	return theme.PathFg, theme.PathBg, false
 }
 
-func Cwd(theme config.Theme) (segments segment) {
+func Cwd(cfg config.Config) (segments segment) {
 	cwd := p.cwd
 
 	switch p.cfg.CwdMode {

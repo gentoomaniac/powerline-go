@@ -1,5 +1,3 @@
-//go:build broken
-
 package segments
 
 import (
@@ -52,7 +50,7 @@ func checkForRvmOutput() (string, error) {
 	return items[0], nil
 }
 
-func Rvm(theme config.Theme) []Segment {
+func Rvm(cfg config.Config) []Segment {
 	var (
 		segment string
 		err     error
@@ -86,8 +84,8 @@ func Rvm(theme config.Theme) []Segment {
 
 	return []Segment{{
 		Name:       "rvm",
-		Content:    p.symbols.RvmIndicator + " " + segment,
-		Foreground: theme.RvmFg,
-		Background: theme.RvmBg,
+		Content:    cfg.Symbols().RvmIndicator + " " + segment,
+		Foreground: cfg.SelectedTheme().RvmFg,
+		Background: cfg.SelectedTheme().RvmBg,
 	}}
 }

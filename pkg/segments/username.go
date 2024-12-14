@@ -1,33 +1,33 @@
-//go:build broken
-
 package segments
 
 import (
+	"os"
+
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func User(theme config.Theme) []Segment {
+func User(conf config.Config) []Segment {
 	var userPrompt string
-	switch p.cfg.Shell {
+	switch conf.Shell {
 	case "bash":
 		userPrompt = "\\u"
 	case "zsh":
 		userPrompt = "%n"
 	default:
-		userPrompt = p.username
+		userPrompt = os.Getenv("USER")
 	}
 
 	var background uint8
-	if p.userIsAdmin {
-		background = theme.UsernameRootBg
+	if userIsAdmin() {
+		background = conf.SelectedTheme().UsernameRootBg
 	} else {
-		background = theme.UsernameBg
+		background = conf.SelectedTheme().UsernameBg
 	}
 
 	return []Segment{{
 		Name:       "user",
 		Content:    userPrompt,
-		Foreground: theme.UsernameFg,
+		Foreground: conf.SelectedTheme().UsernameFg,
 		Background: background,
 	}}
 }

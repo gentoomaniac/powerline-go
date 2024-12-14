@@ -1,5 +1,7 @@
 package config
 
+import "encoding/json"
+
 // Symbols of the theme
 type SymbolTemplate struct {
 	Lock                 string
@@ -23,6 +25,16 @@ type SymbolTemplate struct {
 	VenvIndicator string
 	NodeIndicator string
 	RvmIndicator  string
+}
+
+func (mode *SymbolTemplate) UnmarshalJSON(data []byte) error {
+	type Alias SymbolTemplate
+	tmp := Defaults.Modes[Defaults.Mode]
+	err := json.Unmarshal(data, (*Alias)(&tmp))
+	if err == nil {
+		*mode = tmp
+	}
+	return err
 }
 
 // Theme definitions
@@ -163,4 +175,14 @@ type Theme struct {
 	ViModeCommandBg uint8
 	ViModeInsertFg  uint8
 	ViModeInsertBg  uint8
+}
+
+func (theme *Theme) UnmarshalJSON(data []byte) error {
+	type Alias Theme
+	tmp := Defaults.Themes[Defaults.Theme]
+	err := json.Unmarshal(data, (*Alias)(&tmp))
+	if err == nil {
+		*theme = tmp
+	}
+	return err
 }

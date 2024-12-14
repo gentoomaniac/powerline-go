@@ -4,6 +4,6 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func Newline(theme config.Theme) []Segment {
+func Newline(cfg config.Config) []Segment {
 	return []Segment{{NewLine: true}}
 }

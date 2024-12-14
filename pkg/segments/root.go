@@ -1,24 +1,22 @@
-//go:build broken
-
 package segments
 
 import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func Root(theme config.Theme) []Segment {
+func Root(cfg config.Config) []Segment {
 	var foreground, background uint8
-	if p.cfg.PrevError == 0 || p.cfg.StaticPromptIndicator {
-		foreground = theme.CmdPassedFg
-		background = theme.CmdPassedBg
+	if cfg.PrevError == 0 || cfg.StaticPromptIndicator {
+		foreground = cfg.SelectedTheme().CmdPassedFg
+		background = cfg.SelectedTheme().CmdPassedBg
 	} else {
-		foreground = theme.CmdFailedFg
-		background = theme.CmdFailedBg
+		foreground = cfg.SelectedTheme().CmdFailedFg
+		background = cfg.SelectedTheme().CmdFailedBg
 	}
 
 	return []Segment{{
 		Name:       "root",
-		Content:    p.shell.RootIndicator,
+		Content:    cfg.CurrentShell().RootIndicator,
 		Foreground: foreground,
 		Background: background,
 	}}

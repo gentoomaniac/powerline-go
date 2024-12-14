@@ -6,7 +6,7 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func AWS(theme config.Theme) []Segment {
+func AWS(cfg config.Config) []Segment {
 	profile := os.Getenv("AWS_PROFILE")
 	region := os.Getenv("AWS_DEFAULT_REGION")
 	if profile == "" {
@@ -22,7 +22,7 @@ func AWS(theme config.Theme) []Segment {
 	return []Segment{{
 		Name:       "aws",
 		Content:    profile + r,
-		Foreground: theme.AWSFg,
-		Background: theme.AWSBg,
+		Foreground: cfg.SelectedTheme().AWSFg,
+		Background: cfg.SelectedTheme().AWSBg,
 	}}
 }

@@ -7,7 +7,7 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func Plugin(theme config.Theme, plugin string) ([]Segment, bool) {
+func Plugin(cfg config.Config, plugin string) ([]Segment, bool) {
 	output, err := exec.Command("powerline-go-" + plugin).Output()
 	if err != nil {
 		return nil, false

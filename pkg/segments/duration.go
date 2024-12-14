@@ -1,5 +1,3 @@
-//go:build broken
-
 package segments
 
 import (
@@ -28,18 +26,18 @@ const (
 	hours        int64 = minutes * 60
 )
 
-func Duration(theme config.Theme) []Segment {
-	if p.cfg.Duration == "" {
+func Duration(cfg config.Config) []Segment {
+	if cfg.Duration == "" {
 		return []Segment{{
 			Name:       "duration",
 			Content:    "No duration",
-			Foreground: theme.DurationFg,
-			Background: theme.DurationBg,
+			Foreground: cfg.SelectedTheme().DurationFg,
+			Background: cfg.SelectedTheme().DurationBg,
 		}}
 	}
 
-	durationValue := strings.Trim(p.cfg.Duration, "'\"")
-	durationMinValue := strings.Trim(p.cfg.DurationMin, "'\"")
+	durationValue := strings.Trim(cfg.Duration, "'\"")
+	durationMinValue := strings.Trim(cfg.DurationMin, "'\"")
 
 	hasPrecision := strings.Contains(durationValue, ".")
 
@@ -48,9 +46,9 @@ func Duration(theme config.Theme) []Segment {
 	if err != nil {
 		return []Segment{{
 			Name:       "duration",
-			Content:    fmt.Sprintf("Failed to convert '%s' to a number", p.cfg.Duration),
-			Foreground: theme.DurationFg,
-			Background: theme.DurationBg,
+			Content:    fmt.Sprintf("Failed to convert '%s' to a number", cfg.Duration),
+			Foreground: cfg.SelectedTheme().DurationFg,
+			Background: cfg.SelectedTheme().DurationBg,
 		}}
 	}
 
@@ -84,11 +82,11 @@ func Duration(theme config.Theme) []Segment {
 		ns -= secs * seconds
 		millis := ns / milliseconds
 		content = fmt.Sprintf("%d%c %d%c%c", secs, second, millis, milli, second)
-	} else if ns > milliseconds || p.cfg.DurationLowPrecision {
+	} else if ns > milliseconds || cfg.DurationLowPrecision {
 		millis := ns / milliseconds
 		ns -= millis * milliseconds
 		micros := ns / microseconds
-		if p.cfg.DurationLowPrecision {
+		if cfg.DurationLowPrecision {
 			content = fmt.Sprintf("%d%c%c", millis, milli, second)
 		} else {
 			content = fmt.Sprintf("%d%c%c %d%c%c", millis, milli, second, micros, micro, second)
@@ -100,7 +98,7 @@ func Duration(theme config.Theme) []Segment {
 	return []Segment{{
 		Name:       "duration",
 		Content:    content,
-		Foreground: theme.DurationFg,
-		Background: theme.DurationBg,
+		Foreground: cfg.SelectedTheme().DurationFg,
+		Background: cfg.SelectedTheme().DurationBg,
 	}}
 }

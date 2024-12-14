@@ -1,10 +1,7 @@
-//go:build broken
-
 package segments
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"strings"
@@ -35,7 +32,7 @@ func getPackageVersion() string {
 		return ""
 	}
 	pkg := packageJSON{""}
-	raw, err := ioutil.ReadFile(pkgfile)
+	raw, err := os.ReadFile(pkgfile)
 	if err != nil {
 		return ""
 	}
@@ -47,7 +44,7 @@ func getPackageVersion() string {
 	return strings.TrimSpace(pkg.Version)
 }
 
-func Node(theme config.Theme) []Segment {
+func Node(cfg config.Config) []Segment {
 	nodeVersion := getNodeVersion()
 	packageVersion := getPackageVersion()
 
@@ -56,18 +53,18 @@ func Node(theme config.Theme) []Segment {
 	if nodeVersion != "" {
 		segments = append(segments, Segment{
 			Name:       "node",
-			Content:    p.symbols.NodeIndicator + " " + nodeVersion,
-			Foreground: theme.NodeVersionFg,
-			Background: theme.NodeVersionBg,
+			Content:    cfg.Symbols().NodeIndicator + " " + nodeVersion,
+			Foreground: cfg.SelectedTheme().NodeVersionFg,
+			Background: cfg.SelectedTheme().NodeVersionBg,
 		})
 	}
 
 	if packageVersion != "" {
 		segments = append(segments, Segment{
 			Name:       "node-segment",
-			Content:    packageVersion + " " + p.symbols.NodeIndicator,
-			Foreground: theme.NodeFg,
-			Background: theme.NodeBg,
+			Content:    packageVersion + " " + cfg.Symbols().NodeIndicator,
+			Foreground: cfg.SelectedTheme().NodeFg,
+			Background: cfg.SelectedTheme().NodeBg,
 		})
 	}
 

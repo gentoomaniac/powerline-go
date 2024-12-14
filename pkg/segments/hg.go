@@ -31,7 +31,7 @@ func getHgStatus() (bool, bool, bool) {
 	return hasModifiedFiles, hasUntrackedFiles, hasMissingFiles
 }
 
-func Hg(theme config.Theme) []Segment {
+func Hg(cfg config.Config) []Segment {
 	out, _ := exec.Command("hg", "branch").Output()
 	output := strings.SplitN(string(out), "\n", 2)
 	if !(len(output) > 0 && output[0] != "") {
@@ -43,8 +43,8 @@ func Hg(theme config.Theme) []Segment {
 	var foreground, background uint8
 	var content string
 	if hasModifiedFiles || hasUntrackedFiles || hasMissingFiles {
-		foreground = theme.RepoDirtyFg
-		background = theme.RepoDirtyBg
+		foreground = cfg.SelectedTheme().RepoDirtyFg
+		background = cfg.SelectedTheme().RepoDirtyBg
 
 		extra := ""
 
@@ -58,8 +58,8 @@ func Hg(theme config.Theme) []Segment {
 
 		content = fmt.Sprintf("%s %s", branch, extra)
 	} else {
-		foreground = theme.RepoCleanFg
-		background = theme.RepoCleanBg
+		foreground = cfg.SelectedTheme().RepoCleanFg
+		background = cfg.SelectedTheme().RepoCleanBg
 
 		content = branch
 	}

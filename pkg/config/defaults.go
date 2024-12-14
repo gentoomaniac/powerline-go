@@ -63,7 +63,7 @@ var Defaults = Config{
 	DurationLowPrecision: false,
 	Eval:                 false,
 	Condensed:            false,
-	Modes: SymbolMap{
+	Modes: map[string]SymbolTemplate{
 		"compatible": {
 			Lock:                 "RO",
 			Network:              "SSH",
