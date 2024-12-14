@@ -7,7 +7,7 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func WSL(theme config.Theme) []Segment {
+func WSL(cfg config.Config, align config.Alignment) []Segment {
 	var WSL string
 	WSLMachineName, _ := os.LookupEnv("WSL_DISTRO_NAME")
 	WSLHost, _ := os.LookupEnv("NAME")
@@ -25,8 +25,8 @@ func WSL(theme config.Theme) []Segment {
 		return []Segment{{
 			Name:       "WSL",
 			Content:    WSL,
-			Foreground: theme.WSLMachineFg,
-			Background: theme.WSLMachineBg,
+			Foreground: cfg.SelectedTheme().WSLMachineFg,
+			Background: cfg.SelectedTheme().WSLMachineBg,
 		}}
 	}
 	return []Segment{}

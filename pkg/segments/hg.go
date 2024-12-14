@@ -31,7 +31,7 @@ func getHgStatus() (bool, bool, bool) {
 	return hasModifiedFiles, hasUntrackedFiles, hasMissingFiles
 }
 
-func Hg(cfg config.Config) []Segment {
+func Hg(cfg config.Config, align config.Alignment) []Segment {
 	out, _ := exec.Command("hg", "branch").Output()
 	output := strings.SplitN(string(out), "\n", 2)
 	if !(len(output) > 0 && output[0] != "") {

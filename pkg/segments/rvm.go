@@ -50,7 +50,7 @@ func checkForRvmOutput() (string, error) {
 	return items[0], nil
 }
 
-func Rvm(cfg config.Config) []Segment {
+func Rvm(cfg config.Config, align config.Alignment) []Segment {
 	var (
 		segment string
 		err     error

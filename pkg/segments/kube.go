@@ -51,7 +51,7 @@ func readKubeConfig(config *KubeConfig, path string) (err error) {
 	return
 }
 
-func Kube(cfg config.Config) []Segment {
+func Kube(cfg config.Config, align config.Alignment) []Segment {
 	paths := append(strings.Split(os.Getenv("KUBECONFIG"), ":"), path.Join(homePath(), ".kube", "config"))
 	config := &KubeConfig{}
 	for _, configPath := range paths {

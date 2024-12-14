@@ -1,5 +1,3 @@
-//go:build broken
-
 package segments
 
 import (
@@ -13,9 +11,9 @@ import (
 
 var otherModified int
 
-func addSvnRepoStatsSegment(theme config.Theme, nChanges int, symbol string, foreground uint8, background uint8) (segments segment) {
+func addSvnRepoStatsSegment(nChanges int, symbol string, foreground uint8, background uint8) (segments []Segment) {
 	if nChanges > 0 {
-		segments = append(segments, segment{
+		segments = append(segments, Segment{
 			Name:       "svn-status",
 			Content:    fmt.Sprintf("%d%s", nChanges, symbol),
 			Foreground: foreground,
@@ -25,14 +23,14 @@ func addSvnRepoStatsSegment(theme config.Theme, nChanges int, symbol string, for
 	return segments
 }
 
-func (r repoStats) SvnSegments(theme config.Theme) (segments segment) {
-	segments = append(segments, addSvnRepoStatsSegment(p, r.ahead, p.symbols.RepoAhead, theme.GitAheadFg, theme.GitAheadBg)...)
-	segments = append(segments, addSvnRepoStatsSegment(p, r.behind, p.symbols.RepoBehind, theme.GitBehindFg, theme.GitBehindBg)...)
-	segments = append(segments, addSvnRepoStatsSegment(p, r.staged, p.symbols.RepoStaged, theme.GitStagedFg, theme.GitStagedBg)...)
-	segments = append(segments, addSvnRepoStatsSegment(p, r.notStaged, p.symbols.RepoNotStaged, theme.GitNotStagedFg, theme.GitNotStagedBg)...)
-	segments = append(segments, addSvnRepoStatsSegment(p, r.untracked, p.symbols.RepoUntracked, theme.GitUntrackedFg, theme.GitUntrackedBg)...)
-	segments = append(segments, addSvnRepoStatsSegment(p, r.conflicted, p.symbols.RepoConflicted, theme.GitConflictedFg, theme.GitConflictedBg)...)
-	segments = append(segments, addSvnRepoStatsSegment(p, r.stashed, p.symbols.RepoStashed, theme.GitStashedFg, theme.GitStashedBg)...)
+func (r repoStats) SvnSegments(cfg config.Config) (segments []Segment) {
+	segments = append(segments, addSvnRepoStatsSegment(r.ahead, cfg.Symbols().RepoAhead, cfg.SelectedTheme().GitAheadFg, cfg.SelectedTheme().GitAheadBg)...)
+	segments = append(segments, addSvnRepoStatsSegment(r.behind, cfg.Symbols().RepoBehind, cfg.SelectedTheme().GitBehindFg, cfg.SelectedTheme().GitBehindBg)...)
+	segments = append(segments, addSvnRepoStatsSegment(r.staged, cfg.Symbols().RepoStaged, cfg.SelectedTheme().GitStagedFg, cfg.SelectedTheme().GitStagedBg)...)
+	segments = append(segments, addSvnRepoStatsSegment(r.notStaged, cfg.Symbols().RepoNotStaged, cfg.SelectedTheme().GitNotStagedFg, cfg.SelectedTheme().GitNotStagedBg)...)
+	segments = append(segments, addSvnRepoStatsSegment(r.untracked, cfg.Symbols().RepoUntracked, cfg.SelectedTheme().GitUntrackedFg, cfg.SelectedTheme().GitUntrackedBg)...)
+	segments = append(segments, addSvnRepoStatsSegment(r.conflicted, cfg.Symbols().RepoConflicted, cfg.SelectedTheme().GitConflictedFg, cfg.SelectedTheme().GitConflictedBg)...)
+	segments = append(segments, addSvnRepoStatsSegment(r.stashed, cfg.Symbols().RepoStashed, cfg.SelectedTheme().GitStashedFg, cfg.SelectedTheme().GitStashedBg)...)
 	return segments
 }
 
@@ -118,14 +116,14 @@ func parseSvnStatus() repoStats {
 	return stats
 }
 
-func Subversion(theme config.Theme) []Segment {
+func Subversion(cfg config.Config, align config.Alignment) []Segment {
 	svnInfo, err := parseSvnURL()
 	if err != nil {
 		return []Segment{}
 	}
 
-	if len(p.ignoreRepos) > 0 {
-		if p.ignoreRepos[svnInfo["URL"]] || p.ignoreRepos[svnInfo["Relative URL"]] {
+	for _, repo := range cfg.IgnoreRepos {
+		if svnInfo["URL"] == repo || svnInfo["Relative URL"] == repo {
 			return []Segment{}
 		}
 	}
@@ -134,20 +132,20 @@ func Subversion(theme config.Theme) []Segment {
 
 	var foreground, background uint8
 	if svnStats.dirty() || otherModified > 0 {
-		foreground = theme.RepoDirtyFg
-		background = theme.RepoDirtyBg
+		foreground = cfg.SelectedTheme().RepoDirtyFg
+		background = cfg.SelectedTheme().RepoDirtyBg
 	} else {
-		foreground = theme.RepoCleanFg
-		background = theme.RepoCleanBg
+		foreground = cfg.SelectedTheme().RepoCleanFg
+		background = cfg.SelectedTheme().RepoCleanBg
 	}
 
-	segments := segment{{
+	segments := []Segment{{
 		Name:       "svn-branch",
 		Content:    svnInfo["Relative URL"],
 		Foreground: foreground,
 		Background: background,
 	}}
 
-	segments = append(segments, svnStats.SvnSegments(p)...)
+	segments = append(segments, svnStats.SvnSegments(cfg)...)
 	return segments
 }

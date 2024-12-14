@@ -115,7 +115,7 @@ func getGCPProject() (string, error) {
 	}
 }
 
-func GCP(cfg config.Config) []Segment {
+func GCP(cfg config.Config, align config.Alignment) []Segment {
 	project, err := getGCPProject()
 	if err != nil {
 		log.Fatal(err)

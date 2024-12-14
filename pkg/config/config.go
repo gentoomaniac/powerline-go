@@ -3,10 +3,12 @@ package config
 import (
 	"encoding/json"
 	"os"
+	"os/user"
 	"path/filepath"
 
 	"github.com/gentoomaniac/powerline-go/pkg/logging"
 	"github.com/gentoomaniac/powerline-go/pkg/shellinfo"
+	"github.com/rs/zerolog/log"
 )
 
 var defaultConfigPath = []string{".config", "powerline-go", "config.json"}
@@ -62,9 +64,28 @@ type Config struct {
 
 	PathAliases map[string]string `help:"One or more aliases from a path to a short name. Separate with ','. An alias maps a path like foo/bar/baz to a short name like FBB. Specify these as key/value pairs like foo/bar/baz=FBB. Use '~' for your home dir. You may need to escape this character to avoid shell substitution." mapsep:","`
 
-	Modes  map[string]SymbolTemplate `hidden:""`
-	Shells ShellMap                  `hidden:""`
-	Themes ThemeMap                  `hidden:""`
+	Modes    map[string]SymbolTemplate `hidden:""`
+	Shells   ShellMap                  `hidden:""`
+	Themes   ThemeMap                  `hidden:""`
+	Userinfo *user.User                `hidden:""`
+	Hostname string                    `hidden:""`
+}
+
+func New() Config {
+	user, err := user.Current()
+	if err != nil {
+		log.Error().Err(err).Msg("failed getting userinfo")
+	}
+
+	hostname, err := os.Hostname()
+	if err != nil {
+		log.Error().Err(err).Msg("couldn't determine hostname")
+	}
+
+	return Config{
+		Userinfo: user,
+		Hostname: hostname,
+	}
 }
 
 func (cfg *Config) SelectedTheme() Theme {

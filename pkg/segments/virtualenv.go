@@ -1,5 +1,3 @@
-//go:build broken
-
 package segments
 
 import (
@@ -12,7 +10,7 @@ import (
 	"gopkg.in/ini.v1"
 )
 
-func VirtualEnv(theme config.Theme) []Segment {
+func VirtualEnv(cfg config.Config, align config.Alignment) []Segment {
 	env := os.Getenv("VIRTUAL_ENV_PROMPT")
 	if strings.HasPrefix(env, "(") && strings.HasSuffix(env, ") ") {
 		env = strings.TrimPrefix(env, "(")
@@ -50,14 +48,14 @@ func VirtualEnv(theme config.Theme) []Segment {
 		return []Segment{}
 	}
 	envName := path.Base(env)
-	if p.cfg.VenvNameSizeLimit > 0 && len(envName) > p.cfg.VenvNameSizeLimit {
-		envName = p.symbols.VenvIndicator
+	if cfg.VenvNameSizeLimit > 0 && len(envName) > cfg.VenvNameSizeLimit {
+		envName = cfg.Symbols().VenvIndicator
 	}
 
 	return []Segment{{
 		Name:       "venv",
-		Content:    escapeVariables(p, envName),
-		Foreground: theme.VirtualEnvFg,
-		Background: theme.VirtualEnvBg,
+		Content:    escapeVariables(cfg, envName),
+		Foreground: cfg.SelectedTheme().VirtualEnvFg,
+		Background: cfg.SelectedTheme().VirtualEnvBg,
 	}}
 }

@@ -6,7 +6,7 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func AWS(cfg config.Config) []Segment {
+func AWS(cfg config.Config, align config.Alignment) []Segment {
 	profile := os.Getenv("AWS_PROFILE")
 	region := os.Getenv("AWS_DEFAULT_REGION")
 	if profile == "" {

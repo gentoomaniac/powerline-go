@@ -31,7 +31,7 @@ func getBzrStatus() (bool, bool, bool) {
 	return hasModifiedFiles, hasUntrackedFiles, hasMissingFiles
 }
 
-func Bzr(cfg config.Config) []Segment {
+func Bzr(cfg config.Config, align config.Alignment) []Segment {
 	out, _ := exec.Command("bzr", "nick").Output()
 	output := strings.SplitN(string(out), "\n", 2)
 	if len(output) > 0 && output[0] != "" {

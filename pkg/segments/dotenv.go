@@ -6,7 +6,7 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func DotEnv(cfg config.Config) []Segment {
+func DotEnv(cfg config.Config, align config.Alignment) []Segment {
 	files := []string{".env", ".envrc"}
 	dotEnv := false
 	for _, file := range files {

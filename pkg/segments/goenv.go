@@ -80,7 +80,7 @@ func checkForGoenvOutput() (string, error) {
 	return "", fmt.Errorf("not found in goenv object")
 }
 
-func Goenv(cfg config.Config) []Segment {
+func Goenv(cfg config.Config, align config.Alignment) []Segment {
 	global, _ := checkForGoenvGlobalVersion()
 
 	segment, err := checkEnvForGoenvVersion()

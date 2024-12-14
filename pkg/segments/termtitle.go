@@ -8,13 +8,20 @@ package segments
 import (
 	"fmt"
 	"os"
+	"os/user"
 	"strings"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
+	"github.com/rs/zerolog/log"
 )
 
-func TermTitle(theme config.Theme) []Segment {
+func TermTitle(cfg config.Config, align config.Alignment) []Segment {
 	var title string
+	user, err := user.Current()
+	if err != nil {
+		log.Error().Err(err).Msg("failed getting userinfo")
+		return []Segment{}
+	}
 
 	term := os.Getenv("TERM")
 	if !(strings.Contains(term, "xterm") || strings.Contains(term, "rxvt")) {
@@ -27,8 +34,10 @@ func TermTitle(theme config.Theme) []Segment {
 		title = "%{\033]0;%n@%m: %~\007%}"
 	} else {
 		cwd := p.cwd
-		title = fmt.Sprintf("\033]0;%s@%s: %s\007", p.username, p.hostname, cwd)
+		title = fmt.Sprintf("\033]0;%s@%s: %s\007", user.Username, p.hostname, cwd)
 	}
+
+	// TODO: This doesn't actually show the term title but an arbitrary string
 
 	return []Segment{{
 		Name:           "termtitle",

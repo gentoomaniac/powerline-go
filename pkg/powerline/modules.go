@@ -5,7 +5,7 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/segments"
 )
 
-var modules = map[string]func(config.Config) []segments.Segment{
+var modules = map[string]func(config.Config, config.Alignment) []segments.Segment{
 	"aws": segments.AWS,
 	"bzr": segments.Bzr,
 	//"cwd":                 segments.Cwd,

@@ -1,5 +1,3 @@
-//go:build broken
-
 package segments
 
 import (
@@ -35,15 +33,15 @@ func (s byRevLength) Less(i, j int) bool {
 	return len(s[i]) > len(s[j])
 }
 
-func maybeAliasPathSegments(cfg config.Theme, pathSegments []pathSegment) []pathSegment {
+func maybeAliasPathSegments(cfg config.Config, pathSegments []pathSegment) []pathSegment {
 	pathSeparator := string(os.PathSeparator)
 
-	if p.cfg.PathAliases == nil || len(p.cfg.PathAliases) == 0 {
+	if cfg.PathAliases == nil || len(cfg.PathAliases) == 0 {
 		return pathSegments
 	}
 
-	keys := make([]string, len(p.cfg.PathAliases))
-	for k := range p.cfg.PathAliases {
+	keys := make([]string, len(cfg.PathAliases))
+	for k := range cfg.PathAliases {
 		keys = append(keys, k)
 	}
 	sort.Sort(byRevLength(keys))
@@ -62,7 +60,7 @@ Aliases:
 			continue Aliases
 		}
 
-		alias := p.cfg.PathAliases[k]
+		alias := cfg.PathAliases[k]
 
 	Segments:
 		// We want to see if that array of strings exists in pathSegments.
@@ -106,22 +104,22 @@ Aliases:
 	return pathSegments
 }
 
-func cwdToPathSegments(theme config.Theme, cwd string) []pathSegment {
+func cwdToPathSegments(cfg config.Config, cwd string) []pathSegment {
 	pathSeparator := string(os.PathSeparator)
 	pathSegments := make([]pathSegment, 0)
 
-	if cwd == p.userInfo.HomeDir {
+	if cwd == cfg.Userinfo.HomeDir {
 		pathSegments = append(pathSegments, pathSegment{
 			path: "~",
 			home: true,
 		})
 		cwd = ""
-	} else if strings.HasPrefix(cwd, p.userInfo.HomeDir+pathSeparator) {
+	} else if strings.HasPrefix(cwd, cfg.Userinfo.HomeDir+pathSeparator) {
 		pathSegments = append(pathSegments, pathSegment{
 			path: "~",
 			home: true,
 		})
-		cwd = cwd[len(p.userInfo.HomeDir):]
+		cwd = cwd[len(cfg.Userinfo.HomeDir):]
 	} else if cwd == pathSeparator {
 		pathSegments = append(pathSegments, pathSegment{
 			path: pathSeparator,
@@ -141,56 +139,49 @@ func cwdToPathSegments(theme config.Theme, cwd string) []pathSegment {
 		})
 	}
 
-	return maybeAliasPathSegments(p, pathSegments)
+	return maybeAliasPathSegments(cfg, pathSegments)
 }
 
-func maybeShortenName(theme config.Theme, pathSegment string) string {
-	if p.cfg.CwdMaxDirSize > 0 && len(pathSegment) > p.cfg.CwdMaxDirSize {
-		return pathSegment[:p.cfg.CwdMaxDirSize]
+func maybeShortenName(cfg config.Config, pathSegment string) string {
+	if cfg.CwdMaxDirSize > 0 && len(pathSegment) > cfg.CwdMaxDirSize {
+		return pathSegment[:cfg.CwdMaxDirSize]
 	}
 	return pathSegment
 }
 
-func escapeVariables(theme config.Theme, pathSegment string) string {
-	pathSegment = strings.Replace(pathSegment, `\`, p.shell.EscapedBackslash, -1)
-	pathSegment = strings.Replace(pathSegment, "`", p.shell.EscapedBacktick, -1)
-	pathSegment = strings.Replace(pathSegment, `$`, p.shell.EscapedDollar, -1)
-	return pathSegment
-}
-
-func getColor(theme config.Theme, pathSegment pathSegment, isLastDir bool) (uint8, uint8, bool) {
-	if pathSegment.home && theme.HomeSpecialDisplay {
-		return theme.HomeFg, theme.HomeBg, true
+func getColor(cfg config.Config, pathSegment pathSegment, isLastDir bool) (uint8, uint8, bool) {
+	if pathSegment.home && cfg.SelectedTheme().HomeSpecialDisplay {
+		return cfg.SelectedTheme().HomeFg, cfg.SelectedTheme().HomeBg, true
 	} else if pathSegment.alias {
-		return theme.AliasFg, theme.AliasBg, true
+		return cfg.SelectedTheme().AliasFg, cfg.SelectedTheme().AliasBg, true
 	} else if isLastDir {
-		return theme.CwdFg, theme.PathBg, false
+		return cfg.SelectedTheme().CwdFg, cfg.SelectedTheme().PathBg, false
 	}
-	return theme.PathFg, theme.PathBg, false
+	return cfg.SelectedTheme().PathFg, cfg.SelectedTheme().PathBg, false
 }
 
-func Cwd(cfg config.Config) (segments segment) {
-	cwd := p.cwd
+func Cwd(cfg config.Config, align config.Alignment) (segments []Segment) {
+	cwd := getValidCwd()
 
-	switch p.cfg.CwdMode {
+	switch cfg.CwdMode {
 	case "plain":
-		if strings.HasPrefix(cwd, p.userInfo.HomeDir) {
-			cwd = "~" + cwd[len(p.userInfo.HomeDir):]
+		if strings.HasPrefix(cwd, cfg.Userinfo.HomeDir) {
+			cwd = "~" + cwd[len(cfg.Userinfo.HomeDir):]
 		}
 
-		segments = append(segments, segment{
+		segments = append(segments, Segment{
 			Name:       "cwd",
-			Content:    escapeVariables(p, cwd),
-			Foreground: theme.CwdFg,
-			Background: theme.PathBg,
+			Content:    escapeVariables(cfg, cwd),
+			Foreground: cfg.SelectedTheme().CwdFg,
+			Background: cfg.SelectedTheme().PathBg,
 		})
 	default:
-		pathSegments := cwdToPathSegments(p, cwd)
+		pathSegments := cwdToPathSegments(cfg, cwd)
 
-		if p.cfg.CwdMode == "dironly" {
+		if cfg.CwdMode == "dironly" {
 			pathSegments = pathSegments[len(pathSegments)-1:]
 		} else {
-			maxDepth := p.cfg.CwdMaxDepth
+			maxDepth := cfg.CwdMaxDepth
 			if maxDepth <= 0 {
 				log.Warn().Msg("Ignoring -cwd-max-depth argument since it's smaller than or equal to 0")
 			} else if len(pathSegments) > maxDepth {
@@ -212,7 +203,7 @@ func Cwd(cfg config.Config) (segments segment) {
 				pathSegments = append(pathSegments, secondPart...)
 			}
 
-			if p.cfg.CwdMode == "semifancy" && len(pathSegments) > 1 {
+			if cfg.CwdMode == "semifancy" && len(pathSegments) > 1 {
 				var path string
 				for idx, pathSegment := range pathSegments {
 					if pathSegment.home || pathSegment.alias {
@@ -236,21 +227,23 @@ func Cwd(cfg config.Config) (segments segment) {
 
 		for idx, pathSegment := range pathSegments {
 			isLastDir := idx == len(pathSegments)-1
-			foreground, background, special := getColor(p, pathSegment, isLastDir)
+			foreground, background, special := getColor(cfg, pathSegment, isLastDir)
 
 			segment := Segment{
-				Content:    escapeVariables(p, maybeShortenName(p, pathSegment.path)),
+				Content:    escapeVariables(cfg, maybeShortenName(cfg, pathSegment.path)),
 				Foreground: foreground,
 				Background: background,
 			}
 
 			if !special {
-				if p.align == alignRight && p.supportsRightModules() && idx != 0 {
-					segment.Separator = p.symbols.SeparatorReverseThin
-					segment.SeparatorForeground = theme.SeparatorFg
-				} else if (p.align == alignLeft || !p.supportsRightModules()) && !isLastDir {
-					segment.Separator = p.symbols.SeparatorThin
-					segment.SeparatorForeground = theme.SeparatorFg
+				// TODO: the supports check needs to get done in powerline
+				// && p.supportsRightModules()
+				if align == config.AlignRight && idx != 0 {
+					segment.Separator = cfg.Symbols().SeparatorReverseThin
+					segment.SeparatorForeground = cfg.SelectedTheme().SeparatorFg
+				} else if (align == config.AlignLeft) && !isLastDir {
+					segment.Separator = cfg.Symbols().SeparatorThin
+					segment.SeparatorForeground = cfg.SelectedTheme().SeparatorFg
 				}
 			}
 

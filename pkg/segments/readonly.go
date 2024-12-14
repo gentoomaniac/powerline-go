@@ -11,7 +11,7 @@ import (
 	"golang.org/x/sys/unix"
 )
 
-func Perms(cfg config.Config) []Segment {
+func Perms(cfg config.Config, align config.Alignment) []Segment {
 	cwd, err := os.Getwd()
 	if err != nil {
 		log.Error().Err(err).Msg("could not determine current working directory")
