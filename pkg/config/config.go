@@ -6,7 +6,6 @@ import (
 	"os/user"
 	"path/filepath"
 
-	"github.com/gentoomaniac/powerline-go/pkg/logging"
 	"github.com/gentoomaniac/powerline-go/pkg/shellinfo"
 	"github.com/rs/zerolog/log"
 	"github.com/shirou/gopsutil/v3/process"
@@ -20,8 +19,6 @@ type (
 )
 
 type Config struct {
-	logging.LoggingConfig
-
 	SaveDefaultConfig bool
 
 	CwdMode                string
