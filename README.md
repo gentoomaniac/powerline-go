@@ -1,16 +1,28 @@
 # A Powerline style prompt for your shell
 
+<<<<<<< Updated upstream
 ## DISCLAIMER
 
 This is a fork of [powerline-go](https://github.com/justjanne/powerline-go) by [@justjanne](https://github.com/justjanne).
 
 ## powerline-go
 
+=======
+<<<<<<< Updated upstream
+=======
+## DISCLAIMER
+
+This is a fork of [powerline-go](https://github.com/gentoomaniac/powerline-go) by [@justjanne](https://github.com/justjanne).
+
+## powerline-go
+
+>>>>>>> Stashed changes
+>>>>>>> Stashed changes
 A [Powerline](https://github.com/Lokaltog/vim-powerline) like prompt for Bash,
 ZSH and Fish. Based on [Powerline-Shell](https://github.com/banga/powerline-shell) by @banga.
 Ported to golang by @justjanne.
 
-![Solarized+Powerline](https://raw.github.com/justjanne/powerline-go/main/preview.png)
+![Solarized+Powerline](https://raw.github.com/gentoomaniac/powerline-go/main/preview.png)
 
 - Shows some important details about the git/hg branch (see below)
 - Changes color if the last command exited with a failure code
@@ -84,14 +96,14 @@ Alternatively you can use "compatible" or "flat" mode.
 ### Precompiled Binaries
 
 I provide precompiled binaries for x64 Linux and macOS in the
-[releases tab](https://github.com/justjanne/powerline-go/releases)
+[releases tab](https://github.com/gentoomaniac/powerline-go/releases)
 
 ### Other Platforms
 
 - Install (and update) the package with
 
 ```bash
-go install github.com/justjanne/powerline-go@latest
+go install github.com/gentoomaniac/powerline-go@latest
 ```
 
 - By default it will be in `$GOPATH/bin`, if you want to change that, you can set
@@ -214,111 +226,64 @@ There are a few optional arguments which can be seen by running
 in your shell’s init file.
 
 ```
-Usage of powerline-go:
-  -alternate-ssh-icon
-         Show the older, original icon for SSH connections
-  -colorize-hostname
-         Colorize the hostname based on a hash of itself, or use the PLGO_HOSTNAMEFG and PLGO_HOSTNAMEBG env vars (both need to be set).
-  -condensed
-         Remove spacing between segments
-  -cwd-max-depth int
-         Maximum number of directories to show in path
-         (default 5)
-  -cwd-max-dir-size int
-         Maximum number of letters displayed for each directory in the path
-         (default -1)
-  -cwd-mode string
-         How to display the current directory
-         (valid choices: fancy, semifancy, plain, dironly)
-         (default "fancy")
-  -duration string
-         The elapsed clock-time of the previous command
-  -duration-min string
-         The minimal time a command has to take before the duration segment is shown (default "0")
-  -east-asian-width
-         Use East Asian Ambiguous Widths
-  -error int
-         Exit code of previously executed command
-  -eval
-         Output prompt in 'eval' format.
-  -git-assume-unchanged-size int
-         Disable checking for changed/edited files in git repositories where the index is larger than this size (in KB), improves performance (default 2048)
-  -git-disable-stats string
-         Comma-separated list to disable individual git statuses
-         (valid choices: ahead, behind, staged, notStaged, untracked, conflicted, stashed)
-  -git-mode string
-         How to display git status
-         (valid choices: fancy, compact, simple)
-         (default "fancy")
-  -hostname-only-if-ssh
-         Show hostname only for SSH connections
-  -ignore-repos string
-         A list of git repos to ignore. Separate with ','.
-         Repos are identified by their root directory.
-  -ignore-warnings
-         Ignores all warnings regarding unset or broken variables
-  -jobs int
-         Number of jobs currently running
-  -max-width int
-         Maximum width of the shell that the prompt may use, in percent. Setting this to 0 disables the shrinking subsystem.
-  -mode string
-         The characters used to make separators between segments.
-         (valid choices: patched, compatible, flat)
-         (default "patched")
-  -modules string
-         The list of modules to load, separated by ','
-         (valid choices: aws, bzr, cwd, direnv, docker, docker-context, dotenv, duration, exit, fossil, gcp, git, gitlite, goenv, hg, host, jobs, kube, load, newline, nix-shell, node, perlbrew, perms, plenv, rbenv, root, rvm, shell-var, shenv, ssh, svn, termtitle, terraform-workspace, time, user, venv, vgo, vi-mode, wsl)
-         Unrecognized modules will be invoked as 'powerline-go-MODULE' executable plugins and should output a (possibly empty) list of JSON objects that unmarshal to powerline-go's Segment structs.
-         (default "venv,user,host,ssh,cwd,perms,git,hg,jobs,exit,root")
-  -modules-right string
-         The list of modules to load anchored to the right, for shells that support it, separated by ','
-         (valid choices: aws, bzr, cwd, direnv, docker, docker-context, dotenv, duration, exit, fossil, gcp, git, gitlite, goenv, hg, host, jobs, kube, load, newline, nix-shell, node, perlbrew, perms, plenv, rbenv, root, rvm, shell-var, shenv, ssh, svn, termtitle, terraform-workspace, time, user, venv, vgo, wsl)
-         Unrecognized modules will be invoked as 'powerline-go-MODULE' executable plugins and should output a (possibly empty) list of JSON objects that unmarshal to powerline-go's Segment structs.
-  -newline
-         Show the prompt on a new line
-  -numeric-exit-codes
-         Shows numeric exit codes for errors.
-  -path-aliases string
-         One or more aliases from a path to a short name. Separate with ','.
-         An alias maps a path like foo/bar/baz to a short name like FBB.
-         Specify these as key/value pairs like foo/bar/baz=FBB.
-         Use '~' for your home dir. You may need to escape this character to avoid shell substitution.
-  -priority string
-         Segments sorted by priority, if not enough space exists, the least priorized segments are removed first. Separate with ','
-         (valid choices: aws, bzr, cwd, direnv, docker, docker-context, dotenv, duration, exit, fossil, gcp, git, gitlite, goenv, hg, host, jobs, kube, load, newline, nix-shell, node, perlbrew, perms, plenv, rbenv, root, rvm, shell-var, shenv, ssh, svn, termtitle, terraform-workspace, time, user, venv, vgo, vi-mode, wsl)
-         (default "root,cwd,user,host,ssh,perms,git-branch,git-status,hg,jobs,exit,cwd-path")
-  -shell string
-         Set this to your shell type
-         (valid choices: autodetect, bare, bash, zsh)
-         (default "autodetect")
-  -shell-var string
-         A shell variable to add to the segments.
-  -shell-var-no-warn-empty
-         Disables warning for empty shell variable.
-  -shorten-eks-names
-         Shortens names for EKS Kube clusters.
-  -shorten-gke-names
-         Shortens names for GKE Kube clusters.
-  -static-prompt-indicator
-         Always show the prompt indicator with the default color, never with the error color
-  -theme string
-         Set this to the theme you want to use
-         (valid choices: default, low-contrast, gruvbox, solarized-dark16, solarized-light16)
-         (default "default")
-  -trim-ad-domain
-         Trim the Domainname from the AD username.
-  -truncate-segment-width int
-         Maximum width of a segment, segments longer than this will be shortened if space is limited. Setting this to 0 disables it.
-         (default 16)
-  -venv-name-size-limit int
-         Show indicator instead of virtualenv name if name is longer than this limit (defaults to 0, which is unlimited)
-  -vi-mode string
-         The current vi-mode (eg. KEYMAP for zsh) for vi-module module
+Usage: powerline-go [flags]
+
+Flags:
+  -h, --help                                                              Show context-sensitive help.
+  -v, --verbosity                                                         Increase verbosity.
+  -q, --[no-]quiet                                                        Disable all logging
+      --[no-]json                                                         Log as json
+      --[no-]debug                                                        shortcut for -vvvv
+      --save-config                                                       Save default config and exit
+      --cwd-mode="fancy"                                                  How to display the current directory
+      --cwd-max-depth=5                                                   Maximum number of directories to show in path
+      --cwd-max-dir-size=-1                                               Maximum number of letters displayed for each directory in the path
+      --colorize-hostname                                                 Colorize the hostname based on a hash of itself, or use the PLGO_HOSTNAMEFG and PLGO_HOSTNAMEBG env vars (both need to be set).
+      --hostname-only-if-ssh                                              Show hostname only for SSH connections
+      --ssh-alternate-icon                                                Show the older, original icon for SSH connections
+      --east-asian-width                                                  Use East Asian Ambiguous Widths
+      --newline                                                           Show the prompt on a new line
+      --static-prompt-indicator                                           Always show the prompt indicator with the default color, never with the error color
+      --venv-name-size-limit=0                                            Show indicator instead of virtualenv name if name is longer than this limit (defaults to 0, which is unlimited)
+      --jobs=0                                                            Number of jobs currently running
+      --git-assume-unchanged-size=2048                                    Disable checking for changed/edited files in git repositories where the index is larger than this size (in KB), improves performance
+      --git-disable-stats=GIT-DISABLE-STATS,...                           Comma-separated list to disable individual git statuses, (valid choices: ahead, behind, staged, notStaged, untracked, conflicted, stashed)
+      --git-mode="fancy"                                                  How to display git status, (valid choices: fancy, compact, simple)
+      --mode="patched"                                                    The characters used to make separators between segments, (valid choices: patched, compatible, flat)
+      --theme="default"                                                   Set this to the theme you want to use, (valid choices: default, low-contrast, gruvbox, solarized-dark16, solarized-light16)
+      --shell="autodetect"                                                overwrite the shell (valid choices: autodetect, bare, bash, zsh)
+      --modules=venv,user,host,ssh,cwd,perms,git,hg,jobs,exit,root,...    The list of modules to load, separated by ','. Unrecognized modules will be invoked as 'powerline-go-MODULE' executable plugins and should output
+                                                                          a (possibly empty) list of JSON objects that unmarshal to powerline-go's Segment structs.
+      --modules-right=MODULES-RIGHT,...                                   The list of modules to load anchored to the right, separated by ','. Unrecognized modules will be invoked as 'powerline-go-MODULE' executable
+                                                                          plugins and should output a (possibly empty) list of JSON objects that unmarshal to powerline-go's Segment structs.
+      --priority=root,cwd,user,host,ssh,perms,git-branch,git-status,hg,jobs,exit,cwd-path,...
+                                                                          Segments sorted by priority, if not enough space exists, the least priorized segments are removed first. Separate with ','
+      --max-width-percentage=0                                            Maximum width of the shell that the prompt may use, in percent. Setting this to 0 disables the shrinking subsystem.
+      --truncate-segment-width=16                                         Maximum width of a segment, segments longer than this will be shortened if space is limited. Setting this to 0 disables it.
+      --prev-error=0                                                      Exit code of previously executed command
+      --numeric-exit-codes                                                Shows numeric exit codes for errors.
+      --ignore-repos=IGNORE-REPOS,...                                     A list of git repos to ignore. Separate with ','. Repos are identified by their root directory.
+      --shorten-gke-names                                                 Shortens names for GKE Kube clusters.
+      --shorten-eks-names                                                 Shortens names for EKS Kube clusters.
+      --shorten-openshift-names                                           Shortens names for Openshift Kube clusters.
+      --shell-var=STRING                                                  A shell variable to add to the segments.
+      --shell-var-no-warn-empty                                           Disables warning for empty shell variable.
+      --trim-ad-domain
+      --duration=STRING                                                   The elapsed clock-time of the previous command
+      --duration-min="0"                                                  The minimal time a command has to take before the duration segment is shown
+      --duration-low-precision                                            Use low precision timing for duration with milliseconds as maximum resolution
+      --eval                                                              Output prompt in 'eval' format.
+      --condensed                                                         Remove spacing between segments
+      --time-format="15:04:05"                                            The layout string how a reference time should be represented. The reference time is predefined and not user choosen. Consult the golang
+                                                                          documentation for details: https://pkg.go.dev/time#example-Time.Format
+      --vi-mode=STRING                                                    The current vi-mode (eg. KEYMAP for zsh) for vi-module module
+      --path-aliases=KEY=VALUE,...                                        One or more aliases from a path to a short name. Separate with ','. An alias maps a path like foo/bar/baz to a short name like FBB. Specify these
+                                                                          as key/value pairs like foo/bar/baz=FBB. Use '~' for your home dir. You may need to escape this character to avoid shell substitution.
 ```
 
 ### Eval
 
-If using `eval` and `-modules-right` is desired, the shell setup must be modified slightly, as shown below:
+If using `eval` and `--modules-right` is desired, the shell setup must be modified slightly, as shown below:
 
 ##### Bash
 
@@ -370,7 +335,7 @@ terminal width, even when some portions are replaced by an ellipsis.
 
 For example, you might want to replace the string `$GOPATH/src/github.com` with
 `@GOPATH-GH`. When you're in a directory like
-`$GOPATH/src/github.com/justjanne/powerline-go`, you'll instead see `@GOPATH-GH >
+`$GOPATH/src/github.com/gentoomaniac/powerline-go`, you'll instead see `@GOPATH-GH >
 justjanne > powerline-go` in the shell prompt.
 
 Aliases are defined as comma-separated key value pairs, like this:
