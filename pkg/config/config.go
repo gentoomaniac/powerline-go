@@ -5,6 +5,7 @@ import (
 	"os"
 	"path/filepath"
 
+	"github.com/gentoomaniac/powerline-go/pkg/cli"
 	"github.com/gentoomaniac/powerline-go/pkg/logging"
 )
 
@@ -52,6 +53,8 @@ type Config struct {
 	TimeFormat             string            `help:"The layout string how a reference time should be represented. The reference time is predefined and not user choosen. Consult the golang documentation for details: https://pkg.go.dev/time#example-Time.Format" default:"15:04:05" json:"timeFormat"`
 	ViMode                 string            `help:"The current vi-mode (eg. KEYMAP for zsh) for vi-module module" json:"viMode"`
 	PathAliases            map[string]string `help:"One or more aliases from a path to a short name. Separate with ','. An alias maps a path like foo/bar/baz to a short name like FBB. Specify these as key/value pairs like foo/bar/baz=FBB. Use '~' for your home dir. You may need to escape this character to avoid shell substitution." mapsep:"," json:"pathAliases"`
+
+	Version cli.VersionFlag `short:"V" help:"Display version."`
 }
 
 func (conf Config) save() error {

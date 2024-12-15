@@ -14,10 +14,28 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
+var (
+	version = "unknown"
+	commit  = "unknown"
+	binName = "unknown"
+	builtBy = "unknown"
+	date    = "unknown"
+)
+
 var cli config.Config
 
 func main() {
-	ctx := kong.Parse(&cli, kong.UsageOnError(), kong.Configuration(kong.JSON, filepath.Join(config.ConfigPath(), config.ConfigFileName)))
+	ctx := kong.Parse(&cli,
+		kong.UsageOnError(),
+		kong.Configuration(kong.JSON, filepath.Join(config.ConfigPath(), config.ConfigFileName)),
+		kong.Vars{
+			"version": version,
+			"commit":  commit,
+			"binName": binName,
+			"builtBy": builtBy,
+			"date":    date,
+		},
+	)
 
 	cli.Json = false
 	logging.Setup(&cli.LoggingConfig)
