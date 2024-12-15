@@ -20,7 +20,7 @@ builds:
       - linux
       - windows
       - freebsd
-      - netbsd
+      #- netbsd
       - openbsd
     ignore:
       - goos: darwin
