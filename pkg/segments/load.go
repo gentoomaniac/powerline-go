@@ -15,24 +15,24 @@ func Load(cfg config.Config, align config.Alignment) []Segment {
 	if err != nil {
 		return []Segment{}
 	}
-	bg := cfg.SelectedTheme().LoadBg
+	bg := cfg.Theme.LoadBg
 
 	load := a.Load5
-	switch cfg.SelectedTheme().LoadAvgValue {
+	switch cfg.Theme.LoadAvgValue {
 	case 1:
 		load = a.Load1
 	case 15:
 		load = a.Load15
 	}
 
-	if load > float64(c)*cfg.SelectedTheme().LoadThresholdBad {
-		bg = cfg.SelectedTheme().LoadHighBg
+	if load > float64(c)*cfg.Theme.LoadThresholdBad {
+		bg = cfg.Theme.LoadHighBg
 	}
 
 	return []Segment{{
 		Name:       "load",
 		Content:    fmt.Sprintf("%.2f", a.Load5),
-		Foreground: cfg.SelectedTheme().LoadFg,
+		Foreground: cfg.Theme.LoadFg,
 		Background: bg,
 	}}
 }

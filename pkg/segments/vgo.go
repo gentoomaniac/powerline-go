@@ -15,7 +15,7 @@ func VirtualGo(cfg config.Config, align config.Alignment) []Segment {
 	return []Segment{{
 		Name:       "vgo",
 		Content:    env,
-		Foreground: cfg.SelectedTheme().VirtualGoFg,
-		Background: cfg.SelectedTheme().VirtualGoBg,
+		Foreground: cfg.Theme.VirtualGoFg,
+		Background: cfg.Theme.VirtualGoBg,
 	}}
 }

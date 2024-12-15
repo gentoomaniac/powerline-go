@@ -7,11 +7,11 @@ import (
 func Root(cfg config.Config, align config.Alignment) []Segment {
 	var foreground, background uint8
 	if cfg.PrevError == 0 || cfg.StaticPromptIndicator {
-		foreground = cfg.SelectedTheme().CmdPassedFg
-		background = cfg.SelectedTheme().CmdPassedBg
+		foreground = cfg.Theme.CmdPassedFg
+		background = cfg.Theme.CmdPassedBg
 	} else {
-		foreground = cfg.SelectedTheme().CmdFailedFg
-		background = cfg.SelectedTheme().CmdFailedBg
+		foreground = cfg.Theme.CmdFailedFg
+		background = cfg.Theme.CmdFailedBg
 	}
 
 	return []Segment{{

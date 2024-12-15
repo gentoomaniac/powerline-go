@@ -43,8 +43,8 @@ func Hg(cfg config.Config, align config.Alignment) []Segment {
 	var foreground, background uint8
 	var content string
 	if hasModifiedFiles || hasUntrackedFiles || hasMissingFiles {
-		foreground = cfg.SelectedTheme().RepoDirtyFg
-		background = cfg.SelectedTheme().RepoDirtyBg
+		foreground = cfg.Theme.RepoDirtyFg
+		background = cfg.Theme.RepoDirtyBg
 
 		extra := ""
 
@@ -58,8 +58,8 @@ func Hg(cfg config.Config, align config.Alignment) []Segment {
 
 		content = fmt.Sprintf("%s %s", branch, extra)
 	} else {
-		foreground = cfg.SelectedTheme().RepoCleanFg
-		background = cfg.SelectedTheme().RepoCleanBg
+		foreground = cfg.Theme.RepoCleanFg
+		background = cfg.Theme.RepoCleanBg
 
 		content = branch
 	}

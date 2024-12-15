@@ -17,15 +17,15 @@ func ViMode(cfg config.Config, align config.Alignment) []Segment {
 		return []Segment{{
 			Name:       "vi-mode",
 			Content:    "C",
-			Foreground: cfg.SelectedTheme().ViModeCommandFg,
-			Background: cfg.SelectedTheme().ViModeCommandBg,
+			Foreground: cfg.Theme.ViModeCommandFg,
+			Background: cfg.Theme.ViModeCommandBg,
 		}}
 	default: // usually "viins" or "main"
 		return []Segment{{
 			Name:       "vi-mode",
 			Content:    "I",
-			Foreground: cfg.SelectedTheme().ViModeInsertFg,
-			Background: cfg.SelectedTheme().ViModeInsertBg,
+			Foreground: cfg.Theme.ViModeInsertFg,
+			Background: cfg.Theme.ViModeInsertBg,
 		}}
 	}
 }

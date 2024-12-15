@@ -14,7 +14,7 @@ func ShEnv(cfg config.Config, align config.Alignment) []Segment {
 	return []Segment{{
 		Name:       "shenv",
 		Content:    env,
-		Foreground: cfg.SelectedTheme().ShEnvFg,
-		Background: cfg.SelectedTheme().ShEnvBg,
+		Foreground: cfg.Theme.ShEnvFg,
+		Background: cfg.Theme.ShEnvBg,
 	}}
 }

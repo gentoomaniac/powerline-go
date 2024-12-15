@@ -27,7 +27,7 @@ func Docker(cfg config.Config, align config.Alignment) []Segment {
 	return []Segment{{
 		Name:       "docker",
 		Content:    docker,
-		Foreground: cfg.SelectedTheme().DockerMachineFg,
-		Background: cfg.SelectedTheme().DockerMachineBg,
+		Foreground: cfg.Theme.DockerMachineFg,
+		Background: cfg.Theme.DockerMachineBg,
 	}}
 }

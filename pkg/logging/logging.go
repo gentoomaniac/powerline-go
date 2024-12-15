@@ -11,7 +11,7 @@ import (
 
 type LoggingConfig struct {
 	Verbosity int  `short:"v" help:"Increase verbosity." type:"counter"`
-	Quiet     bool `short:"q" help:"Do not run upgrades." default:"false" negatable:""`
+	Quiet     bool `short:"q" help:"Disable all logging" default:"false" negatable:""`
 	Json      bool `help:"Log as json" default:"true" negatable:""`
 	Debug     bool `help:"shortcut for -vvvv" default:"false" negatable:""`
 }

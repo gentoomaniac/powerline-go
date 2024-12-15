@@ -19,7 +19,7 @@ func Perms(cfg config.Config, align config.Alignment) []Segment {
 	return []Segment{{
 		Name:       "perms",
 		Content:    cfg.Symbols().Lock,
-		Foreground: cfg.SelectedTheme().ReadonlyFg,
-		Background: cfg.SelectedTheme().ReadonlyBg,
+		Foreground: cfg.Theme.ReadonlyFg,
+		Background: cfg.Theme.ReadonlyBg,
 	}}
 }

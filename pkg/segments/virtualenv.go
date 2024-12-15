@@ -55,7 +55,7 @@ func VirtualEnv(cfg config.Config, align config.Alignment) []Segment {
 	return []Segment{{
 		Name:       "venv",
 		Content:    escapeVariables(cfg, envName),
-		Foreground: cfg.SelectedTheme().VirtualEnvFg,
-		Background: cfg.SelectedTheme().VirtualEnvBg,
+		Foreground: cfg.Theme.VirtualEnvFg,
+		Background: cfg.Theme.VirtualEnvBg,
 	}}
 }

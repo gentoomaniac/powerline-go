@@ -21,7 +21,7 @@ func SSH(cfg config.Config, align config.Alignment) []Segment {
 	return []Segment{{
 		Name:       "ssh",
 		Content:    networkIcon,
-		Foreground: cfg.SelectedTheme().SSHFg,
-		Background: cfg.SelectedTheme().SSHBg,
+		Foreground: cfg.Theme.SSHFg,
+		Background: cfg.Theme.SSHBg,
 	}}
 }

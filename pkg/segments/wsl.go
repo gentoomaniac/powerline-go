@@ -25,8 +25,8 @@ func WSL(cfg config.Config, align config.Alignment) []Segment {
 		return []Segment{{
 			Name:       "WSL",
 			Content:    WSL,
-			Foreground: cfg.SelectedTheme().WSLMachineFg,
-			Background: cfg.SelectedTheme().WSLMachineBg,
+			Foreground: cfg.Theme.WSLMachineFg,
+			Background: cfg.Theme.WSLMachineBg,
 		}}
 	}
 	return []Segment{}

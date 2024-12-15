@@ -31,8 +31,8 @@ func Duration(cfg config.Config, align config.Alignment) []Segment {
 		return []Segment{{
 			Name:       "duration",
 			Content:    "No duration",
-			Foreground: cfg.SelectedTheme().DurationFg,
-			Background: cfg.SelectedTheme().DurationBg,
+			Foreground: cfg.Theme.DurationFg,
+			Background: cfg.Theme.DurationBg,
 		}}
 	}
 
@@ -47,8 +47,8 @@ func Duration(cfg config.Config, align config.Alignment) []Segment {
 		return []Segment{{
 			Name:       "duration",
 			Content:    fmt.Sprintf("Failed to convert '%s' to a number", cfg.Duration),
-			Foreground: cfg.SelectedTheme().DurationFg,
-			Background: cfg.SelectedTheme().DurationBg,
+			Foreground: cfg.Theme.DurationFg,
+			Background: cfg.Theme.DurationBg,
 		}}
 	}
 
@@ -98,7 +98,7 @@ func Duration(cfg config.Config, align config.Alignment) []Segment {
 	return []Segment{{
 		Name:       "duration",
 		Content:    content,
-		Foreground: cfg.SelectedTheme().DurationFg,
-		Background: cfg.SelectedTheme().DurationBg,
+		Foreground: cfg.Theme.DurationFg,
+		Background: cfg.Theme.DurationBg,
 	}}
 }

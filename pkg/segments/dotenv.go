@@ -22,7 +22,7 @@ func DotEnv(cfg config.Config, align config.Alignment) []Segment {
 	return []Segment{{
 		Name:       "dotenv",
 		Content:    "\u2235",
-		Foreground: cfg.SelectedTheme().DotEnvFg,
-		Background: cfg.SelectedTheme().DotEnvBg,
+		Foreground: cfg.Theme.DotEnvFg,
+		Background: cfg.Theme.DotEnvBg,
 	}}
 }

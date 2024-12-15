@@ -13,7 +13,7 @@ func Jobs(cfg config.Config, align config.Alignment) []Segment {
 	return []Segment{{
 		Name:       "jobs",
 		Content:    strconv.Itoa(cfg.Jobs),
-		Foreground: cfg.SelectedTheme().JobsFg,
-		Background: cfg.SelectedTheme().JobsBg,
+		Foreground: cfg.Theme.JobsFg,
+		Background: cfg.Theme.JobsBg,
 	}}
 }

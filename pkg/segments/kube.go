@@ -115,8 +115,8 @@ func Kube(cfg config.Config, align config.Alignment) []Segment {
 		segments = append(segments, Segment{
 			Name:       "kube-cluster",
 			Content:    fmt.Sprintf("⎈ %s", cluster),
-			Foreground: cfg.SelectedTheme().KubeClusterFg,
-			Background: cfg.SelectedTheme().KubeClusterBg,
+			Foreground: cfg.Theme.KubeClusterFg,
+			Background: cfg.Theme.KubeClusterBg,
 		})
 	}
 
@@ -128,8 +128,8 @@ func Kube(cfg config.Config, align config.Alignment) []Segment {
 		segments = append(segments, Segment{
 			Name:       "kube-namespace",
 			Content:    content,
-			Foreground: cfg.SelectedTheme().KubeNamespaceFg,
-			Background: cfg.SelectedTheme().KubeNamespaceBg,
+			Foreground: cfg.Theme.KubeNamespaceFg,
+			Background: cfg.Theme.KubeNamespaceBg,
 		})
 	}
 	return segments
