@@ -85,7 +85,7 @@ func Rvm(cfg config.Config, align config.Alignment) []Segment {
 	return []Segment{{
 		Name:       "rvm",
 		Content:    cfg.Symbols().RvmIndicator + " " + segment,
-		Foreground: cfg.SelectedTheme().RvmFg,
-		Background: cfg.SelectedTheme().RvmBg,
+		Foreground: cfg.Theme.RvmFg,
+		Background: cfg.Theme.RvmBg,
 	}}
 }

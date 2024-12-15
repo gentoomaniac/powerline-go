@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"os"
+	"path/filepath"
 	"strings"
 
 	"github.com/alecthomas/kong"
@@ -16,7 +17,7 @@ import (
 type clistruct struct {
 	logging.LoggingConfig
 
-	SaveDefaultConfig bool `help:"Save default config and exit"`
+	SaveDefaultConfig bool `help:"Save default config and exit" default:"false"`
 
 	CwdMode                string   `help:"How to display the current directory" default:"fancy"`
 	CwdMaxDepth            int      `help:"Maximum number of directories to show in path" default:"5"`
@@ -63,7 +64,7 @@ type clistruct struct {
 var cli clistruct
 
 func main() {
-	ctx := kong.Parse(&cli, kong.UsageOnError(), kong.Configuration(kong.JSON, config.ConfigPath()))
+	ctx := kong.Parse(&cli, kong.UsageOnError(), kong.Configuration(kong.JSON, filepath.Join(config.ConfigPath(), config.ConfigFileName)))
 
 	cli.Json = false
 	logging.Setup(&cli.LoggingConfig)
@@ -71,23 +72,22 @@ func main() {
 	cfg := config.New()
 	updateConfFromCLi(&cfg, cli)
 
-	if cfg.SaveDefaultConfig {
+	if cli.SaveDefaultConfig {
 		if err := cfg.EnsureExists(); err != nil {
-			log.Fatal().Msg("could not write default config")
+			log.Fatal().Err(err).Msg("could not write default config")
 		}
 		ctx.Exit(0)
 	}
 
-	if strings.HasSuffix(cfg.Theme, ".json") {
-		file, err := os.ReadFile(cfg.Theme)
-		if err == nil {
-			theme := cfg.Themes["default"]
-			err = json.Unmarshal(file, &theme)
-			if err == nil {
-				cfg.Themes[cfg.Theme] = theme
-			} else {
-				log.Error().Err(err).Msg("error reading theme")
-			}
+	var exists bool
+	cfg.Theme, exists = cfg.Themes[cli.Theme]
+	if !exists {
+		theme, err := config.ThemeFromFile(cli.Theme)
+		if err != nil {
+			log.Warn().Err(err).Msg("could't load theme, falling back to default")
+			cfg.Theme = cfg.Themes["default"]
+		} else {
+			cfg.Theme = *theme
 		}
 	}
 
@@ -132,7 +132,6 @@ func updateConfFromCLi(cfg *config.Config, cli clistruct) {
 	}
 	cfg.GitMode = cli.GitMode
 	cfg.Mode = cli.Mode
-	cfg.Theme = cli.Theme
 	if cli.Shell != "autodetect" {
 		cfg.Shell = cli.Shell
 	}
@@ -160,4 +159,5 @@ func updateConfFromCLi(cfg *config.Config, cli clistruct) {
 	cfg.Time = cli.Time
 	cfg.ViMode = cli.ViMode
 	cfg.PathAliases = cli.PathAliases
+	cfg.ThemeName = cli.Theme
 }

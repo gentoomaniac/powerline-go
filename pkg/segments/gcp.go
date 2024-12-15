@@ -127,7 +127,7 @@ func GCP(cfg config.Config, align config.Alignment) []Segment {
 	return []Segment{{
 		Name:       "gcp",
 		Content:    project,
-		Foreground: cfg.SelectedTheme().GCPFg,
-		Background: cfg.SelectedTheme().GCPBg,
+		Foreground: cfg.Theme.GCPFg,
+		Background: cfg.Theme.GCPBg,
 	}}
 }

@@ -17,7 +17,7 @@ func Perlbrew(cfg config.Config, align config.Alignment) []Segment {
 	return []Segment{{
 		Name:       "perlbrew",
 		Content:    envName,
-		Foreground: cfg.SelectedTheme().PerlbrewFg,
-		Background: cfg.SelectedTheme().PerlbrewBg,
+		Foreground: cfg.Theme.PerlbrewFg,
+		Background: cfg.Theme.PerlbrewBg,
 	}}
 }

@@ -100,7 +100,7 @@ func Rbenv(cfg config.Config, align config.Alignment) []Segment {
 	return []Segment{{
 		Name:       "rbenv",
 		Content:    segment,
-		Foreground: cfg.SelectedTheme().TimeFg,
-		Background: cfg.SelectedTheme().TimeBg,
+		Foreground: cfg.Theme.TimeFg,
+		Background: cfg.Theme.TimeBg,
 	}}
 }

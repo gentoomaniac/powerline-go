@@ -22,7 +22,7 @@ func AWS(cfg config.Config, align config.Alignment) []Segment {
 	return []Segment{{
 		Name:       "aws",
 		Content:    profile + r,
-		Foreground: cfg.SelectedTheme().AWSFg,
-		Background: cfg.SelectedTheme().AWSBg,
+		Foreground: cfg.Theme.AWSFg,
+		Background: cfg.Theme.AWSBg,
 	}}
 }

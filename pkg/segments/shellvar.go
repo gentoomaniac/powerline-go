@@ -28,7 +28,7 @@ func ShellVar(cfg config.Config, align config.Alignment) []Segment {
 	return []Segment{{
 		Name:       "shell-var",
 		Content:    varContent,
-		Foreground: cfg.SelectedTheme().ShellVarFg,
-		Background: cfg.SelectedTheme().ShellVarBg,
+		Foreground: cfg.Theme.ShellVarFg,
+		Background: cfg.Theme.ShellVarBg,
 	}}
 }

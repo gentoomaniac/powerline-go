@@ -42,7 +42,7 @@ func GitLite(cfg config.Config, align config.Alignment) []Segment {
 	return []Segment{{
 		Name:       "git-branch",
 		Content:    branch,
-		Foreground: cfg.SelectedTheme().RepoCleanFg,
-		Background: cfg.SelectedTheme().RepoCleanBg,
+		Foreground: cfg.Theme.RepoCleanFg,
+		Background: cfg.Theme.RepoCleanBg,
 	}}
 }

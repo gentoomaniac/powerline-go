@@ -14,7 +14,7 @@ func PlEnv(cfg config.Config, align config.Alignment) []Segment {
 	return []Segment{{
 		Name:       "plenv",
 		Content:    env,
-		Foreground: cfg.SelectedTheme().PlEnvFg,
-		Background: cfg.SelectedTheme().PlEnvBg,
+		Foreground: cfg.Theme.PlEnvFg,
+		Background: cfg.Theme.PlEnvBg,
 	}}
 }

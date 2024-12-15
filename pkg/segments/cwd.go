@@ -150,14 +150,14 @@ func maybeShortenName(cfg config.Config, pathSegment string) string {
 }
 
 func getColor(cfg config.Config, pathSegment pathSegment, isLastDir bool) (uint8, uint8, bool) {
-	if pathSegment.home && cfg.SelectedTheme().HomeSpecialDisplay {
-		return cfg.SelectedTheme().HomeFg, cfg.SelectedTheme().HomeBg, true
+	if pathSegment.home && cfg.Theme.HomeSpecialDisplay {
+		return cfg.Theme.HomeFg, cfg.Theme.HomeBg, true
 	} else if pathSegment.alias {
-		return cfg.SelectedTheme().AliasFg, cfg.SelectedTheme().AliasBg, true
+		return cfg.Theme.AliasFg, cfg.Theme.AliasBg, true
 	} else if isLastDir {
-		return cfg.SelectedTheme().CwdFg, cfg.SelectedTheme().PathBg, false
+		return cfg.Theme.CwdFg, cfg.Theme.PathBg, false
 	}
-	return cfg.SelectedTheme().PathFg, cfg.SelectedTheme().PathBg, false
+	return cfg.Theme.PathFg, cfg.Theme.PathBg, false
 }
 
 func Cwd(cfg config.Config, align config.Alignment) (segments []Segment) {
@@ -172,8 +172,8 @@ func Cwd(cfg config.Config, align config.Alignment) (segments []Segment) {
 		segments = append(segments, Segment{
 			Name:       "cwd",
 			Content:    escapeVariables(cfg, cwd),
-			Foreground: cfg.SelectedTheme().CwdFg,
-			Background: cfg.SelectedTheme().PathBg,
+			Foreground: cfg.Theme.CwdFg,
+			Background: cfg.Theme.PathBg,
 		})
 	default:
 		pathSegments := cwdToPathSegments(cfg, cwd)
@@ -240,10 +240,10 @@ func Cwd(cfg config.Config, align config.Alignment) (segments []Segment) {
 				// && p.supportsRightModules()
 				if align == config.AlignRight && idx != 0 {
 					segment.Separator = cfg.Symbols().SeparatorReverseThin
-					segment.SeparatorForeground = cfg.SelectedTheme().SeparatorFg
+					segment.SeparatorForeground = cfg.Theme.SeparatorFg
 				} else if (align == config.AlignLeft) && !isLastDir {
 					segment.Separator = cfg.Symbols().SeparatorThin
-					segment.SeparatorForeground = cfg.SelectedTheme().SeparatorFg
+					segment.SeparatorForeground = cfg.Theme.SeparatorFg
 				}
 			}
 

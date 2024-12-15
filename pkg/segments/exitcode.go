@@ -63,7 +63,7 @@ func ExitCode(cfg config.Config, align config.Alignment) []Segment {
 	return []Segment{{
 		Name:       "exit",
 		Content:    meaning,
-		Foreground: cfg.SelectedTheme().CmdFailedFg,
-		Background: cfg.SelectedTheme().CmdFailedBg,
+		Foreground: cfg.Theme.CmdFailedFg,
+		Background: cfg.Theme.CmdFailedBg,
 	}}
 }

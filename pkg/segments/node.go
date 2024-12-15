@@ -54,8 +54,8 @@ func Node(cfg config.Config, align config.Alignment) []Segment {
 		segments = append(segments, Segment{
 			Name:       "node",
 			Content:    cfg.Symbols().NodeIndicator + " " + nodeVersion,
-			Foreground: cfg.SelectedTheme().NodeVersionFg,
-			Background: cfg.SelectedTheme().NodeVersionBg,
+			Foreground: cfg.Theme.NodeVersionFg,
+			Background: cfg.Theme.NodeVersionBg,
 		})
 	}
 
@@ -63,8 +63,8 @@ func Node(cfg config.Config, align config.Alignment) []Segment {
 		segments = append(segments, Segment{
 			Name:       "node-segment",
 			Content:    packageVersion + " " + cfg.Symbols().NodeIndicator,
-			Foreground: cfg.SelectedTheme().NodeFg,
-			Background: cfg.SelectedTheme().NodeBg,
+			Foreground: cfg.Theme.NodeFg,
+			Background: cfg.Theme.NodeBg,
 		})
 	}
 

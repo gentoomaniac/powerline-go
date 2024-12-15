@@ -19,15 +19,15 @@ func User(cfg config.Config, align config.Alignment) []Segment {
 
 	var background uint8
 	if userIsAdmin() {
-		background = cfg.SelectedTheme().UsernameRootBg
+		background = cfg.Theme.UsernameRootBg
 	} else {
-		background = cfg.SelectedTheme().UsernameBg
+		background = cfg.Theme.UsernameBg
 	}
 
 	return []Segment{{
 		Name:       "user",
 		Content:    userPrompt,
-		Foreground: cfg.SelectedTheme().UsernameFg,
+		Foreground: cfg.Theme.UsernameFg,
 		Background: background,
 	}}
 }

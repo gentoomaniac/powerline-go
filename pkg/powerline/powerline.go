@@ -307,7 +307,6 @@ func (p *Powerline) drawRow(rowNum int, buffer *bytes.Buffer) {
 }
 
 func (p *Powerline) Render() string {
-	log.Debug().Msgf("Draw(): %v", p.cfg.Modules)
 	var buffer bytes.Buffer
 
 	if p.cfg.Eval {

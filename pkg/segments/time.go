@@ -11,7 +11,7 @@ func Time(cfg config.Config, align config.Alignment) []Segment {
 	return []Segment{{
 		Name:       "time",
 		Content:    time.Now().Format(strings.TrimSpace(cfg.Time)),
-		Foreground: cfg.SelectedTheme().TimeFg,
-		Background: cfg.SelectedTheme().TimeBg,
+		Foreground: cfg.Theme.TimeFg,
+		Background: cfg.Theme.TimeBg,
 	}}
 }

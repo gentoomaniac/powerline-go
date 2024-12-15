@@ -96,8 +96,8 @@ func Goenv(cfg config.Config, align config.Alignment) []Segment {
 		return []Segment{{
 			Name:       "goenv",
 			Content:    segment,
-			Foreground: cfg.SelectedTheme().GoenvFg,
-			Background: cfg.SelectedTheme().GoenvBg,
+			Foreground: cfg.Theme.GoenvFg,
+			Background: cfg.Theme.GoenvBg,
 		}}
 	}
 }

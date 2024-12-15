@@ -23,7 +23,7 @@ func TerraformWorkspace(cfg config.Config, align config.Alignment) []Segment {
 	return []Segment{{
 		Name:       "terraform-workspace",
 		Content:    string(workspace),
-		Foreground: cfg.SelectedTheme().TFWsFg,
-		Background: cfg.SelectedTheme().TFWsBg,
+		Foreground: cfg.Theme.TFWsFg,
+		Background: cfg.Theme.TFWsBg,
 	}}
 }

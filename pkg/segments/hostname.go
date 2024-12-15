@@ -36,13 +36,14 @@ func Hostname(cfg config.Config, align config.Alignment) []Segment {
 
 		foregroundEnv, foregroundEnvErr := strconv.ParseUint(os.Getenv("PLGO_HOSTNAMEFG"), 0, 8)
 		backgroundEnv, backgroundEnvErr := strconv.ParseUint(os.Getenv("PLGO_HOSTNAMEBG"), 0, 8)
+
 		if foregroundEnvErr == nil && backgroundEnvErr == nil {
 			foreground = uint8(foregroundEnv)
 			background = uint8(backgroundEnv)
 		} else {
 			hash := getMd5(hostName)
 			background = hash[0] % 128
-			foreground = cfg.SelectedTheme().HostnameColorizedFgMap[background]
+			foreground = cfg.Theme.HostnameColorizedFg[background]
 		}
 	} else {
 		if cfg.Shell == "bash" {
@@ -53,8 +54,8 @@ func Hostname(cfg config.Config, align config.Alignment) []Segment {
 			hostPrompt = getHostName(cfg.Hostname)
 		}
 
-		foreground = cfg.SelectedTheme().HostnameFg
-		background = cfg.SelectedTheme().HostnameBg
+		foreground = cfg.Theme.HostnameFg
+		background = cfg.Theme.HostnameBg
 	}
 
 	return []Segment{{

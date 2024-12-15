@@ -52,13 +52,13 @@ func addRepoStatsSegment(nChanges int, symbol string, foreground uint8, backgrou
 }
 
 func (r repoStats) GitSegments(cfg config.Config) (segments []Segment) {
-	segments = append(segments, addRepoStatsSegment(r.ahead, cfg.Symbols().RepoAhead, cfg.SelectedTheme().GitAheadFg, cfg.SelectedTheme().GitAheadBg)...)
-	segments = append(segments, addRepoStatsSegment(r.behind, cfg.Symbols().RepoBehind, cfg.SelectedTheme().GitBehindFg, cfg.SelectedTheme().GitBehindBg)...)
-	segments = append(segments, addRepoStatsSegment(r.staged, cfg.Symbols().RepoStaged, cfg.SelectedTheme().GitStagedFg, cfg.SelectedTheme().GitStagedBg)...)
-	segments = append(segments, addRepoStatsSegment(r.notStaged, cfg.Symbols().RepoNotStaged, cfg.SelectedTheme().GitNotStagedFg, cfg.SelectedTheme().GitNotStagedBg)...)
-	segments = append(segments, addRepoStatsSegment(r.untracked, cfg.Symbols().RepoUntracked, cfg.SelectedTheme().GitUntrackedFg, cfg.SelectedTheme().GitUntrackedBg)...)
-	segments = append(segments, addRepoStatsSegment(r.conflicted, cfg.Symbols().RepoConflicted, cfg.SelectedTheme().GitConflictedFg, cfg.SelectedTheme().GitConflictedBg)...)
-	segments = append(segments, addRepoStatsSegment(r.stashed, cfg.Symbols().RepoStashed, cfg.SelectedTheme().GitStashedFg, cfg.SelectedTheme().GitStashedBg)...)
+	segments = append(segments, addRepoStatsSegment(r.ahead, cfg.Symbols().RepoAhead, cfg.Theme.GitAheadFg, cfg.Theme.GitAheadBg)...)
+	segments = append(segments, addRepoStatsSegment(r.behind, cfg.Symbols().RepoBehind, cfg.Theme.GitBehindFg, cfg.Theme.GitBehindBg)...)
+	segments = append(segments, addRepoStatsSegment(r.staged, cfg.Symbols().RepoStaged, cfg.Theme.GitStagedFg, cfg.Theme.GitStagedBg)...)
+	segments = append(segments, addRepoStatsSegment(r.notStaged, cfg.Symbols().RepoNotStaged, cfg.Theme.GitNotStagedFg, cfg.Theme.GitNotStagedBg)...)
+	segments = append(segments, addRepoStatsSegment(r.untracked, cfg.Symbols().RepoUntracked, cfg.Theme.GitUntrackedFg, cfg.Theme.GitUntrackedBg)...)
+	segments = append(segments, addRepoStatsSegment(r.conflicted, cfg.Symbols().RepoConflicted, cfg.Theme.GitConflictedFg, cfg.Theme.GitConflictedBg)...)
+	segments = append(segments, addRepoStatsSegment(r.stashed, cfg.Symbols().RepoStashed, cfg.Theme.GitStashedFg, cfg.Theme.GitStashedBg)...)
 	return
 }
 
@@ -236,11 +236,11 @@ func Git(cfg config.Config, align config.Alignment) []Segment {
 
 	var foreground, background uint8
 	if stats.dirty() {
-		foreground = cfg.SelectedTheme().RepoDirtyFg
-		background = cfg.SelectedTheme().RepoDirtyBg
+		foreground = cfg.Theme.RepoDirtyFg
+		background = cfg.Theme.RepoDirtyBg
 	} else {
-		foreground = cfg.SelectedTheme().RepoCleanFg
-		background = cfg.SelectedTheme().RepoCleanBg
+		foreground = cfg.Theme.RepoCleanFg
+		background = cfg.Theme.RepoCleanBg
 	}
 
 	segments := []Segment{{

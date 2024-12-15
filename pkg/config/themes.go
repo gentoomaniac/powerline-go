@@ -1,6 +1,12 @@
 package config
 
-import "encoding/json"
+import (
+	"encoding/json"
+	"os"
+	"path/filepath"
+
+	"github.com/rs/zerolog/log"
+)
 
 // Symbols of the theme
 type SymbolTemplate struct {
@@ -28,12 +34,7 @@ type SymbolTemplate struct {
 }
 
 func (mode *SymbolTemplate) UnmarshalJSON(data []byte) error {
-	type Alias SymbolTemplate
-	tmp := defaults.Modes[defaults.Mode]
-	err := json.Unmarshal(data, (*Alias)(&tmp))
-	if err == nil {
-		*mode = tmp
-	}
+	err := json.Unmarshal(data, mode)
 	return err
 }
 
@@ -55,7 +56,7 @@ type Theme struct {
 
 	// The foreground-background mapping is precomputed and stored in a map for improved performance
 	// The old script used to brute-force this at runtime
-	HostnameColorizedFgMap map[uint8]uint8
+	HostnameColorizedFg []uint8
 
 	HomeSpecialDisplay bool
 	HomeFg             uint8
@@ -177,12 +178,19 @@ type Theme struct {
 	ViModeInsertBg  uint8
 }
 
-func (theme *Theme) UnmarshalJSON(data []byte) error {
-	type Alias Theme
-	tmp := defaults.Themes[defaults.Theme]
-	err := json.Unmarshal(data, (*Alias)(&tmp))
-	if err == nil {
-		*theme = tmp
+func ThemeFromFile(name string) (*Theme, error) {
+	path := filepath.Join(ConfigPath(), "themes", name+".json")
+	data, err := os.ReadFile(path)
+	if err != nil {
+		return nil, err
 	}
-	return err
+
+	theme := Theme{}
+	err = json.Unmarshal(data, &theme)
+	if err != nil {
+		log.Fatal().Err(err).Str("path", path).Msg("failed unmarshaling theme")
+		return nil, err
+	}
+
+	return &theme, nil
 }

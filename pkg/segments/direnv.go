@@ -22,7 +22,7 @@ func Direnv(cfg config.Config, align config.Alignment) []Segment {
 	return []Segment{{
 		Name:       "direnv",
 		Content:    content,
-		Foreground: cfg.SelectedTheme().DotEnvFg,
-		Background: cfg.SelectedTheme().DotEnvBg,
+		Foreground: cfg.Theme.DotEnvFg,
+		Background: cfg.Theme.DotEnvBg,
 	}}
 }

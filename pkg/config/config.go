@@ -2,6 +2,7 @@ package config
 
 import (
 	"encoding/json"
+	"fmt"
 	"os"
 	"os/user"
 	"path/filepath"
@@ -11,16 +12,12 @@ import (
 	"github.com/shirou/gopsutil/v3/process"
 )
 
-var defaultConfigPath = []string{".config", "powerline-go", "config.json"}
-
-type (
-	ShellMap map[string]shellinfo.ShellInfo
-	ThemeMap map[string]Theme
+var (
+	defaultConfigPath = []string{".config", "powerline-go"}
+	ConfigFileName    = "config.json"
 )
 
 type Config struct {
-	SaveDefaultConfig bool
-
 	CwdMode                string
 	CwdMaxDepth            int
 	CwdMaxDirSize          int
@@ -36,7 +33,7 @@ type Config struct {
 	GitDisableStats        []string
 	GitMode                string
 	Mode                   string
-	Theme                  string
+	Theme                  Theme
 	Shell                  string
 	Modules                []string
 	ModulesRight           []string
@@ -59,15 +56,15 @@ type Config struct {
 	Condensed              bool
 	Time                   string
 	ViMode                 string
+	PathAliases            map[string]string
 
-	PathAliases map[string]string
-
-	Modes    map[string]SymbolTemplate
-	Shells   ShellMap
-	Themes   ThemeMap
-	Userinfo *user.User
-	Hostname string
-	Cwd      string
+	Modes     map[string]SymbolTemplate      `json:"-"`
+	Shells    map[string]shellinfo.ShellInfo `json:"-"`
+	Themes    map[string]Theme               `json:"-"`
+	Userinfo  *user.User                     `json:"-"`
+	Hostname  string                         `json:"-"`
+	Cwd       string                         `json:"-"`
+	ThemeName string                         `json:"-"`
 }
 
 func New() Config {
@@ -103,10 +100,6 @@ func New() Config {
 	return defaults
 }
 
-func (cfg *Config) SelectedTheme() Theme {
-	return cfg.Themes[cfg.Theme]
-}
-
 func (cfg *Config) Symbols() SymbolTemplate {
 	return cfg.Modes[cfg.Mode]
 }
@@ -116,28 +109,25 @@ func (cfg *Config) CurrentShell() shellinfo.ShellInfo {
 }
 
 func (cfg *Config) save() error {
-	path := ConfigPath()
-	tmp := cfg
-	tmp.Themes = map[string]Theme{}
-	tmp.Modes = map[string]SymbolTemplate{}
-	tmp.Shells = map[string]shellinfo.ShellInfo{}
-	data, err := json.MarshalIndent(tmp, "", "    ")
+	data, err := json.MarshalIndent(cfg, "", "  ")
 	if err != nil {
 		return err
 	}
-	return os.WriteFile(path, data, 0o644)
+	return os.WriteFile(filepath.Join(ConfigPath(), ConfigFileName), data, 0o644)
 }
 
 func (cfg *Config) EnsureExists() error {
 	home, _ := os.UserHomeDir()
 	p := []string{home}
-	path := filepath.Join(append(p, defaultConfigPath[:len(defaultConfigPath)-1]...)...)
+	path := filepath.Join(append(p, defaultConfigPath...)...)
 
 	if _, err := os.Stat(path); os.IsNotExist(err) {
 		err := os.MkdirAll(path, os.ModePerm)
 		if err != nil {
 			return err
 		}
+	} else {
+		return fmt.Errorf("config already exists")
 	}
 
 	return cfg.save()

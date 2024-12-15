@@ -43,7 +43,7 @@ func DockerContext(cfg config.Config, align config.Alignment) []Segment {
 	return []Segment{{
 		Name:       "docker-context",
 		Content:    "🐳" + context,
-		Foreground: cfg.SelectedTheme().PlEnvFg,
-		Background: cfg.SelectedTheme().PlEnvBg,
+		Foreground: cfg.Theme.PlEnvFg,
+		Background: cfg.Theme.PlEnvBg,
 	}}
 }

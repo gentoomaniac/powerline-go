@@ -24,13 +24,13 @@ func addSvnRepoStatsSegment(nChanges int, symbol string, foreground uint8, backg
 }
 
 func (r repoStats) SvnSegments(cfg config.Config) (segments []Segment) {
-	segments = append(segments, addSvnRepoStatsSegment(r.ahead, cfg.Symbols().RepoAhead, cfg.SelectedTheme().GitAheadFg, cfg.SelectedTheme().GitAheadBg)...)
-	segments = append(segments, addSvnRepoStatsSegment(r.behind, cfg.Symbols().RepoBehind, cfg.SelectedTheme().GitBehindFg, cfg.SelectedTheme().GitBehindBg)...)
-	segments = append(segments, addSvnRepoStatsSegment(r.staged, cfg.Symbols().RepoStaged, cfg.SelectedTheme().GitStagedFg, cfg.SelectedTheme().GitStagedBg)...)
-	segments = append(segments, addSvnRepoStatsSegment(r.notStaged, cfg.Symbols().RepoNotStaged, cfg.SelectedTheme().GitNotStagedFg, cfg.SelectedTheme().GitNotStagedBg)...)
-	segments = append(segments, addSvnRepoStatsSegment(r.untracked, cfg.Symbols().RepoUntracked, cfg.SelectedTheme().GitUntrackedFg, cfg.SelectedTheme().GitUntrackedBg)...)
-	segments = append(segments, addSvnRepoStatsSegment(r.conflicted, cfg.Symbols().RepoConflicted, cfg.SelectedTheme().GitConflictedFg, cfg.SelectedTheme().GitConflictedBg)...)
-	segments = append(segments, addSvnRepoStatsSegment(r.stashed, cfg.Symbols().RepoStashed, cfg.SelectedTheme().GitStashedFg, cfg.SelectedTheme().GitStashedBg)...)
+	segments = append(segments, addSvnRepoStatsSegment(r.ahead, cfg.Symbols().RepoAhead, cfg.Theme.GitAheadFg, cfg.Theme.GitAheadBg)...)
+	segments = append(segments, addSvnRepoStatsSegment(r.behind, cfg.Symbols().RepoBehind, cfg.Theme.GitBehindFg, cfg.Theme.GitBehindBg)...)
+	segments = append(segments, addSvnRepoStatsSegment(r.staged, cfg.Symbols().RepoStaged, cfg.Theme.GitStagedFg, cfg.Theme.GitStagedBg)...)
+	segments = append(segments, addSvnRepoStatsSegment(r.notStaged, cfg.Symbols().RepoNotStaged, cfg.Theme.GitNotStagedFg, cfg.Theme.GitNotStagedBg)...)
+	segments = append(segments, addSvnRepoStatsSegment(r.untracked, cfg.Symbols().RepoUntracked, cfg.Theme.GitUntrackedFg, cfg.Theme.GitUntrackedBg)...)
+	segments = append(segments, addSvnRepoStatsSegment(r.conflicted, cfg.Symbols().RepoConflicted, cfg.Theme.GitConflictedFg, cfg.Theme.GitConflictedBg)...)
+	segments = append(segments, addSvnRepoStatsSegment(r.stashed, cfg.Symbols().RepoStashed, cfg.Theme.GitStashedFg, cfg.Theme.GitStashedBg)...)
 	return segments
 }
 
@@ -132,11 +132,11 @@ func Subversion(cfg config.Config, align config.Alignment) []Segment {
 
 	var foreground, background uint8
 	if svnStats.dirty() || otherModified > 0 {
-		foreground = cfg.SelectedTheme().RepoDirtyFg
-		background = cfg.SelectedTheme().RepoDirtyBg
+		foreground = cfg.Theme.RepoDirtyFg
+		background = cfg.Theme.RepoDirtyBg
 	} else {
-		foreground = cfg.SelectedTheme().RepoCleanFg
-		background = cfg.SelectedTheme().RepoCleanBg
+		foreground = cfg.Theme.RepoCleanFg
+		background = cfg.Theme.RepoCleanBg
 	}
 
 	segments := []Segment{{
