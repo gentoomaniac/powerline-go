@@ -1,5 +1,11 @@
 # A Powerline style prompt for your shell
 
+## DISCLAIMER
+
+This is a fork of [powerline-go](https://github.com/justjanne/powerline-go) by [@justjanne](https://github.com/justjanne).
+
+## powerline-go
+
 A [Powerline](https://github.com/Lokaltog/vim-powerline) like prompt for Bash,
 ZSH and Fish. Based on [Powerline-Shell](https://github.com/banga/powerline-shell) by @banga.
 Ported to golang by @justjanne.
@@ -14,19 +20,32 @@ Ported to golang by @justjanne.
 - Shows if you are in a [nix](https://nixos.org/) shell
 - It's easy to customize and extend. See below for details.
 
-**Table of Contents**
+## Table of Contents
 
-- [Version Control](#version-control)
-- [Installation](#installation)
-  - [Precompiled Binaries](#precompiled-binaries)
-  - [Other Platforms](#other-platforms)
-  - [Bash](#bash)
-  - [ZSH](#zsh)
-  - [Fish](#fish)
-  - [Nix](#nix)
-  - [PowerShell](#powershell)
-- [Customization](#customization)
-- [License](#license)
+- [A Powerline style prompt for your shell](#a-powerline-style-prompt-for-your-shell)
+  - [DISCLAIMER](#disclaimer)
+  - [powerline-go](#powerline-go)
+  - [Table of Contents](#table-of-contents)
+  - [Version Control](#version-control)
+  - [Installation](#installation)
+    - [Precompiled Binaries](#precompiled-binaries)
+    - [Other Platforms](#other-platforms)
+    - [Bash](#bash)
+    - [ZSH](#zsh)
+    - [Fish](#fish)
+    - [Nix](#nix)
+    - [Powershell](#powershell)
+  - [Customization](#customization)
+    - [Eval](#eval)
+        - [Bash](#bash-1)
+        - [ZSH](#zsh-1)
+        - [Fish](#fish-1)
+    - [Path Aliases](#path-aliases)
+    - [Duration](#duration)
+      - [Bash](#bash-2)
+      - [Zsh](#zsh-2)
+      - [Fish](#fish-2)
+  - [License](#license)
 
 ## Version Control
 
@@ -437,7 +456,7 @@ end
 ## License
 
 > This program is free software: you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation, either version 3 of the License, or (at your option) any later version.
-> 
+>
 > This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
-> 
+>
 > You should have received a copy of the GNU General Public License along with this program. If not, see <http://www.gnu.org/licenses/>.
