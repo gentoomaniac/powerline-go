@@ -41,6 +41,7 @@ var modules = map[string]func(config.State, config.Alignment) []segments.Segment
 	"terraform-workspace": segments.TerraformWorkspace,
 	"time":                segments.Time,
 	"node":                segments.Node,
+	"uptime":              segments.Uptime,
 	"user":                segments.User,
 	"venv":                segments.VirtualEnv,
 	"vgo":                 segments.VirtualGo,
