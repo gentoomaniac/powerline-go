@@ -51,7 +51,7 @@ func addRepoStatsSegment(nChanges int, symbol string, foreground uint8, backgrou
 	return []Segment{}
 }
 
-func (r repoStats) GitSegments(cfg config.Config) (segments []Segment) {
+func (r repoStats) GitSegments(cfg config.State) (segments []Segment) {
 	segments = append(segments, addRepoStatsSegment(r.ahead, cfg.Symbols().RepoAhead, cfg.Theme.GitAheadFg, cfg.Theme.GitAheadBg)...)
 	segments = append(segments, addRepoStatsSegment(r.behind, cfg.Symbols().RepoBehind, cfg.Theme.GitBehindFg, cfg.Theme.GitBehindBg)...)
 	segments = append(segments, addRepoStatsSegment(r.staged, cfg.Symbols().RepoStaged, cfg.Theme.GitStagedFg, cfg.Theme.GitStagedBg)...)
@@ -75,7 +75,7 @@ func addRepoStatsSymbol(nChanges int, symbol string, GitMode string) string {
 	return ""
 }
 
-func (r repoStats) GitSymbols(cfg config.Config) string {
+func (r repoStats) GitSymbols(cfg config.State) string {
 	var info string
 	info += addRepoStatsSymbol(r.ahead, cfg.Symbols().RepoAhead, cfg.GitMode)
 	info += addRepoStatsSymbol(r.behind, cfg.Symbols().RepoBehind, cfg.GitMode)
@@ -129,7 +129,7 @@ func parseGitBranchInfo(status []string) map[string]string {
 	return groupDict(branchRegex, status[0])
 }
 
-func getGitDetachedBranch(cfg config.Config) string {
+func getGitDetachedBranch(cfg config.State) string {
 	out, err := runGitCommand("git", "--no-optional-locks", "rev-parse", "--short", "HEAD")
 	if err != nil {
 		out, err := runGitCommand("git", "--no-optional-locks", "symbolic-ref", "--short", "HEAD")
@@ -185,7 +185,7 @@ func indexSize(root string) (int64, error) {
 	return fileInfo.Size(), nil
 }
 
-func Git(cfg config.Config, align config.Alignment) []Segment {
+func Git(cfg config.State, align config.Alignment) []Segment {
 	repoRoot, err := repoRoot(cfg.Cwd)
 	if err != nil {
 		return []Segment{}

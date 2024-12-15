@@ -6,7 +6,7 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func Jobs(cfg config.Config, align config.Alignment) []Segment {
+func Jobs(cfg config.State, align config.Alignment) []Segment {
 	if cfg.Jobs <= 0 {
 		return []Segment{}
 	}

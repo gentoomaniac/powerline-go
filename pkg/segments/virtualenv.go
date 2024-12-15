@@ -10,7 +10,7 @@ import (
 	"gopkg.in/ini.v1"
 )
 
-func VirtualEnv(cfg config.Config, align config.Alignment) []Segment {
+func VirtualEnv(cfg config.State, align config.Alignment) []Segment {
 	env := os.Getenv("VIRTUAL_ENV_PROMPT")
 	if strings.HasPrefix(env, "(") && strings.HasSuffix(env, ") ") {
 		env = strings.TrimPrefix(env, "(")

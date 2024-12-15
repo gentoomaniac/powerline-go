@@ -18,7 +18,7 @@ import (
 )
 
 type Powerline struct {
-	cfg            config.Config
+	cfg            config.State
 	theme          config.Theme
 	reset          string
 	priorities     map[string]int
@@ -33,11 +33,11 @@ type prioritizedSegments struct {
 	segs []segments.Segment
 }
 
-func NewPowerline(cfg config.Config, align config.Alignment) *Powerline {
+func NewPowerline(cfg config.State, align config.Alignment) *Powerline {
 	p := new(Powerline)
 	p.cfg = cfg
 
-	if cfg.TrimADDomain {
+	if cfg.TrimAdDomain {
 		usernameWithAd := strings.SplitN(cfg.Userinfo.Username, `\`, 2)
 		if len(usernameWithAd) > 1 {
 			// remove the Domain name from username

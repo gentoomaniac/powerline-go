@@ -8,7 +8,7 @@ import (
 
 const wsFile = "./.terraform/environment"
 
-func TerraformWorkspace(cfg config.Config, align config.Alignment) []Segment {
+func TerraformWorkspace(cfg config.State, align config.Alignment) []Segment {
 	stat, err := os.Stat(wsFile)
 	if err != nil {
 		return []Segment{}

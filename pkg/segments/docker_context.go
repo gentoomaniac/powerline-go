@@ -12,7 +12,7 @@ type DockerContextConfig struct {
 	CurrentContext string `json:"currentContext"`
 }
 
-func DockerContext(cfg config.Config, align config.Alignment) []Segment {
+func DockerContext(cfg config.State, align config.Alignment) []Segment {
 	context := "default"
 	home, _ := os.LookupEnv("HOME")
 	contextFolder := filepath.Join(home, ".docker", "contexts")

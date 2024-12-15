@@ -19,11 +19,11 @@ func getMd5(text string) []byte {
 	return hasher.Sum(nil)
 }
 
-func Hostname(cfg config.Config, align config.Alignment) []Segment {
+func Hostname(cfg config.State, align config.Alignment) []Segment {
 	var hostPrompt string
 	var foreground, background uint8
 
-	if cfg.HostnameOnlyIfSSH {
+	if cfg.HostnameOnlyIfSsh {
 		if os.Getenv("SSH_CLIENT") == "" {
 			// It's not an ssh connection do nothing
 			return []Segment{}

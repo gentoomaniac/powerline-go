@@ -6,7 +6,7 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func SSH(cfg config.Config, align config.Alignment) []Segment {
+func SSH(cfg config.State, align config.Alignment) []Segment {
 	sshClient, _ := os.LookupEnv("SSH_CLIENT")
 	if sshClient == "" {
 		return []Segment{}

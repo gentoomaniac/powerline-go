@@ -31,7 +31,7 @@ func getFossilStatus() (bool, bool, bool) {
 	return hasModifiedFiles, hasUntrackedFiles, hasMissingFiles
 }
 
-func Fossil(cfg config.Config, align config.Alignment) []Segment {
+func Fossil(cfg config.State, align config.Alignment) []Segment {
 	out, _ := exec.Command("fossil", "branch", "current").Output()
 	output := strings.SplitN(string(out), "\n", 2)
 	if len(output) > 0 && output[0] != "" {
