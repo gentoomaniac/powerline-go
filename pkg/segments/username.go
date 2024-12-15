@@ -6,7 +6,7 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func User(cfg config.Config, align config.Alignment) []Segment {
+func User(cfg config.State, align config.Alignment) []Segment {
 	var userPrompt string
 	switch cfg.Shell {
 	case "bash":

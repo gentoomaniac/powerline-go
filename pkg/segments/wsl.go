@@ -7,7 +7,7 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func WSL(cfg config.Config, align config.Alignment) []Segment {
+func WSL(cfg config.State, align config.Alignment) []Segment {
 	var WSL string
 	WSLMachineName, _ := os.LookupEnv("WSL_DISTRO_NAME")
 	WSLHost, _ := os.LookupEnv("NAME")

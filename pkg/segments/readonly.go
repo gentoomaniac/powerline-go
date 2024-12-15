@@ -8,7 +8,7 @@ import (
 	"golang.org/x/sys/unix"
 )
 
-func Perms(cfg config.Config, align config.Alignment) []Segment {
+func Perms(cfg config.State, align config.Alignment) []Segment {
 	if unix.Access(cfg.Cwd, unix.W_OK) == nil {
 		return []Segment{}
 	}

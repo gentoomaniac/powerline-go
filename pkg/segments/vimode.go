@@ -5,7 +5,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func ViMode(cfg config.Config, align config.Alignment) []Segment {
+func ViMode(cfg config.State, align config.Alignment) []Segment {
 	mode := cfg.ViMode
 	if mode == "" {
 		log.Warn().Msg("'--vi-mode' is not set.")

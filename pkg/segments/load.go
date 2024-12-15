@@ -9,7 +9,7 @@ import (
 	"github.com/shirou/gopsutil/v3/load"
 )
 
-func Load(cfg config.Config, align config.Alignment) []Segment {
+func Load(cfg config.State, align config.Alignment) []Segment {
 	c := runtime.NumCPU()
 	a, err := load.Avg()
 	if err != nil {

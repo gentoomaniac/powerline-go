@@ -9,7 +9,7 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func Perms(cfg config.Config, align config.Alignment) []Segment {
+func Perms(cfg config.State, align config.Alignment) []Segment {
 	const W_USR = 0o002
 	// Check user's permissions on directory in a portable but probably slower way
 	fileInfo, _ := os.Stat(cfg.Cwd)

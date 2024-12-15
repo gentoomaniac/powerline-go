@@ -49,7 +49,7 @@ func getMeaningFromExitCode(exitCode int) string {
 	return fmt.Sprintf("%d", exitCode)
 }
 
-func ExitCode(cfg config.Config, align config.Alignment) []Segment {
+func ExitCode(cfg config.State, align config.Alignment) []Segment {
 	var meaning string
 	if cfg.PrevError == 0 {
 		return []Segment{}

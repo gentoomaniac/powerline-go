@@ -33,7 +33,7 @@ func (s byRevLength) Less(i, j int) bool {
 	return len(s[i]) > len(s[j])
 }
 
-func maybeAliasPathSegments(cfg config.Config, pathSegments []pathSegment) []pathSegment {
+func maybeAliasPathSegments(cfg config.State, pathSegments []pathSegment) []pathSegment {
 	pathSeparator := string(os.PathSeparator)
 
 	if cfg.PathAliases == nil || len(cfg.PathAliases) == 0 {
@@ -104,7 +104,7 @@ Aliases:
 	return pathSegments
 }
 
-func cwdToPathSegments(cfg config.Config, cwd string) []pathSegment {
+func cwdToPathSegments(cfg config.State, cwd string) []pathSegment {
 	pathSeparator := string(os.PathSeparator)
 	pathSegments := make([]pathSegment, 0)
 
@@ -142,14 +142,14 @@ func cwdToPathSegments(cfg config.Config, cwd string) []pathSegment {
 	return maybeAliasPathSegments(cfg, pathSegments)
 }
 
-func maybeShortenName(cfg config.Config, pathSegment string) string {
+func maybeShortenName(cfg config.State, pathSegment string) string {
 	if cfg.CwdMaxDirSize > 0 && len(pathSegment) > cfg.CwdMaxDirSize {
 		return pathSegment[:cfg.CwdMaxDirSize]
 	}
 	return pathSegment
 }
 
-func getColor(cfg config.Config, pathSegment pathSegment, isLastDir bool) (uint8, uint8, bool) {
+func getColor(cfg config.State, pathSegment pathSegment, isLastDir bool) (uint8, uint8, bool) {
 	if pathSegment.home && cfg.Theme.HomeSpecialDisplay {
 		return cfg.Theme.HomeFg, cfg.Theme.HomeBg, true
 	} else if pathSegment.alias {
@@ -160,7 +160,7 @@ func getColor(cfg config.Config, pathSegment pathSegment, isLastDir bool) (uint8
 	return cfg.Theme.PathFg, cfg.Theme.PathBg, false
 }
 
-func Cwd(cfg config.Config, align config.Alignment) (segments []Segment) {
+func Cwd(cfg config.State, align config.Alignment) (segments []Segment) {
 	cwd := cfg.Cwd
 
 	switch cfg.CwdMode {

@@ -6,7 +6,7 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func ShEnv(cfg config.Config, align config.Alignment) []Segment {
+func ShEnv(cfg config.State, align config.Alignment) []Segment {
 	env, _ := os.LookupEnv("SHENV_VERSION")
 	if env == "" {
 		return []Segment{}

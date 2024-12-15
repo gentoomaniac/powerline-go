@@ -11,7 +11,7 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func TermTitle(cfg config.Config, align config.Alignment) []Segment {
+func TermTitle(cfg config.State, align config.Alignment) []Segment {
 	var title string
 
 	term := os.Getenv("TERM")

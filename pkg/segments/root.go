@@ -4,7 +4,7 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func Root(cfg config.Config, align config.Alignment) []Segment {
+func Root(cfg config.State, align config.Alignment) []Segment {
 	var foreground, background uint8
 	if cfg.PrevError == 0 || cfg.StaticPromptIndicator {
 		foreground = cfg.Theme.CmdPassedFg

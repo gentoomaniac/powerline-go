@@ -7,7 +7,7 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func GitLite(cfg config.Config, align config.Alignment) []Segment {
+func GitLite(cfg config.State, align config.Alignment) []Segment {
 	if len(cfg.IgnoreRepos) > 0 {
 		out, err := runGitCommand("git", "--no-optional-locks", "rev-parse", "--show-toplevel")
 		if err != nil {

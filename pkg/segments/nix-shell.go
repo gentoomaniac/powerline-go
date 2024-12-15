@@ -6,7 +6,7 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func NixShell(cfg config.Config, align config.Alignment) []Segment {
+func NixShell(cfg config.State, align config.Alignment) []Segment {
 	var nixShell string
 	nixShell, _ = os.LookupEnv("IN_NIX_SHELL")
 	if nixShell == "" {

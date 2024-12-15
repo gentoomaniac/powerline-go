@@ -7,7 +7,7 @@ import (
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 )
 
-func Docker(cfg config.Config, align config.Alignment) []Segment {
+func Docker(cfg config.State, align config.Alignment) []Segment {
 	var docker string
 	dockerMachineName, _ := os.LookupEnv("DOCKER_MACHINE_NAME")
 	dockerHost, _ := os.LookupEnv("DOCKER_HOST")

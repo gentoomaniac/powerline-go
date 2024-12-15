@@ -44,7 +44,7 @@ func getPackageVersion() string {
 	return strings.TrimSpace(pkg.Version)
 }
 
-func Node(cfg config.Config, align config.Alignment) []Segment {
+func Node(cfg config.State, align config.Alignment) []Segment {
 	nodeVersion := getNodeVersion()
 	packageVersion := getPackageVersion()
 

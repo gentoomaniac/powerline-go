@@ -23,7 +23,7 @@ func addSvnRepoStatsSegment(nChanges int, symbol string, foreground uint8, backg
 	return segments
 }
 
-func (r repoStats) SvnSegments(cfg config.Config) (segments []Segment) {
+func (r repoStats) SvnSegments(cfg config.State) (segments []Segment) {
 	segments = append(segments, addSvnRepoStatsSegment(r.ahead, cfg.Symbols().RepoAhead, cfg.Theme.GitAheadFg, cfg.Theme.GitAheadBg)...)
 	segments = append(segments, addSvnRepoStatsSegment(r.behind, cfg.Symbols().RepoBehind, cfg.Theme.GitBehindFg, cfg.Theme.GitBehindBg)...)
 	segments = append(segments, addSvnRepoStatsSegment(r.staged, cfg.Symbols().RepoStaged, cfg.Theme.GitStagedFg, cfg.Theme.GitStagedBg)...)
@@ -116,7 +116,7 @@ func parseSvnStatus() repoStats {
 	return stats
 }
 
-func Subversion(cfg config.Config, align config.Alignment) []Segment {
+func Subversion(cfg config.State, align config.Alignment) []Segment {
 	svnInfo, err := parseSvnURL()
 	if err != nil {
 		return []Segment{}

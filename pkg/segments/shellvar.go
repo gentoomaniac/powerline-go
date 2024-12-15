@@ -7,7 +7,7 @@ import (
 	"github.com/rs/zerolog/log"
 )
 
-func ShellVar(cfg config.Config, align config.Alignment) []Segment {
+func ShellVar(cfg config.State, align config.Alignment) []Segment {
 	shellVarName := cfg.ShellVar
 	varContent, varExists := os.LookupEnv(shellVarName)
 
