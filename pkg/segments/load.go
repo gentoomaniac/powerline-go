@@ -6,7 +6,7 @@ import (
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
 
-	"github.com/shirou/gopsutil/v3/load"
+	"github.com/shirou/gopsutil/v4/load"
 )
 
 func Load(cfg config.State, align config.Alignment) []Segment {
