@@ -185,7 +185,7 @@ func ThemeFromFile(name string) (*Theme, error) {
 		return nil, err
 	}
 
-	theme := Theme{}
+	theme := DefaultThemes["default"]
 	err = json.Unmarshal(data, &theme)
 	if err != nil {
 		log.Fatal().Err(err).Str("path", path).Msg("failed unmarshaling theme")

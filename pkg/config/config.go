@@ -60,7 +60,6 @@ type Config struct {
 
 	Modes     map[string]SymbolTemplate      `json:"-"`
 	Shells    map[string]shellinfo.ShellInfo `json:"-"`
-	Themes    map[string]Theme               `json:"-"`
 	Userinfo  *user.User                     `json:"-"`
 	Hostname  string                         `json:"-"`
 	Cwd       string                         `json:"-"`
