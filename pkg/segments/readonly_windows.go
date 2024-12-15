@@ -10,10 +10,9 @@ import (
 )
 
 func Perms(cfg config.Config, align config.Alignment) []Segment {
-	cwd := getValidCwd()
 	const W_USR = 0o002
 	// Check user's permissions on directory in a portable but probably slower way
-	fileInfo, _ := os.Stat(cwd)
+	fileInfo, _ := os.Stat(cfg.Cwd)
 	if fileInfo.Mode()&W_USR == W_USR {
 		return []Segment{}
 	}

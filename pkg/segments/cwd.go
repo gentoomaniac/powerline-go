@@ -161,7 +161,7 @@ func getColor(cfg config.Config, pathSegment pathSegment, isLastDir bool) (uint8
 }
 
 func Cwd(cfg config.Config, align config.Alignment) (segments []Segment) {
-	cwd := getValidCwd()
+	cwd := cfg.Cwd
 
 	switch cfg.CwdMode {
 	case "plain":

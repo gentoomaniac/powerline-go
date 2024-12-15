@@ -9,8 +9,7 @@ import (
 
 func Time(cfg config.Config, align config.Alignment) []Segment {
 	return []Segment{{
-		Name: "time",
-		// TODO: use go to get the time and instead use config to provide a format string
+		Name:       "time",
 		Content:    time.Now().Format(strings.TrimSpace(cfg.Time)),
 		Foreground: cfg.SelectedTheme().TimeFg,
 		Background: cfg.SelectedTheme().TimeBg,

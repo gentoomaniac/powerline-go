@@ -54,7 +54,7 @@ type clistruct struct {
 	DurationLowPrecision   bool     `help:"Use low precision timing for duration with milliseconds as maximum resolution" default:"false"`
 	Eval                   bool     `help:"Output prompt in 'eval' format." default:"false"`
 	Condensed              bool     `help:"Remove spacing between segments" default:"false"`
-	Time                   string   `help:"The layout string how a reference time should be represented. The reference time is predefined and not user choosen. Consult the golang documentation for details: https://pkg.go.dev/time#example-Time.Format"`
+	Time                   string   `help:"The layout string how a reference time should be represented. The reference time is predefined and not user choosen. Consult the golang documentation for details: https://pkg.go.dev/time#example-Time.Format" default:"15:04:05"`
 	ViMode                 string   `help:"The current vi-mode (eg. KEYMAP for zsh) for vi-module module"`
 
 	PathAliases map[string]string `help:"One or more aliases from a path to a short name. Separate with ','. An alias maps a path like foo/bar/baz to a short name like FBB. Specify these as key/value pairs like foo/bar/baz=FBB. Use '~' for your home dir. You may need to escape this character to avoid shell substitution." mapsep:","`
