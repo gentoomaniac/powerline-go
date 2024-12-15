@@ -7,6 +7,7 @@ import (
 
 var modules = map[string]func(config.State, config.Alignment) []segments.Segment{
 	"aws":                 segments.AWS,
+	"btc":                 segments.Bitcoin,
 	"bzr":                 segments.Bzr,
 	"cwd":                 segments.Cwd,
 	"direnv":              segments.Direnv,
