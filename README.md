@@ -91,7 +91,7 @@ I provide precompiled binaries for x64 Linux and macOS in the
 - Install (and update) the package with
 
 ```bash
-go install github.com/gentoomaniac/powerline-go@latest
+go install github.com/gentoomaniac/powerline-go/cmd/powerline-go@latest
 ```
 
 - By default it will be in `$GOPATH/bin`, if you want to change that, you can set
