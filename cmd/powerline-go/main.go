@@ -80,12 +80,12 @@ func main() {
 	}
 
 	var exists bool
-	cfg.Theme, exists = cfg.Themes[cli.Theme]
+	cfg.Theme, exists = config.DefaultThemes[cli.Theme]
 	if !exists {
 		theme, err := config.ThemeFromFile(cli.Theme)
 		if err != nil {
 			log.Warn().Err(err).Msg("could't load theme, falling back to default")
-			cfg.Theme = cfg.Themes["default"]
+			cfg.Theme = config.DefaultThemes["default"]
 		} else {
 			cfg.Theme = *theme
 		}
