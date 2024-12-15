@@ -159,25 +159,6 @@ func (p *Powerline) newRow() {
 	}
 }
 
-func termWidth() int {
-	termWidth, _, err := term.GetSize(int(os.Stdin.Fd()))
-	if err != nil {
-		shellMaxLengthStr, found := os.LookupEnv("COLUMNS")
-		if !found {
-			return 0
-		}
-
-		shellMaxLength64, err := strconv.ParseInt(shellMaxLengthStr, 0, 64)
-		if err != nil {
-			return 0
-		}
-
-		termWidth = int(shellMaxLength64)
-	}
-
-	return termWidth
-}
-
 func (p *Powerline) truncateRow(rowNum int) {
 	shellMaxLength := termWidth() * p.cfg.MaxWidthPercentage / 100
 	row := p.Segments[rowNum]
@@ -401,4 +382,23 @@ func (p *Powerline) SupportsRightModules() bool {
 
 func (p *Powerline) isRightPrompt() bool {
 	return p.align == config.AlignRight && p.SupportsRightModules()
+}
+
+func termWidth() int {
+	termWidth, _, err := term.GetSize(int(os.Stdin.Fd()))
+	if err != nil {
+		shellMaxLengthStr, found := os.LookupEnv("COLUMNS")
+		if !found {
+			return 0
+		}
+
+		shellMaxLength64, err := strconv.ParseInt(shellMaxLengthStr, 0, 64)
+		if err != nil {
+			return 0
+		}
+
+		termWidth = int(shellMaxLength64)
+	}
+
+	return termWidth
 }

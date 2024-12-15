@@ -11,7 +11,6 @@ import (
 	"strings"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-	"github.com/rs/zerolog/log"
 )
 
 func homeEnvName() string {
@@ -187,11 +186,7 @@ func indexSize(root string) (int64, error) {
 }
 
 func Git(cfg config.Config, align config.Alignment) []Segment {
-	cwd, err := os.Getwd()
-	if err != nil {
-		log.Error().Err(err).Msg("could not determine current working directory")
-	}
-	repoRoot, err := repoRoot(cwd)
+	repoRoot, err := repoRoot(cfg.Cwd)
 	if err != nil {
 		return []Segment{}
 	}
@@ -207,7 +202,7 @@ func Git(cfg config.Config, align config.Alignment) []Segment {
 	}
 
 	if cfg.GitAssumeUnchangedSize > 0 {
-		indexSize, _ := indexSize(cwd)
+		indexSize, _ := indexSize(cfg.Cwd)
 		if indexSize > (cfg.GitAssumeUnchangedSize * 1024) {
 			args = append(args, "-uno")
 		}

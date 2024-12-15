@@ -67,6 +67,7 @@ type Config struct {
 	Themes   ThemeMap
 	Userinfo *user.User
 	Hostname string
+	Cwd      string
 }
 
 func New() Config {
@@ -90,9 +91,15 @@ func New() Config {
 		log.Error().Err(err).Msg("couldn't determine hostname")
 	}
 
+	cwd, err := os.Getwd()
+	if err != nil {
+		log.Error().Err(err).Msg("could not determine current working directory")
+	}
+
 	defaults.Userinfo = user
 	defaults.Hostname = hostname
 	defaults.Shell = shell
+	defaults.Cwd = cwd
 	return defaults
 }
 
