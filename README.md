@@ -1,23 +1,11 @@
 # A Powerline style prompt for your shell
 
-<<<<<<< Updated upstream
-## DISCLAIMER
-
-This is a fork of [powerline-go](https://github.com/justjanne/powerline-go) by [@justjanne](https://github.com/justjanne).
-
-## powerline-go
-
-=======
-<<<<<<< Updated upstream
-=======
 ## DISCLAIMER
 
 This is a fork of [powerline-go](https://github.com/gentoomaniac/powerline-go) by [@justjanne](https://github.com/justjanne).
 
 ## powerline-go
 
->>>>>>> Stashed changes
->>>>>>> Stashed changes
 A [Powerline](https://github.com/Lokaltog/vim-powerline) like prompt for Bash,
 ZSH and Fish. Based on [Powerline-Shell](https://github.com/banga/powerline-shell) by @banga.
 Ported to golang by @justjanne.
