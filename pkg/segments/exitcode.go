@@ -2,10 +2,12 @@ package segments
 
 import (
 	"fmt"
+	"os"
 	"strconv"
 
 	"github.com/gentoomaniac/powerline-go/pkg/config"
-	"github.com/justjanne/powerline-go/exitcode"
+	"github.com/gentoomaniac/powerline-go/pkg/signals"
+	"github.com/rs/zerolog/log"
 )
 
 var exitCodes = map[int]string{
@@ -40,24 +42,41 @@ func getMeaningFromExitCode(exitCode int) string {
 			return name
 		}
 	} else {
-		name, ok := exitcode.Signals[exitCode-128]
-		if ok {
+		name := signals.ResolveSignalCode(exitCode - 128)
+		if name != "" {
 			return name
 		}
+
 	}
 
 	return fmt.Sprintf("%d", exitCode)
 }
 
+func getExitCode() (int, error) {
+	val := os.Getenv("?")
+	code, err := strconv.ParseInt(val, 10, 32)
+	if err != nil {
+		return int(code), nil
+	}
+	val = os.Getenv("status")
+	code, err = strconv.ParseInt(val, 10, 32)
+	if err != nil {
+		return int(code), nil
+	}
+	return -255, fmt.Errorf("no exit code found")
+}
+
 func ExitCode(cfg config.State, align config.Alignment) []Segment {
 	var meaning string
-	if cfg.PrevError == 0 {
+	code, err := getExitCode()
+	log.Debug().Msgf("%d", code)
+	if code == 0 || err != nil {
 		return []Segment{}
 	}
 	if cfg.NumericExitCodes {
-		meaning = strconv.Itoa(cfg.PrevError)
+		meaning = strconv.Itoa(code)
 	} else {
-		meaning = getMeaningFromExitCode(cfg.PrevError)
+		meaning = getMeaningFromExitCode(code)
 	}
 
 	return []Segment{{

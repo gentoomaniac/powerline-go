@@ -2,7 +2,6 @@ package segments
 
 import (
 	"fmt"
-	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
@@ -43,7 +42,7 @@ func checkForGoVersionFileInTree() (string, error) {
 	workingDirectory, err = os.Getwd()
 	if err == nil {
 		for workingDirectory != "/" {
-			goVersion, goVersionErr := ioutil.ReadFile(workingDirectory + goenvVersionFileSuffix)
+			goVersion, goVersionErr := os.ReadFile(workingDirectory + goenvVersionFileSuffix)
 			if goVersionErr == nil {
 				return strings.TrimSpace(string(goVersion)), nil
 			}

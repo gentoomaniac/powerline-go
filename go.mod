@@ -4,7 +4,6 @@ go 1.22
 
 require (
 	github.com/alecthomas/kong v1.6.0
-	github.com/justjanne/powerline-go v1.22.1
 	github.com/mattn/go-runewidth v0.0.16
 	github.com/rs/zerolog v1.33.0
 	github.com/shirou/gopsutil/v4 v4.24.11
