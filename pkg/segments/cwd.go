@@ -36,7 +36,7 @@ func (s byRevLength) Less(i, j int) bool {
 func maybeAliasPathSegments(cfg config.State, pathSegments []pathSegment) []pathSegment {
 	pathSeparator := string(os.PathSeparator)
 
-	if cfg.PathAliases == nil || len(cfg.PathAliases) == 0 {
+	if len(cfg.PathAliases) == 0 {
 		return pathSegments
 	}
 

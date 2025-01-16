@@ -19,7 +19,7 @@ func runRvmCommand(cmd string, args ...string) (string, error) {
 func checkEnvForRubyVersion() (string, error) {
 	rubyVersion := os.Getenv("RUBY_VERSION")
 	if len(rubyVersion) <= 0 {
-		return "", errors.New("Not found in RUBY_VERSION")
+		return "", errors.New("not found in RUBY_VERSION")
 	}
 	return rubyVersion, nil
 }
@@ -29,7 +29,7 @@ func checkEnvForRubyGemset() (string, error) {
 	gemHomeSegments := strings.Split(os.Getenv("GEM_HOME"), "@")
 
 	if len(gemHomeSegments) <= 1 {
-		return "", errors.New("Gemset not found in GEM_HOME")
+		return "", errors.New("gemset not found in GEM_HOME")
 	}
 
 	return gemHomeSegments[1], nil
@@ -40,11 +40,11 @@ func checkForRvmOutput() (string, error) {
 	// ask RVM what the current ruby version is
 	out, err := runRvmCommand("rvm", "current")
 	if err != nil {
-		return "", errors.New("Not found in RVM output")
+		return "", errors.New("not found in RVM output")
 	}
 	items := strings.Split(out, " ")
 	if len(items) <= 0 {
-		return "", errors.New("Not found in RVM output")
+		return "", errors.New("not found in RVM output")
 	}
 
 	return items[0], nil

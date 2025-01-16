@@ -26,7 +26,7 @@ func runRbenvCommand(cmd string, args ...string) (string, error) {
 func checkEnvForRbenvVersion() (string, error) {
 	rbenvVersion := os.Getenv("RBENV_VERSION")
 	if len(rbenvVersion) <= 0 {
-		return "", errors.New("Not found in RBENV_VERSION")
+		return "", errors.New("not found in RBENV_VERSION")
 	}
 	return rbenvVersion, nil
 }
@@ -41,7 +41,7 @@ func checkForRubyVersionFileInTree() (string, error) {
 	workingDirectory, err = os.Getwd()
 	if err == nil {
 		for workingDirectory != "/" {
-			rubyVersion, rubyVersionErr := ioutil.ReadFile(workingDirectory + rubyVersionFileSuffix)
+			rubyVersion, rubyVersionErr := os.ReadFile(workingDirectory + rubyVersionFileSuffix)
 			if rubyVersionErr == nil {
 				return strings.TrimSpace(string(rubyVersion)), nil
 			}
@@ -50,7 +50,7 @@ func checkForRubyVersionFileInTree() (string, error) {
 		}
 	}
 
-	return "", errors.New("No .ruby_version file found in tree")
+	return "", errors.New("no .ruby_version file found in tree")
 }
 
 // check for global version
@@ -58,7 +58,7 @@ func checkForGlobalVersion() (string, error) {
 	homeDir, _ := os.UserHomeDir()
 	globalRubyVersion, err := ioutil.ReadFile(homeDir + globalVersionFileSuffix)
 	if err != nil {
-		return "", errors.New("No global version file found in tree")
+		return "", errors.New("no global version file found in tree")
 	}
 	return strings.TrimSpace(string(globalRubyVersion)), nil
 }
@@ -68,11 +68,11 @@ func checkForRbenvOutput() (string, error) {
 	// spawn rbenv and print out version
 	out, err := runRbenvCommand("rbenv", "version")
 	if err != nil {
-		return "", errors.New("Not found in rbenv output")
+		return "", errors.New("not found in rbenv output")
 	}
 	items := strings.Split(out, " ")
 	if len(items) <= 0 {
-		return "", errors.New("Not found in rbenv output")
+		return "", errors.New("not found in rbenv output")
 	}
 
 	return items[0], nil
