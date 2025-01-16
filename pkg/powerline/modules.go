@@ -20,6 +20,7 @@ var modules = map[string]func(config.State, config.Alignment) []segments.Segment
 	"gcp":                 segments.GCP,
 	"git":                 segments.Git,
 	"gitlite":             segments.GitLite,
+	"githubnotifications": segments.GithubNotifications,
 	"goenv":               segments.Goenv,
 	"hg":                  segments.Hg,
 	"svn":                 segments.Subversion,

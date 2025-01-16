@@ -4,6 +4,7 @@ go 1.22
 
 require (
 	github.com/alecthomas/kong v1.6.0
+	github.com/google/go-github/v67 v67.0.0
 	github.com/mattn/go-runewidth v0.0.16
 	github.com/rs/zerolog v1.33.0
 	github.com/shirou/gopsutil/v4 v4.24.11
@@ -17,6 +18,7 @@ require (
 require (
 	github.com/ebitengine/purego v0.8.1 // indirect
 	github.com/go-ole/go-ole v1.3.0 // indirect
+	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/lufia/plan9stats v0.0.0-20240909124753-873cd0166683 // indirect
 	github.com/mattn/go-colorable v0.1.13 // indirect
 	github.com/mattn/go-isatty v0.0.20 // indirect

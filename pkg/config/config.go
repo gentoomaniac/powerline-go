@@ -28,6 +28,7 @@ type Config struct {
 	GitAssumeUnchangedSize int64             `help:"Disable checking for changed/edited files in git repositories where the index is larger than this size (in KB), improves performance" default:"2048" json:"gitAssumeUnchangedSize"`
 	GitDisableStats        []string          `help:"Comma-separated list to disable individual git statuses, (valid choices: ahead, behind, staged, notStaged, untracked, conflicted, stashed)" json:"gitDisableStats"`
 	GitMode                string            `help:"How to display git status, (valid choices: fancy, compact, simple)" default:"fancy" json:"gitMode"`
+	GithubToken            string            `help:"Github PAT (classic) that has access to notifications" default:"fancy" env:"GH_TOKEN" json:"ghToken"`
 	Mode                   string            `help:"The characters used to make separators between segments, (valid choices: patched, compatible, flat)" default:"patched" json:"mode"`
 	Theme                  string            `help:"Set this to the theme you want to use, (valid choices: default, low-contrast, gruvbox, solarized-dark16, solarized-light16)" default:"default" json:"theme"`
 	Shell                  string            `help:"overwrite the shell (valid choices: autodetect, bare, bash, zsh)" enum:"autodetect,bare,bash,zsh" default:"autodetect" json:"shell"`

@@ -30,6 +30,7 @@ type State struct {
 	GitAssumeUnchangedSize int64
 	GitDisableStats        []string
 	GitMode                string
+	GithubToken            string
 	Mode                   string
 	Theme                  Theme
 	Shell                  string
@@ -111,6 +112,7 @@ func NewStateFromConfig(cfg Config) State {
 		defaults.GitDisableStats = cfg.GitDisableStats
 	}
 	defaults.GitMode = cfg.GitMode
+	defaults.GithubToken = cfg.GithubToken
 	defaults.Mode = cfg.Mode
 	if cfg.Shell != "autodetect" {
 		defaults.Shell = cfg.Shell
